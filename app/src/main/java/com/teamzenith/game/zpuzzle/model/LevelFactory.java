@@ -6,7 +6,7 @@ package com.teamzenith.game.zpuzzle.model;
  */
 
 public class LevelFactory {
-    private static LevelFactory niveauFactory = null;
+    private static LevelFactory levelFactory = null;
 
     private LevelFactory() {
 
@@ -17,31 +17,31 @@ public class LevelFactory {
      * @return
      */
     public static LevelFactory getInstance() {
-        if (niveauFactory == null) {
-            niveauFactory = new LevelFactory();
+        if (levelFactory == null) {
+            levelFactory = new LevelFactory();
         }
-        return niveauFactory;
+        return levelFactory;
     }
 
-    public Level createNiveau(LevelType niveauType) {
-        Level niveau = null;
+    public Level createLevel(LevelType levelType) {
+        Level level = null;
 
-        switch (niveauType) {
+        switch (levelType) {
             case HARD: {
-                niveau = new Hard();
-                return niveau;
+                level = new Hard();
+                return level;
             }
-            case KIDS: {
-                niveau = new Kids();
-                return niveau;
+            case EASY: {
+                level = new Easy();
+                return level;
             }
             case MEDIUM: {
-                niveau = new Medium();
-                return niveau;
+                level = new Medium();
+                return level;
             }
             default:
                 System.out.println("false");
-                return niveau;
+                return level;
 
         }
     }

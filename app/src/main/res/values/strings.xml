@@ -1,3 +1,19 @@
 <resources>
-    <string name="app_name">Puzzle</string>
+    <string name="app_name">zPuzzle</string>
+    <string name="login">User Login</string>
+    <string name="userstats">User Stats</string>
+    <string name="select_level">Pick a level</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
+    <string name="select_image">Pick an image</string>
+    <string name="random">Random</string>
+    <string name="gallery">Gallery</string>
+    <string name="click">Click</string>
+    <string name="select_opponent">Pick an opponent</string>
+    <string name="single">Single</string>
+    <string name="human">Against Human</string>
+    <string name="computer">Against Computer</string>
+    <string name="play">Play</string>
 </resources>
+

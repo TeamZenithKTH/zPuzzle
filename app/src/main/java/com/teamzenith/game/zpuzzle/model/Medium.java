@@ -11,7 +11,7 @@ public class Medium extends Level {
     public static final int COLUMN=3;
 
     public String toString(){
-        return "medel";
+        return "Medium";
     }
 
     @Override

@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -23,7 +22,7 @@ import android.widget.Toast;
 
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.Hard;
-import com.teamzenith.game.zpuzzle.model.Kids;
+import com.teamzenith.game.zpuzzle.model.Easy;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.Medium;
 import com.teamzenith.game.zpuzzle.util.ImageSplit;
@@ -92,8 +91,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             row = Medium.ROW;
             column = Medium.COLUMN;
         } else {
-            row = Kids.ROW;
-            column = Kids.COLUMN;
+            row = Easy.ROW;
+            column = Easy.COLUMN;
 
         }
 
