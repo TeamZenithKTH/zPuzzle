@@ -3,69 +3,63 @@ package com.teamzenith.game.zpuzzle.util;
 import android.graphics.Bitmap;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Random;
-import java.util.Set;
+
 
 /**
+ * This class will shuffle the input images randomly.
  * Created by alaaalkassar on 3/14/17.
  */
 
 public class ShufflingImage {
 
-    private HashMap<Integer, Bitmap> meMap=new HashMap<Integer, Bitmap>();
+    private HashMap<Integer, Bitmap> meMap = new HashMap<Integer, Bitmap>();
 
     /**
+     * This method will shuffle the provided image's array.
      *
-     * @param img
-     * @return
+     * @param img An array that hold the images that will be shuffled.
+     * @return tmpBmp An array of bitmaps that hold the newly shuffled images.
      */
-    public Bitmap[] shuffle(Bitmap[] img){
+    public Bitmap[] shuffle(Bitmap[] img) {
 
-        //HashMap<Integer, Bitmap> meMap=new HashMap<Integer, Bitmap>();
-        Bitmap[] tmpBmp=new Bitmap[img.length];
-
+        Bitmap[] tmpBmp = new Bitmap[img.length];
         ArrayList<Integer> list = new ArrayList<>();
-        for(int i = 0; i < img.length; i++) {
+        for (int i = 0; i < img.length; i++) {
             list.add(i);
         }
 
         Random rand = new Random();
-        int i=0;
-        while(list.size() > 0) {
-
+        int i = 0;
+        while (list.size() > 0) {
             int index = rand.nextInt(list.size());
-            tmpBmp[i]=img[list.remove(index)];
-            Bitmap resized = Bitmap.createScaledBitmap(tmpBmp[i], 250, 250, true);
-
-            meMap.put(i,resized);
+            tmpBmp[i] = img[list.remove(index)];
+            //Bitmap resized = Bitmap.createScaledBitmap(tmpBmp[i], 250, 250, true);
+            meMap.put(i, tmpBmp[i]);
             i++;
         }
-        meMap.put(img.length-1,null);
-
+        //Set the right lower corner in the matrix to be empty.
+        // meMap.put(img.length-1,null);
         return tmpBmp;
     }
 
     /**
+     * Get the shuffled image's array.
      *
-     * @return
+     * @return meMap The shuffled image's array.
      */
-    public HashMap<Integer, Bitmap> getShuffledOrder(){
-
-
+    public HashMap<Integer, Bitmap> getShuffledOrder() {
         return meMap;
     }
 
     /**
+     * Set the new images array.
      *
      * @param newOrder
      */
 
-    public void setShuffledOrder(HashMap<Integer, Bitmap> newOrder){
+    public void setShuffledOrder(HashMap<Integer, Bitmap> newOrder) {
         this.meMap = newOrder;
     }
 }

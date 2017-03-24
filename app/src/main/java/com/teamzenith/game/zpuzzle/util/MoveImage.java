@@ -1,8 +1,6 @@
 package com.teamzenith.game.zpuzzle.util;
 
 import android.graphics.Bitmap;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import java.util.HashMap;
 
@@ -14,552 +12,201 @@ public class MoveImage {
     private HashMap<Integer, Bitmap> SHMap = new HashMap<Integer, Bitmap>();
     private int position;
     private HashMap<Integer, Bitmap> newList;
+    private String msg;
 
     /**
+     * This method will be responseble of the moving of the images when the user click on an imageButton.
      *
-     * @param SHMap
-     * @param imageId
-     * @return
+     * @param SHMap   The Hashmap that holds the shuffled images and their postions after shuffling.
+     * @param imageId The id of the clicked imageButton.
+     * @param row     The matrix row number.
+     * @param column  The matrix columns number.
+     * @return newList the new order of the images after making the change according to the user change.
+     * newList
      */
-    public HashMap<Integer, Bitmap> move(HashMap<Integer, Bitmap> SHMap,int imageId) {
+
+    public HashMap<Integer, Bitmap> step(HashMap<Integer, Bitmap> SHMap, int imageId, int row, int column) {
+        //int j = 0;
+
         this.SHMap = SHMap;
-        position=imageId;
-        if (SHMap.get(position) == null) {
-            System.out.println("YOU CANNOT MOVE NULL IMAGE");
-            return SHMap;
-        } else if (SHMap.size() == 4) {
-            SHMap = kidsNewOrder(position);
-            return SHMap;
-        } else if (SHMap.size() == 9) {
-            SHMap = mediumNewOrder(position);
-            return SHMap;
-        } else if (SHMap.size()== 16){
-            SHMap = hardNewOrder(position);
-            return SHMap;
-        }else {
-            return SHMap;
+        if (SHMap.get(imageId) == null) {
+            msg = "YOU CANNOT MOVE EMPTY IMAGE";
+            return newList = SHMap;
+        } else {
+            //Check if the left upper imageButton was clicked.
+            if (imageId == 0) {
+                if (SHMap.get(imageId + 1) == null) {
+                    SHMap.put(imageId + 1, SHMap.get(imageId));
+                    SHMap.put(imageId, null);
+                    return newList = SHMap;
+                } else if (SHMap.get(imageId + column) == null) {
+                    SHMap.put(imageId + column, SHMap.get(imageId));
+                    SHMap.put(imageId, null);
+                    return newList = SHMap;
+                } else {
+                    msg = "THERE IS NO PLACE TO MOVE TO";
+                    return newList = SHMap;
+                }
+                //Check if the right upper imageButton was clicked.
+            } else if (imageId - column + 1 == 0) {
+                if (SHMap.get(imageId - 1) == null) {
+                    SHMap.put(imageId - 1, SHMap.get(imageId));
+                    SHMap.put(imageId, null);
+                    return newList = SHMap;
+                } else if (SHMap.get(imageId + column) == null) {
+                    SHMap.put(imageId + column, SHMap.get(imageId));
+                    SHMap.put(imageId, null);
+                    return newList = SHMap;
+                } else {
+                    msg = "THERE IS NO PLACE TO MOVE TO";
+                    return newList = SHMap;
+                }
+                //Check if the left lower imageButton was clicked.
+            } else if (imageId == (row * column) - column) {
+                if (SHMap.get(imageId + 1) == null) {
+                    SHMap.put(imageId + 1, SHMap.get(imageId));
+                    SHMap.put(imageId, null);
+                    return newList = SHMap;
+                } else if (SHMap.get(imageId - column) == null) {
+                    SHMap.put(imageId - column, SHMap.get(imageId));
+                    SHMap.put(imageId, null);
+                    return newList = SHMap;
+                } else {
+                    msg = "THERE IS NO PLACE TO MOVE TO";
+                    return newList = SHMap;
+                }
+
+                //Check if the right lower imageButton was clicked.
+            } else if (imageId == (row * column) - 1) {
+                if (SHMap.get(imageId - 1) == null) {
+                    SHMap.put(imageId - 1, SHMap.get(imageId));
+                    SHMap.put(imageId, null);
+                    return newList = SHMap;
+                } else if (SHMap.get(imageId - column) == null) {
+                    SHMap.put(imageId - column, SHMap.get(imageId));
+                    SHMap.put(imageId, null);
+                    return newList = SHMap;
+                } else {
+                    msg = "THERE IS NO PLACE TO MOVE TO";
+                    return newList = SHMap;
+                }
+            }
+            //check if an imageButton from the first column was clicked except the left upper imageButton and the left lower imageButton.
+            for (int i = 1; i < row - 1; i++) {
+                if (imageId == (i * row)) {
+                    if (SHMap.get(imageId + 1) == null) {
+                        SHMap.put(imageId + 1, SHMap.get(imageId));
+                        SHMap.put(imageId, null);
+                        return newList = SHMap;
+                    } else if (SHMap.get(imageId - column) == null) {
+                        SHMap.put(imageId - column, SHMap.get(imageId));
+                        SHMap.put(imageId, null);
+                        return newList = SHMap;
+                    } else if (SHMap.get(imageId + column) == null) {
+                        SHMap.put(imageId + column, SHMap.get(imageId));
+                        SHMap.put(imageId, null);
+                        return newList = SHMap;
+                    } else {
+                        msg = "THERE IS NO PLACE TO MOVE TO";
+                        return newList = SHMap;
+                    }
+
+                }
+            }
+            //Check if an imageButton was clicked from the right column except for the right upper imageButton and the right lower imageButton.
+            for (int i = 1; i < row - 1; i++) {
+                if (imageId == (i * column) + column - 1) {
+                    if (SHMap.get(imageId - 1) == null) {
+                        SHMap.put(imageId - 1, SHMap.get(imageId));
+                        SHMap.put(imageId, null);
+                        return newList = SHMap;
+                    } else if (SHMap.get(imageId - column) == null) {
+                        SHMap.put(imageId - column, SHMap.get(imageId));
+                        SHMap.put(imageId, null);
+                        return newList = SHMap;
+                    } else if (SHMap.get(imageId + column) == null) {
+                        SHMap.put(imageId + column, SHMap.get(imageId));
+                        SHMap.put(imageId, null);
+                        return newList = SHMap;
+                    } else {
+                        msg = "THERE IS NO PLACE TO MOVE TO";
+                        return newList = SHMap;
+                    }
+                }
+            }
+            //Check if an imageButton from the first row was clicked except for the left upper imageButton and the right upper imageButton.
+            for (int i = 1; i < column - 1; i++) {
+                if (imageId == i) {
+                    if (SHMap.get(imageId - 1) == null) {
+                        SHMap.put(imageId - 1, SHMap.get(imageId));
+                        SHMap.put(imageId, null);
+                        return newList = SHMap;
+                    } else if (SHMap.get(imageId + 1) == null) {
+                        SHMap.put(imageId + 1, SHMap.get(imageId));
+                        SHMap.put(imageId, null);
+                        return newList = SHMap;
+                    } else if (SHMap.get(imageId + column) == null) {
+                        SHMap.put(imageId + column, SHMap.get(imageId));
+                        SHMap.put(imageId, null);
+                        return newList = SHMap;
+                    } else {
+                        msg = "THERE IS NO PLACE TO MOVE TO";
+                        return newList = SHMap;
+                    }
+
+                }
+            }
+            //Check if an imageButton from the last row was clicked except for the left lower imageButton and the right lower imageButton.
+            for (int i = ((column * (row - 1)) + 1); i < (column * row) - 1; i++) {
+                if (imageId == i) {
+                    if (SHMap.get(imageId - 1) == null) {
+                        SHMap.put(imageId - 1, SHMap.get(imageId));
+                        SHMap.put(imageId, null);
+                        return newList = SHMap;
+                    } else if (SHMap.get(imageId + 1) == null) {
+                        SHMap.put(imageId + 1, SHMap.get(imageId));
+                        SHMap.put(imageId, null);
+                        return newList = SHMap;
+                    } else if (SHMap.get(imageId - column) == null) {
+                        SHMap.put(imageId - column, SHMap.get(imageId));
+                        SHMap.put(imageId, null);
+                        return newList = SHMap;
+                    } else {
+                        msg = "THERE IS NO PLACE TO MOVE TO";
+                        return newList = SHMap;
+                    }
+                }
+            }
+
+
+            //Check the rest of the imageButtons was clicked.
+
+            if (SHMap.get(imageId - 1) == null) {
+                SHMap.put(imageId - 1, SHMap.get(imageId));
+                SHMap.put(imageId, null);
+                return newList = SHMap;
+            } else if (SHMap.get(imageId - column) == null) {
+                SHMap.put(imageId - column, SHMap.get(imageId));
+                SHMap.put(imageId, null);
+                return newList = SHMap;
+            } else if (SHMap.get(imageId + column) == null) {
+                SHMap.put(imageId + column, SHMap.get(imageId));
+                SHMap.put(imageId, null);
+                return newList = SHMap;
+            } else if (SHMap.get(imageId + 1) == null) {
+                SHMap.put(imageId + 1, SHMap.get(imageId));
+                SHMap.put(imageId, null);
+                return newList = SHMap;
+            } else {
+                msg = "THERE IS NO PLACE TO MOVE TO";
+                return newList = SHMap;
+            }
         }
     }
 
 
-    private HashMap<Integer, Bitmap> kidsNewOrder(int pos) {
-        switch (pos) {
-            case 0: {
-                if (SHMap.get(1) == null) {
-                    SHMap.put(1, SHMap.get(0));
-                    SHMap.put(0, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(2) == null) {
-                    SHMap.put(2, SHMap.get(0));
-                    SHMap.put(0, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(3) == null) {
-                    SHMap.put(3, SHMap.get(0));
-                    SHMap.put(0, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 1: {
-                if (SHMap.get(0) == null) {
-                    SHMap.put(0, SHMap.get(1));
-                    SHMap.put(1, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(3) == null) {
-                    SHMap.put(3, SHMap.get(1));
-                    SHMap.put(1, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 2: {
-                if (SHMap.get(0) == null) {
-                    SHMap.put(0, SHMap.get(2));
-                    SHMap.put(2, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(3) == null) {
-                    SHMap.put(3, SHMap.get(2));
-                    SHMap.put(2, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 3: {
-                if (SHMap.get(1) == null) {
-                    SHMap.put(1, SHMap.get(3));
-                    SHMap.put(3, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(2) == null) {
-                    SHMap.put(2, SHMap.get(3));
-                    SHMap.put(3, null);
-                    return newList = SHMap;
-                }else if (SHMap.get(0) == null) {
-                    SHMap.put(0, SHMap.get(3));
-                    SHMap.put(3, null);
-                    return newList = SHMap;
-                }else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-
-        }
-        return newList;
+    public String getMsg() {
+        return msg;
     }
-    private HashMap<Integer, Bitmap> mediumNewOrder(int pos) {
-        switch (pos) {
-            case 0: {
-                if (SHMap.get(1) == null) {
-                    SHMap.put(1, SHMap.get(0));
-                    SHMap.put(0, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(3) == null) {
-                    SHMap.put(3, SHMap.get(0));
-                    SHMap.put(0, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 1: {
-                if (SHMap.get(0) == null) {
-                    SHMap.put(0, SHMap.get(1));
-                    SHMap.put(1, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(4) == null) {
-                    SHMap.put(4, SHMap.get(1));
-                    SHMap.put(1, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(2) == null) {
-                    SHMap.put(2, SHMap.get(1));
-                    SHMap.put(1, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 2: {
-                if (SHMap.get(1) == null) {
-                    SHMap.put(1, SHMap.get(2));
-                    SHMap.put(2, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(5) == null) {
-                    SHMap.put(5, SHMap.get(2));
-                    SHMap.put(2, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 3: {
-                if (SHMap.get(0) == null) {
-                    SHMap.put(0, SHMap.get(3));
-                    SHMap.put(3, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(4) == null) {
-                    SHMap.put(4, SHMap.get(3));
-                    SHMap.put(3, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(6) == null) {
-                    SHMap.put(6, SHMap.get(3));
-                    SHMap.put(3, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 4: {
-                if (SHMap.get(1) == null) {
-                    SHMap.put(1, SHMap.get(4));
-                    SHMap.put(4, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(3) == null) {
-                    SHMap.put(3, SHMap.get(4));
-                    SHMap.put(4, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(5) == null) {
-                    SHMap.put(5, SHMap.get(4));
-                    SHMap.put(4, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(7) == null) {
-                    SHMap.put(7, SHMap.get(4));
-                    SHMap.put(4, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 5: {
-                if (SHMap.get(2) == null) {
-                    SHMap.put(2, SHMap.get(5));
-                    SHMap.put(5, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(4) == null) {
-                    SHMap.put(4, SHMap.get(5));
-                    SHMap.put(5, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(8) == null) {
-                    SHMap.put(8, SHMap.get(5));
-                    SHMap.put(5, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 6: {
-                if (SHMap.get(3) == null) {
-                    SHMap.put(3, SHMap.get(6));
-                    SHMap.put(6, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(7) == null) {
-                    SHMap.put(7, SHMap.get(6));
-                    SHMap.put(6, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 7: {
-                if (SHMap.get(4) == null) {
-                    SHMap.put(4, SHMap.get(7));
-                    SHMap.put(7, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(6) == null) {
-                    SHMap.put(6, SHMap.get(7));
-                    SHMap.put(7, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(8) == null) {
-                    SHMap.put(8, SHMap.get(7));
-                    SHMap.put(7, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 8: {
-                if (SHMap.get(5) == null) {
-                    SHMap.put(5, SHMap.get(8));
-                    SHMap.put(8, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(7) == null) {
-                    SHMap.put(7, SHMap.get(8));
-                    SHMap.put(8, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-        }
 
-        return newList;
-    }
-    private HashMap<Integer, Bitmap> hardNewOrder(int pos) {
-        switch (pos) {
-            case 0: {
-                if (SHMap.get(1) == null) {
-                    SHMap.put(1, SHMap.get(0));
-                    SHMap.put(0, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(4) == null) {
-                    SHMap.put(4, SHMap.get(0));
-                    SHMap.put(0, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 1: {
-                if (SHMap.get(0) == null) {
-                    SHMap.put(0, SHMap.get(1));
-                    SHMap.put(1, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(2) == null) {
-                    SHMap.put(2, SHMap.get(1));
-                    SHMap.put(1, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(5) == null) {
-                    SHMap.put(5, SHMap.get(1));
-                    SHMap.put(1, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 2: {
-                if (SHMap.get(1) == null) {
-                    SHMap.put(1, SHMap.get(2));
-                    SHMap.put(2, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(3) == null) {
-                    SHMap.put(3, SHMap.get(2));
-                    SHMap.put(2, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(6) == null) {
-                    SHMap.put(6, SHMap.get(2));
-                    SHMap.put(2, null);
-                    return newList = SHMap;
-                }else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 3: {
-                if (SHMap.get(2) == null) {
-                    SHMap.put(2, SHMap.get(3));
-                    SHMap.put(3, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(7) == null) {
-                    SHMap.put(7, SHMap.get(3));
-                    SHMap.put(3, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 4: {
-                if (SHMap.get(0) == null) {
-                    SHMap.put(0, SHMap.get(4));
-                    SHMap.put(4, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(5) == null) {
-                    SHMap.put(5, SHMap.get(4));
-                    SHMap.put(4, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(8) == null) {
-                    SHMap.put(8, SHMap.get(4));
-                    SHMap.put(4, null);
-                    return newList = SHMap;
-                }  else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 5: {
-                if (SHMap.get(1) == null) {
-                    SHMap.put(1, SHMap.get(5));
-                    SHMap.put(5, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(4) == null) {
-                    SHMap.put(4, SHMap.get(5));
-                    SHMap.put(5, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(6) == null) {
-                    SHMap.put(6, SHMap.get(5));
-                    SHMap.put(5, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(9) == null) {
-                    SHMap.put(9, SHMap.get(5));
-                    SHMap.put(5, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 6: {
-                if (SHMap.get(2) == null) {
-                    SHMap.put(2, SHMap.get(6));
-                    SHMap.put(6, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(7) == null) {
-                    SHMap.put(7, SHMap.get(6));
-                    SHMap.put(6, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(5) == null) {
-                    SHMap.put(5, SHMap.get(6));
-                    SHMap.put(6, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(10) == null) {
-                    SHMap.put(10, SHMap.get(6));
-                    SHMap.put(6, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 7: {
-                if (SHMap.get(3) == null) {
-                    SHMap.put(3, SHMap.get(7));
-                    SHMap.put(7, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(6) == null) {
-                    SHMap.put(6, SHMap.get(7));
-                    SHMap.put(7, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(11) == null) {
-                    SHMap.put(11, SHMap.get(7));
-                    SHMap.put(7, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 8: {
-                if (SHMap.get(4) == null) {
-                    SHMap.put(4, SHMap.get(8));
-                    SHMap.put(8, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(9) == null) {
-                    SHMap.put(9, SHMap.get(8));
-                    SHMap.put(8, null);
-                    return newList = SHMap;
-                }else if (SHMap.get(12) == null) {
-                    SHMap.put(12, SHMap.get(8));
-                    SHMap.put(8, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 9: {
-                if (SHMap.get(5) == null) {
-                    SHMap.put(5, SHMap.get(9));
-                    SHMap.put(9, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(8) == null) {
-                    SHMap.put(8, SHMap.get(9));
-                    SHMap.put(9, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(10) == null) {
-                    SHMap.put(10, SHMap.get(9));
-                    SHMap.put(9, null);
-                    return newList = SHMap;
-                }else if (SHMap.get(13) == null) {
-                    SHMap.put(13, SHMap.get(9));
-                    SHMap.put(9, null);
-                    return newList = SHMap;
-                }else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 10: {
-                if (SHMap.get(6) == null) {
-                    SHMap.put(6, SHMap.get(10));
-                    SHMap.put(10, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(11) == null) {
-                    SHMap.put(11, SHMap.get(10));
-                    SHMap.put(10, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(9) == null) {
-                    SHMap.put(9, SHMap.get(10));
-                    SHMap.put(10, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(14) == null) {
-                    SHMap.put(14, SHMap.get(10));
-                    SHMap.put(10, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 11: {
-                if (SHMap.get(7) == null) {
-                    SHMap.put(7, SHMap.get(11));
-                    SHMap.put(11, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(10) == null) {
-                    SHMap.put(10, SHMap.get(11));
-                    SHMap.put(11, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(15) == null) {
-                    SHMap.put(15, SHMap.get(11));
-                    SHMap.put(11, null);
-                    return newList = SHMap;
-                }else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 12: {
-                if (SHMap.get(8) == null) {
-                    SHMap.put(8, SHMap.get(12));
-                    SHMap.put(12, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(13) == null) {
-                    SHMap.put(13, SHMap.get(12));
-                    SHMap.put(12, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 13: {
-                if (SHMap.get(9) == null) {
-                    SHMap.put(9, SHMap.get(13));
-                    SHMap.put(13, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(12) == null) {
-                    SHMap.put(12, SHMap.get(13));
-                    SHMap.put(13, null);
-                    return newList = SHMap;
-                }else if (SHMap.get(14) == null) {
-                    SHMap.put(14, SHMap.get(13));
-                    SHMap.put(13, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 14: {
-                if (SHMap.get(13) == null) {
-                    SHMap.put(13, SHMap.get(14));
-                    SHMap.put(14, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(10) == null) {
-                    SHMap.put(10, SHMap.get(14));
-                    SHMap.put(14, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(15) == null) {
-                    SHMap.put(15, SHMap.get(14));
-                    SHMap.put(14, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-            case 15: {
-                if (SHMap.get(11) == null) {
-                    SHMap.put(11, SHMap.get(15));
-                    SHMap.put(15, null);
-                    return newList = SHMap;
-                } else if (SHMap.get(14) == null) {
-                    SHMap.put(14, SHMap.get(15));
-                    SHMap.put(15, null);
-                    return newList = SHMap;
-                } else {
-                    System.out.println("YOU ARE NOT ALLOW TO MAKE THIS MOVE");
-                    return newList = SHMap;
-                }
-            }
-        }
-
-        return newList;
-    }
 }

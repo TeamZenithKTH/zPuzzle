@@ -13,7 +13,6 @@ public class LevelFactory {
     }
 
     /**
-     *
      * @return
      */
     public static LevelFactory getInstance() {

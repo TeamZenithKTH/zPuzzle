@@ -6,26 +6,26 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.teamzenith.game.zpuzzle.R;
+
 import com.teamzenith.game.zpuzzle.model.Hard;
 import com.teamzenith.game.zpuzzle.model.Kids;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.Medium;
+import com.teamzenith.game.zpuzzle.util.GetCurrentStatus;
 import com.teamzenith.game.zpuzzle.util.ImageSplit;
 import com.teamzenith.game.zpuzzle.util.ImagesIDs;
 import com.teamzenith.game.zpuzzle.util.MoveImage;
@@ -40,6 +40,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
 
     private static final int CAMERA_REQUEST = 1888;
+    private final MoveImage moveImage = new MoveImage();
+    ShufflingImage shufflingImage = new ShufflingImage();
+    boolean isFinish = false;
     private ArrayList<Integer> images;
     private TextView textView;
     private Button photoButton;
@@ -50,15 +53,16 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private Level level;
     private Bitmap[] bmp;
     private Bitmap[] tmpbmp;
-    private HashMap<Integer, Bitmap> OMap=new HashMap<Integer, Bitmap>();
-    private HashMap<Integer, Bitmap> SHMap=new HashMap<Integer, Bitmap>();
-    private ImagesIDs imagesIDs = new  ImagesIDs();
+    private HashMap<Integer, Bitmap> SHMap = new HashMap<Integer, Bitmap>();
+    private ImagesIDs imagesIDs = new ImagesIDs();
     private HashMap<Integer, Integer> imagesIDList;
+    private ImageSplit imageSplit = new ImageSplit();
+    private HashMap<Integer, Bitmap> newMoveedImagesList;
+    ImageButton[] imageButtons;
+    private ImageButton im;
+    ImageButton ims;
+    final GetCurrentStatus getCurrentStatus = new GetCurrentStatus();
 
-
-
-    ShufflingImage shufflingImage = new ShufflingImage();
-    private final MoveImage moveImage = new MoveImage();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,15 +81,13 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
     private void createComponents() {
         photoButton = (Button) this.findViewById(R.id.takePicture);
-        textView = (TextView) findViewById(R.id.niveauText);
-
-
+        //textView = (TextView) findViewById(R.id.niveauText);
     }
 
     private void initComponent() {
         Intent intent = this.getIntent();
-        Level level = (Level) intent.getSerializableExtra("Level");
-         if (level instanceof Hard) {
+        level = (Level) intent.getSerializableExtra("Level");
+        if (level instanceof Hard) {
             row = Hard.ROW;
             column = Hard.COLUMN;
         } else if (level instanceof Medium) {
@@ -97,7 +99,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
         }
 
-        textView.setText(String.valueOf(level));
+        // textView.setText(String.valueOf(level));
     }
 
     private void actions() {
@@ -109,334 +111,899 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        if(ll!=null){
-           ll.removeAllViews();
+        if (ll != null) {
+            ll.removeAllViews();
             ll.refreshDrawableState();
         }
 
-        Uri relativePath = Uri.fromFile(new File(Environment.getExternalStorageDirectory()+"/images.jpeg"));
+        Uri relativePath = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/images.jpeg"));
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, relativePath);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
-   }
+
+
+    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            File imgFile1 = new File(Environment.getExternalStorageDirectory()+"/images.jpeg");
+            File imgFile1 = new File(Environment.getExternalStorageDirectory() + "/images.jpeg");
             Bitmap photo;
             if (level instanceof Hard) {
                 photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), 1000, 1000, true);
             } else if (level instanceof Medium) {
-                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), 750, 750, true);
-            } else
-                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), 500, 500, true);
-
-            ImageSplit imageSplit = new ImageSplit();
+                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), 800, 800, true);
+            } else {
+                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), 600, 600, true);
+            }
             try {
                 bmp = imageSplit.get(photo, row, column);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
             ShufflingImage shufflingImage = new ShufflingImage();
-            tmpbmp =shufflingImage.shuffle(bmp);
-            SHMap= shufflingImage.getShuffledOrder();
+            tmpbmp = shufflingImage.shuffle(bmp);
+            SHMap = shufflingImage.getShuffledOrder();
             settingImages(SHMap);
-            }
+        }
 
         createImageViews(SHMap);
-
 
 
     }
 
 
     private void settingImages(HashMap<Integer, Bitmap> SHMap) {
-            this.SHMap =SHMap;
-            int j = 0;
-            ll = (TableLayout) findViewById(R.id.table);
-            tableRow = new TableRow(this);
-            for (int i = 0; i < row * column; i++) {
-                if (j == ((row * column) / row) - 1) {
-                    ImageButton im = new ImageButton(this);
-                    im.setId(i);
-                   // Bitmap resized = Bitmap.createScaledBitmap(tmpbmp[i], 250, 250, true);
-                    im.setImageBitmap(tmpbmp[i]);
-                    imagesIDs.setposition(im.getId(),i);
-                    TableRow.LayoutParams params = new TableRow.LayoutParams();
-                    params.setMargins(1, 1, 1, 1);
-                    params.width=250;
-                    params.height=250;
-                    im.setLayoutParams(params);
-                    tableRow.addView(im, params);
-                    ll.addView(tableRow);
-                    tableRow = new TableRow(this);
-                    j = 0;
-                } else {
-                    TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-                    tableRow.setLayoutParams(lp);
-                    ImageButton im = new ImageButton(this);
-                    im.setId(i);
-                    imagesIDs.setposition(im.getId(),i);
-                    System.out.println("Image ID2 "+im.getId());
-                    //Bitmap resized = Bitmap.createScaledBitmap(tmpbmp[i], 250, 250, true);
-                    im.setImageBitmap(tmpbmp[i]);
-                    TableRow.LayoutParams params = new TableRow.LayoutParams();
-                    params.setMargins(1, 1, 1, 1);
-                    params.width=250;
-                    params.height=250;
-                    im.setLayoutParams(params);
-                    tableRow.addView(im, params);
-                    j++;
-                }
+        this.SHMap = SHMap;
+        imageButtons = new ImageButton[row * column];
+        int j = 0;
+        ll = (TableLayout) findViewById(R.id.table);
+        tableRow = new TableRow(this);
+        for (int i = 0; i < row * column; i++) {
+            if (j == ((row * column) / row) - 1) {
+                im = new ImageButton(this);
+                im.setId(i);
+                im.setImageBitmap(tmpbmp[i]);
+                imagesIDs.setposition(im.getId(), i);
+                TableRow.LayoutParams params = new TableRow.LayoutParams();
+                params.setMargins(1, 1, 1, 1);
+                params.width = 200;
+                params.height = 200;
+                im.setLayoutParams(params);
+                tableRow.addView(im, params);
+                ll.addView(tableRow);
+                tableRow = new TableRow(this);
+                imageButtons[i] = im;
+                j = 0;
+            } else {
+                TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+                tableRow.setLayoutParams(lp);
+                im = new ImageButton(this);
+                im.setId(i);
+                imagesIDs.setposition(im.getId(), i);
+                System.out.println("Image ID2 " + im.getId());
+                im.setImageBitmap(tmpbmp[i]);
+                TableRow.LayoutParams params = new TableRow.LayoutParams();
+                params.setMargins(1, 1, 1, 1);
+                params.width = 200;
+                params.height = 200;
+                im.setLayoutParams(params);
+                tableRow.addView(im, params);
+                imageButtons[i] = im;
+                j++;
             }
-        imagesIDList =imagesIDs.getposition();
+        }
+        imagesIDList = imagesIDs.getposition();
 
     }
 
 
-  private void createImageViews(final HashMap<Integer, Bitmap> SHMap){
+    private void createImageViews(final HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
-        if (SHMap.size() == 4) {
+        if (SHMap.size() == 0) {
+            Toast.makeText(this, "Could not create a matrix", Toast.LENGTH_SHORT).show();
+        } else if (SHMap.size() == 9) {
             kidsImageView();
-        }else if (SHMap.size()==9){
+        } else if (SHMap.size() == 16) {
             mediumImageView();
-        }else{
+        } else {
             hardImageView();
         }
     }
 
-    private void kidsImageView(){
+    private void kidsImageView() {
         final ImageButton imageButton0 = (ImageButton) findViewById(0);
-        final ImageButton imageButton1=(ImageButton) findViewById(0+1);
-        final ImageButton imageButton2=(ImageButton) findViewById(0+2);
-        final ImageButton imageButton3=(ImageButton) findViewById(0+3);
+        final ImageButton imageButton1 = (ImageButton) findViewById(0 + 1);
+        final ImageButton imageButton2 = (ImageButton) findViewById(0 + 2);
+        final ImageButton imageButton3 = (ImageButton) findViewById(0 + 3);
+        final ImageButton imageButton4 = (ImageButton) findViewById(0 + 4);
+        final ImageButton imageButton5 = (ImageButton) findViewById(0 + 5);
+        final ImageButton imageButton6 = (ImageButton) findViewById(0 + 6);
+        final ImageButton imageButton7 = (ImageButton) findViewById(0 + 7);
+        final ImageButton imageButton8 = (ImageButton) findViewById(0 + 8);
+        final GetCurrentStatus getCurrentStatus = new GetCurrentStatus();
+        final Toast toast = Toast.makeText(this, moveImage.getMsg(), Toast.LENGTH_LONG);
 
         imageButton0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(imageButton0.getId());
-                setNewImages( moveImage.move(SHMap,imageButton0.getId()));
-
+                newMoveedImagesList = moveImage.step(SHMap, imageButton0.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(bmp, newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    isFinish = false;
+                }
             }
         });
 
         imageButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton1.getId()));
+
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton1.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
 
             }
         });
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton2.getId()));
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton2.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages(  moveImage.move(SHMap,imageButton3.getId()));
-            }
-        });
-    }
-    private void mediumImageView(){
-
-        final ImageButton imageButton0 = (ImageButton) findViewById(0);
-        final ImageButton imageButton1=(ImageButton) findViewById(0+1);
-        final ImageButton imageButton2=(ImageButton) findViewById(0+2);
-        final ImageButton imageButton3=(ImageButton) findViewById(0+3);
-        final ImageButton imageButton4=(ImageButton) findViewById(0+4);
-        final ImageButton imageButton5=(ImageButton) findViewById(0+5);
-        final ImageButton imageButton6=(ImageButton) findViewById(0+6);
-        final ImageButton imageButton7=(ImageButton) findViewById(0+7);
-        final ImageButton imageButton8=(ImageButton) findViewById(0+8);
-
-        imageButton0.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton0.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton3.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
 
-        imageButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setNewImages(  moveImage.move(SHMap,imageButton1.getId()));
-            }
-        });
-        imageButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setNewImages(  moveImage.move(SHMap,imageButton2.getId()));
-            }
-        });
-        imageButton3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setNewImages(  moveImage.move(SHMap,imageButton3.getId()));
-            }
-        });
         imageButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton4.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton4.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages(   moveImage.move(SHMap,imageButton5.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton5.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton6.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton6.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages(  moveImage.move(SHMap,imageButton7.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton7.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages(  moveImage.move(SHMap,imageButton8.getId()));
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton8.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
+
     }
-    private void hardImageView(){
+
+    private void mediumImageView() {
         final ImageButton imageButton0 = (ImageButton) findViewById(0);
-        final ImageButton imageButton1=(ImageButton) findViewById(0+1);
-        final ImageButton imageButton2=(ImageButton) findViewById(0+2);
-        final ImageButton imageButton3=(ImageButton) findViewById(0+3);
-        final ImageButton imageButton4=(ImageButton) findViewById(0+4);
-        final ImageButton imageButton5=(ImageButton) findViewById(0+5);
-        final ImageButton imageButton6=(ImageButton) findViewById(0+6);
-        final ImageButton imageButton7=(ImageButton) findViewById(0+7);
-        final ImageButton imageButton8=(ImageButton) findViewById(0+8);
-        final ImageButton imageButton9=(ImageButton) findViewById(0+9);
-        final ImageButton imageButton10=(ImageButton) findViewById(0+10);
-        final ImageButton imageButton11=(ImageButton) findViewById(0+11);
-        final ImageButton imageButton12=(ImageButton) findViewById(0+12);
-        final ImageButton imageButton13=(ImageButton) findViewById(0+13);
-        final ImageButton imageButton14=(ImageButton) findViewById(0+14);
-        final ImageButton imageButton15=(ImageButton) findViewById(0+15);
+        final ImageButton imageButton1 = (ImageButton) findViewById(0 + 1);
+        final ImageButton imageButton2 = (ImageButton) findViewById(0 + 2);
+        final ImageButton imageButton3 = (ImageButton) findViewById(0 + 3);
+        final ImageButton imageButton4 = (ImageButton) findViewById(0 + 4);
+        final ImageButton imageButton5 = (ImageButton) findViewById(0 + 5);
+        final ImageButton imageButton6 = (ImageButton) findViewById(0 + 6);
+        final ImageButton imageButton7 = (ImageButton) findViewById(0 + 7);
+        final ImageButton imageButton8 = (ImageButton) findViewById(0 + 8);
+        final ImageButton imageButton9 = (ImageButton) findViewById(0 + 9);
+        final ImageButton imageButton10 = (ImageButton) findViewById(0 + 10);
+        final ImageButton imageButton11 = (ImageButton) findViewById(0 + 11);
+        final ImageButton imageButton12 = (ImageButton) findViewById(0 + 12);
+        final ImageButton imageButton13 = (ImageButton) findViewById(0 + 13);
+        final ImageButton imageButton14 = (ImageButton) findViewById(0 + 14);
+        final ImageButton imageButton15 = (ImageButton) findViewById(0 + 15);
+        final Toast toast = Toast.makeText(this, "Done", Toast.LENGTH_LONG);
 
         imageButton0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                setNewImages(  moveImage.move(SHMap,imageButton0.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton0.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
 
         imageButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton1.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton1.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+
             }
         });
         imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton2.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton2.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton3.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton3.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton4.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton4.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages(   moveImage.move(SHMap,imageButton5.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton5.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages(  moveImage.move(SHMap,imageButton6.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton6.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton7.getId()));
+                newMoveedImagesList = moveImage.step(SHMap, imageButton7.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton8.getId()));
-
+                newMoveedImagesList = moveImage.step(SHMap, imageButton8.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages(  moveImage.move(SHMap,imageButton9.getId()));
-
+                newMoveedImagesList = moveImage.step(SHMap, imageButton9.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages(  moveImage.move(SHMap,imageButton10.getId()));
-
+                newMoveedImagesList = moveImage.step(SHMap, imageButton10.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton11.getId()));
-
+                newMoveedImagesList = moveImage.step(SHMap, imageButton11.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages(  moveImage.move(SHMap,imageButton12.getId()));
-
+                newMoveedImagesList = moveImage.step(SHMap, imageButton12.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton13.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton13.getId()));
-
+                newMoveedImagesList = moveImage.step(SHMap, imageButton13.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton14.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages( moveImage.move(SHMap,imageButton14.getId()));
-
+                newMoveedImagesList = moveImage.step(SHMap, imageButton14.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
             }
         });
         imageButton15.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setNewImages(  moveImage.move(SHMap,imageButton15.getId()));
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton15.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
 
             }
         });
 
     }
+
+    private void hardImageView() {
+        final ImageButton imageButton0 = (ImageButton) findViewById(0);
+        final ImageButton imageButton1 = (ImageButton) findViewById(0 + 1);
+        final ImageButton imageButton2 = (ImageButton) findViewById(0 + 2);
+        final ImageButton imageButton3 = (ImageButton) findViewById(0 + 3);
+        final ImageButton imageButton4 = (ImageButton) findViewById(0 + 4);
+        final ImageButton imageButton5 = (ImageButton) findViewById(0 + 5);
+        final ImageButton imageButton6 = (ImageButton) findViewById(0 + 6);
+        final ImageButton imageButton7 = (ImageButton) findViewById(0 + 7);
+        final ImageButton imageButton8 = (ImageButton) findViewById(0 + 8);
+        final ImageButton imageButton9 = (ImageButton) findViewById(0 + 9);
+        final ImageButton imageButton10 = (ImageButton) findViewById(0 + 10);
+        final ImageButton imageButton11 = (ImageButton) findViewById(0 + 11);
+        final ImageButton imageButton12 = (ImageButton) findViewById(0 + 12);
+        final ImageButton imageButton13 = (ImageButton) findViewById(0 + 13);
+        final ImageButton imageButton14 = (ImageButton) findViewById(0 + 14);
+        final ImageButton imageButton15 = (ImageButton) findViewById(0 + 15);
+        final ImageButton imageButton16 = (ImageButton) findViewById(0 + 16);
+        final ImageButton imageButton17 = (ImageButton) findViewById(0 + 17);
+        final ImageButton imageButton18 = (ImageButton) findViewById(0 + 18);
+        final ImageButton imageButton19 = (ImageButton) findViewById(0 + 19);
+        final ImageButton imageButton20 = (ImageButton) findViewById(0 + 20);
+        final ImageButton imageButton21 = (ImageButton) findViewById(0 + 21);
+        final ImageButton imageButton22 = (ImageButton) findViewById(0 + 22);
+        final ImageButton imageButton23 = (ImageButton) findViewById(0 + 23);
+        final ImageButton imageButton24 = (ImageButton) findViewById(0 + 24);
+        final Toast toast = Toast.makeText(this, "Done", Toast.LENGTH_LONG);
+
+        imageButton0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton0.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+
+        imageButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton1.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+
+            }
+        });
+        imageButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton2.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton3.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton4.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton5.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton6.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton7.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton8.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton9.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton10.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton11.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton12.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton12.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton13.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton13.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton14.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                newMoveedImagesList = moveImage.step(SHMap, imageButton14.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                //toast.show();
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+            }
+        });
+        imageButton15.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton15.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+
+            }
+        });
+        imageButton16.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton16.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+
+            }
+        });
+        imageButton17.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton17.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+
+            }
+        });
+        imageButton18.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton18.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+
+            }
+        });
+        imageButton19.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton19.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+
+            }
+        });
+        imageButton20.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton20.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+
+            }
+        });
+        imageButton21.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton21.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+
+            }
+        });
+        imageButton22.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton22.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+
+            }
+        });
+        imageButton23.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton23.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+
+            }
+        });
+        imageButton24.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                newMoveedImagesList = moveImage.step(SHMap, imageButton24.getId(), row, column);
+                setNewImages(newMoveedImagesList);
+                isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+                if (isFinish) {
+                    toast.show();
+                    SetOriginalImagesToMatrix();
+                    isFinish = false;
+                }
+
+            }
+        });
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -464,15 +1031,27 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     }
 
     /**
+     * Set The new images postion to the imageButtons for each move that the user done.
      *
      * @param SHMap
      */
-    public void setNewImages(HashMap<Integer, Bitmap> SHMap){
-        this.SHMap=SHMap;
-        for (int i = 0; i<SHMap.size(); i++){
-            ImageButton im=(ImageButton)  findViewById(imagesIDList.get(i));
+    public void setNewImages(HashMap<Integer, Bitmap> SHMap) {
+        this.SHMap = SHMap;
+        for (int i = 0; i < SHMap.size(); i++) {
+            ImageButton im = (ImageButton) findViewById(i);
             im.setImageBitmap(SHMap.get(i));
         }
     }
 
+    /**
+     * Set the Original image's pieces after the user solve the puzzle.
+     */
+    private void SetOriginalImagesToMatrix() {
+        Bitmap[] tmpbitMap;
+        tmpbitMap = imageSplit.getOriginalDividedImage();
+        for (int i = 0; i < tmpbitMap.length; i++) {
+            ImageButton im = (ImageButton) findViewById(i);
+            im.setImageBitmap(tmpbitMap[i]);
+        }
+    }
 }

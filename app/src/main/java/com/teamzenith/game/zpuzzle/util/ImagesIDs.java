@@ -1,8 +1,5 @@
 package com.teamzenith.game.zpuzzle.util;
 
-import com.teamzenith.game.zpuzzle.R;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -12,23 +9,25 @@ import java.util.HashMap;
 public class ImagesIDs {
 
 
-    private HashMap<Integer, Integer> images= new HashMap<>();;
+    private HashMap<Integer, Integer> images = new HashMap<>();
 
     /**
+     * Set the postion of the image pieces in a HashMap to use it later.
      *
-     * @param imagID
-     * @param position
+     * @param imagID   Get the image id
+     * @param position Set the image position in the HashMap.
      */
-   public void setposition(int imagID, int position) {
-       images.put(imagID, position);
+    public void setposition(int imagID, int position) {
+        images.put(imagID, position);
 
-   }
+    }
 
     /**
+     * Get the postion of the image pieces.
      *
-     * @return
+     * @return Return a HashMap that include the imageButton's ids and the image's positions.
      */
-    public HashMap<Integer,Integer> getposition() {
+    public HashMap<Integer, Integer> getposition() {
 
         return images;
     }

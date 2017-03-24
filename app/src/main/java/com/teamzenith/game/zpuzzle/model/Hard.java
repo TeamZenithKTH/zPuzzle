@@ -7,15 +7,13 @@ package com.teamzenith.game.zpuzzle.model;
 public class Hard extends Level {
 
 
-
-    public static final int ROW=4;
-    public static final int COLUMN=4;
+    public static final int ROW = 5;
+    public static final int COLUMN = 5;
 
     /**
-     *
      * @return
      */
-    public String toString(){
+    public String toString() {
         return "hard";
     }
 

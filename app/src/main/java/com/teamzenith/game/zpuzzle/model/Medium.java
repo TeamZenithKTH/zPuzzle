@@ -7,10 +7,10 @@ package com.teamzenith.game.zpuzzle.model;
 
 public class Medium extends Level {
 
-    public static final int ROW=3;
-    public static final int COLUMN=3;
+    public static final int ROW = 4;
+    public static final int COLUMN = 4;
 
-    public String toString(){
+    public String toString() {
         return "medel";
     }
 

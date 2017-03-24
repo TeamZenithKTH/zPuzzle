@@ -13,9 +13,10 @@ public abstract class Level implements Serializable {
     /**
      *
      */
-    public Level(){
+    public Level() {
 
     }
-   abstract protected void test();
+
+    abstract protected void test();
 
 }
