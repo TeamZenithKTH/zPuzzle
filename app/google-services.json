@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "862506891261",
+    "firebase_url": "https://zpuzzle-1.firebaseio.com",
+    "project_id": "zpuzzle-1",
+    "storage_bucket": "zpuzzle-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862506891261:android:3100be56aea5b5bd",
+        "android_client_info": {
+          "package_name": "com.teamzenith.game.zpuzzle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862506891261-amnaquvbd1stsafrv9kffepkko6ke8fq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teamzenith.game.zpuzzle",
+            "certificate_hash": "f3b976564019e955359c4d7ca5654f18ddbc7ce2"
+          }
+        },
+        {
+          "client_id": "862506891261-b72vh5q7klc732afoi8aeo047lo5hg4o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhnEw1qJXvZFHdy7ZC4w7o_3ehUo7B7C4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862506891261-b72vh5q7klc732afoi8aeo047lo5hg4o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
