@@ -36,6 +36,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static java.security.AccessController.getContext;
+
 public class Game extends AppCompatActivity implements View.OnClickListener {
 
 
@@ -62,13 +64,17 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private ImageButton im;
     ImageButton ims;
     final GetCurrentStatus getCurrentStatus = new GetCurrentStatus();
+    float scale;
+
+    public Game() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-
+        scale = getApplicationContext().getResources().getDisplayMetrics().density;
         createComponents();
         initComponent();
         actions();
@@ -132,11 +138,11 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             File imgFile1 = new File(Environment.getExternalStorageDirectory() + "/images.jpeg");
             Bitmap photo;
             if (level instanceof Hard) {
-                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), 1000, 1000, true);
+                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int)(350 * scale), (int)(350 * scale), true);
             } else if (level instanceof Medium) {
-                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), 800, 800, true);
+                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int)(344 * scale), (int)(344 * scale), true);
             } else {
-                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), 600, 600, true);
+                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int)(300 * scale), (int)(300 * scale), true);
             }
             try {
                 bmp = imageSplit.get(photo, row, column);
@@ -168,9 +174,20 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 im.setImageBitmap(tmpbmp[i]);
                 imagesIDs.setposition(im.getId(), i);
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
-                params.setMargins(1, 1, 1, 1);
-                params.width = 200;
-                params.height = 200;
+
+                if(level instanceof Kids){
+                    params.width = (int)(100 * scale);
+                    params.height = (int)(100 * scale);
+                }
+                else if(level instanceof Medium){
+                    params.width = (int)(86 * scale);
+                    params.height = (int)(86 * scale);
+                }
+                else{
+                    params.width = (int)(70 * scale);
+                    params.height = (int)(70 * scale);
+                }
+
                 im.setLayoutParams(params);
                 tableRow.addView(im, params);
                 ll.addView(tableRow);
@@ -187,8 +204,18 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 im.setImageBitmap(tmpbmp[i]);
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
                 params.setMargins(1, 1, 1, 1);
-                params.width = 200;
-                params.height = 200;
+                if(level instanceof Kids){
+                    params.width = (int)(100 * scale);
+                    params.height = (int)(100 * scale);
+                }
+                else if(level instanceof Medium){
+                    params.width = (int)(86 * scale);
+                    params.height = (int)(86 * scale);
+                }
+                else{
+                    params.width = (int)(70 * scale);
+                    params.height = (int)(70 * scale);
+                }
                 im.setLayoutParams(params);
                 tableRow.addView(im, params);
                 imageButtons[i] = im;
