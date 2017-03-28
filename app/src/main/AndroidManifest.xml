@@ -41,6 +41,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.teamzenith.game.zpuzzle.controller.PickImage"></activity>
+        <activity android:name="com.teamzenith.game.zpuzzle.controller.GalleryImageAdapter"></activity>
 
         <activity
             android:name=".controller.AfterTheGameActivity" />

@@ -158,6 +158,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             ll.refreshDrawableState();
         }
 
+
         Uri relativePath = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/images.jpeg"));
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, relativePath);
