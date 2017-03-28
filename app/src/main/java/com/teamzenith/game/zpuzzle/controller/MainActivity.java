@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.login.LoginManager;
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.LevelFactory;
@@ -34,16 +35,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("Level", level);
         startActivity(intent);
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -116,9 +118,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+       /* if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
@@ -128,20 +130,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        if (id == R.id.nav_profile) {
+            Intent i = new Intent(MainActivity.this, Profile.class);
+            startActivity(i);
+        } else if (id == R.id.nav_history) {
+            Intent i = new Intent(MainActivity.this, HistoryActivity.class);
+            startActivity(i);
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_settings) {
+            Intent i = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(i);
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_logout) {
+            LoginManager.getInstance().logOut();
+            Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(i);
+        }
+        /*else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
-        }
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
