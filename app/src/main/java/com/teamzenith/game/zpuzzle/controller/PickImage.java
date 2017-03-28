@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.widget.ImageButton;
 import android.view.View;
 import android.widget.Toast;
@@ -42,6 +43,14 @@ public class PickImage  extends AppCompatActivity{
         mViewPager = (ViewPager) findViewById(R.id.viewPageRandom);
         RandomImageAdapter adapterView = new RandomImageAdapter(this);
         mViewPager.setAdapter(adapterView);
+
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Toast.makeText(PickImage.this, "touch", Toast.LENGTH_LONG).show();
+                return false;
+            }
+        });
 
 
         mViewPager.setOnClickListener(new View.OnClickListener() {
