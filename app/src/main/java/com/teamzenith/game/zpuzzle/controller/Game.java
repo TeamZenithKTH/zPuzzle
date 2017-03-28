@@ -2,7 +2,6 @@ package com.teamzenith.game.zpuzzle.controller;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,7 +11,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -158,6 +156,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+
+
             ShufflingImage shufflingImage = new ShufflingImage();
             tmpbmp = shufflingImage.shuffle(bmp);
             SHMap = shufflingImage.getShuffledOrder();
@@ -231,6 +231,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 j++;
             }
         }
+
+
         imagesIDList = imagesIDs.getposition();
 
     }
@@ -1074,9 +1076,11 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     public void setNewImages(HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
         for (int i = 0; i < SHMap.size(); i++) {
+
             ImageButton im = (ImageButton) findViewById(i);
             im.setImageBitmap(SHMap.get(i));
         }
+
     }
 
     /**
