@@ -26,7 +26,9 @@
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
-        <activity android:name="com.teamzenith.game.zpuzzle.controller.Game"></activity>
+        <activity android:name="com.teamzenith.game.zpuzzle.controller.Game"  android:configChanges="orientation|screenSize">
+
+        </activity>
 
 
 
@@ -54,6 +56,10 @@
         <activity
             android:name="com.teamzenith.game.zpuzzle.controller.AnonymousAuthActivity"
             android:label="@string/label_anonymous_auth" />
+
+        <activity
+            android:name=".controller.AfterTheGameActivity" />
+
         <!--<activity-->
             <!--android:name="com.teamzenith.game.zpuzzle.controller.FirebaseUIActivity"-->
             <!--android:label="@string/label_firebase_ui"/>-->
