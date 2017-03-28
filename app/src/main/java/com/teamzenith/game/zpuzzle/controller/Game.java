@@ -2,6 +2,7 @@ package com.teamzenith.game.zpuzzle.controller;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -36,12 +38,13 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static android.util.Log.VERBOSE;
+
 public class Game extends AppCompatActivity implements View.OnClickListener {
 
 
     private static final int CAMERA_REQUEST = 1888;
     private final MoveImage moveImage = new MoveImage();
-    ShufflingImage shufflingImage = new ShufflingImage();
     boolean isFinish = false;
     private ArrayList<Integer> images;
     private TextView textView;
@@ -61,15 +64,17 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     ImageButton[] imageButtons;
     private ImageButton im;
     ImageButton ims;
+    private static final String TAG = "Game";
     final GetCurrentStatus getCurrentStatus = new GetCurrentStatus();
     float scale;
+    Bundle savedInstanceState;
 
     public Game() {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
         setContentView(R.layout.activity_game);
 
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
@@ -80,7 +85,12 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
 
+
+        savedInstanceState=bundle;
+
     }
+
+
 
 
     private void createComponents() {
@@ -91,6 +101,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private void initComponent() {
         Intent intent = this.getIntent();
         level = (Level) intent.getSerializableExtra("Level");
+
         if (level instanceof Hard) {
             row = Hard.ROW;
             column = Hard.COLUMN;
@@ -1078,6 +1089,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             ImageButton im = (ImageButton) findViewById(i);
             im.setImageBitmap(tmpbitMap[i]);
             Intent it= new Intent(getBaseContext(),AfterTheGameActivity.class);
+            it.putExtra("Level",level);
             startActivity(it);
 
         }
