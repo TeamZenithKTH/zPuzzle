@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamzenith.game.zpuzzle.R;
-
 import com.teamzenith.game.zpuzzle.model.Hard;
 import com.teamzenith.game.zpuzzle.model.Easy;
 import com.teamzenith.game.zpuzzle.model.Level;

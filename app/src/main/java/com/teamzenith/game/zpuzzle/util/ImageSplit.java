@@ -11,7 +11,7 @@ import java.io.FileOutputStream;
  * Created by memmi on 2017-03-13.
  */
 
-public class ImageSplit extends AppCompatActivity {
+public class ImageSplit {
 
     /**
      * Divide an image to mutible small pieces.
