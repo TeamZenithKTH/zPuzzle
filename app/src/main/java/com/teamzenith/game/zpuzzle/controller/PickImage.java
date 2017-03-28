@@ -86,7 +86,7 @@ public class PickImage  extends AppCompatActivity{
         });
 
 
-        // Initate new Activity for Taking a Pictures with camera
+        // Initate new Activity for Taking a Pictures with camera_button
         pImageButton = (ImageButton) findViewById(R.id.imageButtonCamera);
         pImageButton.setOnClickListener(new View.OnClickListener(){
 

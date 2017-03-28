@@ -6,55 +6,55 @@
     android:layout_height="match_parent"
     tools:context="com.teamzenith.game.zpuzzle.controller.Game">
 
-
-
-    <Button
+    <ImageView
         android:id="@+id/takePicture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="left|center"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:gravity="center"
         android:text="Take picture"
+        android:src="@drawable/cm"
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_alignParentTop="true"
-
-        android:layout_marginEnd="49dp" />
-
-    <Button
-        android:id="@+id/openGalery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="right|center"
-        android:text="open Galery"
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
-
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
 
 
     <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
         android:id="@+id/linearLayout"
-        android:layout_below="@+id/takePicture"
-        android:layout_marginTop="14dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/takePicture"
+        android:layout_marginTop="14dp"
+        android:orientation="vertical">
 
-
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/timerCounter"/>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/timerCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="135dp"
+                android:layout_marginLeft="10dp"
+                android:typeface="normal"
+                android:textStyle="bold"/>
+
+
+            <TextView
+                android:id="@+id/currentMovement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end|center"
+                android:typeface="normal"
+                android:textStyle="bold"/>
+        </LinearLayout>
 
 
         <TableLayout
@@ -64,18 +64,7 @@
             android:layout_gravity="center">
 
         </TableLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="your current move is "
-            android:id="@+id/currentMovement"/>
-
     </LinearLayout>
-
-
-
-
 
     <!--<ImageView
         android:id="@+id/selected_image"
