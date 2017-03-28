@@ -26,8 +26,9 @@ public class ShufflingImage {
 
         Bitmap[] tmpBmp = new Bitmap[img.length];
         ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < img.length; i++) {
+        for (int i = 0; i < img.length-1; i++) {//fixed
             list.add(i);
+            //meMap.put(i, img[i]);
         }
 
         Random rand = new Random();
@@ -36,11 +37,13 @@ public class ShufflingImage {
             int index = rand.nextInt(list.size());
             tmpBmp[i] = img[list.remove(index)];
             //Bitmap resized = Bitmap.createScaledBitmap(tmpBmp[i], 250, 250, true);
-            meMap.put(i, tmpBmp[i]);
+           meMap.put(i, tmpBmp[i]);
             i++;
         }
         //Set the right lower corner in the matrix to be empty.
         // meMap.put(img.length-1,null);
+        tmpBmp[tmpBmp.length-1]=img[img.length-1]; //fixed
+        meMap.put(tmpBmp.length-1,tmpBmp[tmpBmp.length-1]);//fixed
         return tmpBmp;
     }
 
