@@ -30,8 +30,8 @@ public class LevelFactory {
                 niveau = new Hard();
                 return niveau;
             }
-            case KIDS: {
-                niveau = new Kids();
+            case EASY: {
+                niveau = new Easy();
                 return niveau;
             }
             case MEDIUM: {
