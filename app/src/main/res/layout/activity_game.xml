@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context="com.teamzenith.game.zpuzzle.controller.Game">
 
+
+
     <Button
         android:id="@+id/takePicture"
         android:layout_width="wrap_content"
@@ -49,6 +51,12 @@
         android:layout_alignParentStart="true">
 
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timerCounter"/>
+
+
         <TableLayout
             android:id="@+id/table"
             android:layout_width="wrap_content"
@@ -57,7 +65,17 @@
 
         </TableLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="your current move is "
+            android:id="@+id/currentMovement"/>
+
     </LinearLayout>
+
+
+
+
 
     <!--<ImageView
         android:id="@+id/selected_image"

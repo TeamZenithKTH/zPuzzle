@@ -34,6 +34,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Hichem Memmi on 2017-03-09.
@@ -66,11 +68,17 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private HashMap<Integer, Bitmap> newMoveedImagesList;
     ImageButton[] imageButtons;
     private ImageButton im;
+    private int countMovement=0;
     ImageButton ims;
     private static final String TAG = "Game";
     final GetCurrentStatus getCurrentStatus = new GetCurrentStatus();
     float scale;
-    Bundle savedInstanceState;
+    private TextView currentMovement;
+    Timer T=new Timer();
+    private TextView timerCounter;
+    int count=0;
+
+
 
     public Game() {
     }
@@ -84,12 +92,26 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         createComponents();
         initComponent();
         actions();
+
+       T.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        timerCounter.setText("count="+count);
+                        count++;
+                    }
+                });
+            }
+        }, 1000, 1000);
+
         ActivityCompat.requestPermissions(Game.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
 
-
-        savedInstanceState=bundle;
 
     }
 
@@ -98,7 +120,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
     private void createComponents() {
         photoButton = (Button) this.findViewById(R.id.takePicture);
-        //textView = (TextView) findViewById(R.id.niveauText);
+        currentMovement = (TextView) findViewById(R.id.currentMovement);
+        timerCounter = (TextView) findViewById(R.id.timerCounter);
     }
 
     private void initComponent() {
@@ -130,6 +153,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
 
         if (ll != null) {
+            count=0;
             ll.removeAllViews();
             ll.refreshDrawableState();
         }
@@ -433,6 +457,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 //toast.show();
                 isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
                 if (isFinish) {
+
                     toast.show();
                     SetOriginalImagesToMatrix();
                     isFinish = false;
@@ -448,6 +473,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 //toast.show();
                 isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
                 if (isFinish) {
+
                     toast.show();
                     SetOriginalImagesToMatrix();
                     isFinish = false;
@@ -463,6 +489,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 //toast.show();
                 isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
                 if (isFinish) {
+
                     toast.show();
                     SetOriginalImagesToMatrix();
                     isFinish = false;
@@ -477,6 +504,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 //toast.show();
                 isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
                 if (isFinish) {
+
                     toast.show();
                     SetOriginalImagesToMatrix();
                     isFinish = false;
@@ -1081,6 +1109,15 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
      */
     public void setNewImages(HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
+        countMovement++;
+
+        int lastIndexSpace=currentMovement.getText().toString().lastIndexOf(" ");
+        String currentText=currentMovement.getText().toString();
+        String newText=currentText.substring(0,lastIndexSpace)+" "+String.valueOf(countMovement);
+
+
+        currentMovement.setText(newText);
+
         for (int i = 0; i < SHMap.size(); i++) {
 
             ImageButton im = (ImageButton) findViewById(i);
@@ -1100,8 +1137,11 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             im.setImageBitmap(tmpbitMap[i]);
             Intent it= new Intent(getBaseContext(),AfterTheGameActivity.class);
             it.putExtra("Level",level);
+            it.putExtra("CountMovement",String.valueOf(countMovement));
+            T.cancel();
             startActivity(it);
 
         }
+
     }
 }

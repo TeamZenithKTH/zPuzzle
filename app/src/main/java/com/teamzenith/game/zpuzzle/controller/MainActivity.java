@@ -26,9 +26,9 @@ import com.teamzenith.game.zpuzzle.model.LevelType;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    Button hardBtn;
-    Button medelBtn;
-    Button kidsBtn;
+    private Button hardBtn;
+    private Button medelBtn;
+    private Button kidsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
