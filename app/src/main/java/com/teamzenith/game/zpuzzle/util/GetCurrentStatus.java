@@ -29,7 +29,7 @@ public class GetCurrentStatus {
         for (int index = 0; index < newStatus.size(); index++) {
             if (newStatus.get(index) != null && orignalStatus[index] != null && orignalStatus[index].equals(newStatus.get(index))) {
 
-                // increase the number for each correct postion.
+                // increase the number for each correct position.
                 count++;
                 System.out.println(count);
             }

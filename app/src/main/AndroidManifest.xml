@@ -22,21 +22,11 @@
         android:theme="@style/AppTheme">
         <activity android:name=".controller.MainActivity">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".controller.Game" />
-         <!-- <activity -->
-        <!-- android:name="com.teamzenith.game.zpuzzle.controller.FacebookLoginActivity" -->
-        <!-- android:label="@string/label_facebook_login" /> -->
-         <!-- <activity -->
-        <!-- android:name="com.teamzenith.game.zpuzzle.controller.FirebaseUIActivity" -->
-        <!-- android:label="@string/label_firebase_ui"/> -->
 
+        <activity android:name="com.teamzenith.game.zpuzzle.controller.Game"  android:configChanges="orientation|screenSize">
+
+        </activity>
 
         <activity android:name=".controller.Profile" />
         <activity android:name=".controller.SettingsActivity" />
@@ -44,14 +34,17 @@
         <activity
             android:name=".controller.LoginActivity"
             android:label="@string/title_activity_login">
+
             <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
-
-            <category android:name="android.intent.category.LAUNCHER" />
-           </intent-filter>
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+
+        <activity
+            android:name=".controller.AfterTheGameActivity" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

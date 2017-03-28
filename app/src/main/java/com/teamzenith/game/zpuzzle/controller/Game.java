@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.Hard;
-import com.teamzenith.game.zpuzzle.model.Kids;
+import com.teamzenith.game.zpuzzle.model.Easy;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.Medium;
 import com.teamzenith.game.zpuzzle.util.GetCurrentStatus;
@@ -35,12 +35,19 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Created by Hichem Memmi on 2017-03-09.
+ */
+
+
+/**
+ * This is the the activity of the GamePlay
+ */
 public class Game extends AppCompatActivity implements View.OnClickListener {
 
 
     private static final int CAMERA_REQUEST = 1888;
     private final MoveImage moveImage = new MoveImage();
-    ShufflingImage shufflingImage = new ShufflingImage();
     boolean isFinish = false;
     private ArrayList<Integer> images;
     private TextView textView;
@@ -60,14 +67,20 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     ImageButton[] imageButtons;
     private ImageButton im;
     ImageButton ims;
+    private static final String TAG = "Game";
     final GetCurrentStatus getCurrentStatus = new GetCurrentStatus();
+    float scale;
+    Bundle savedInstanceState;
+
+    public Game() {
+    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
         setContentView(R.layout.activity_game);
 
-
+        scale = getApplicationContext().getResources().getDisplayMetrics().density;
         createComponents();
         initComponent();
         actions();
@@ -75,7 +88,12 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
 
+
+        savedInstanceState=bundle;
+
     }
+
+
 
 
     private void createComponents() {
@@ -86,6 +104,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private void initComponent() {
         Intent intent = this.getIntent();
         level = (Level) intent.getSerializableExtra("Level");
+
         if (level instanceof Hard) {
             row = Hard.ROW;
             column = Hard.COLUMN;
@@ -93,8 +112,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             row = Medium.ROW;
             column = Medium.COLUMN;
         } else {
-            row = Kids.ROW;
-            column = Kids.COLUMN;
+            row = Easy.ROW;
+            column = Easy.COLUMN;
 
         }
 
@@ -131,17 +150,19 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             File imgFile1 = new File(Environment.getExternalStorageDirectory() + "/images.jpeg");
             Bitmap photo;
             if (level instanceof Hard) {
-                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), 1000, 1000, true);
+                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int)(350 * scale), (int)(350 * scale), true);
             } else if (level instanceof Medium) {
-                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), 800, 800, true);
+                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int)(344 * scale), (int)(344 * scale), true);
             } else {
-                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), 600, 600, true);
+                photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int)(300 * scale), (int)(300 * scale), true);
             }
             try {
                 bmp = imageSplit.get(photo, row, column);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+
+
             ShufflingImage shufflingImage = new ShufflingImage();
             tmpbmp = shufflingImage.shuffle(bmp);
             SHMap = shufflingImage.getShuffledOrder();
@@ -167,9 +188,20 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 im.setImageBitmap(tmpbmp[i]);
                 imagesIDs.setposition(im.getId(), i);
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
-                params.setMargins(1, 1, 1, 1);
-                params.width = 200;
-                params.height = 200;
+
+                if(level instanceof Easy){
+                    params.width = (int)(100 * scale);
+                    params.height = (int)(100 * scale);
+                }
+                else if(level instanceof Medium){
+                    params.width = (int)(86 * scale);
+                    params.height = (int)(86 * scale);
+                }
+                else{
+                    params.width = (int)(70 * scale);
+                    params.height = (int)(70 * scale);
+                }
+
                 im.setLayoutParams(params);
                 tableRow.addView(im, params);
                 ll.addView(tableRow);
@@ -186,14 +218,26 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 im.setImageBitmap(tmpbmp[i]);
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
                 params.setMargins(1, 1, 1, 1);
-                params.width = 200;
-                params.height = 200;
+                if(level instanceof Easy){
+                    params.width = (int)(100 * scale);
+                    params.height = (int)(100 * scale);
+                }
+                else if(level instanceof Medium){
+                    params.width = (int)(86 * scale);
+                    params.height = (int)(86 * scale);
+                }
+                else{
+                    params.width = (int)(70 * scale);
+                    params.height = (int)(70 * scale);
+                }
                 im.setLayoutParams(params);
                 tableRow.addView(im, params);
                 imageButtons[i] = im;
                 j++;
             }
         }
+
+
         imagesIDList = imagesIDs.getposition();
 
     }
@@ -866,7 +910,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
-        imageButton16.setOnClickListener(new View.OnClickListener() {
+     imageButton16.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -1037,9 +1081,11 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     public void setNewImages(HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
         for (int i = 0; i < SHMap.size(); i++) {
+
             ImageButton im = (ImageButton) findViewById(i);
             im.setImageBitmap(SHMap.get(i));
         }
+
     }
 
     /**
@@ -1051,6 +1097,10 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         for (int i = 0; i < tmpbitMap.length; i++) {
             ImageButton im = (ImageButton) findViewById(i);
             im.setImageBitmap(tmpbitMap[i]);
+            Intent it= new Intent(getBaseContext(),AfterTheGameActivity.class);
+            it.putExtra("Level",level);
+            startActivity(it);
+
         }
     }
 }
