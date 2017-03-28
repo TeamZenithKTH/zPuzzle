@@ -5,5 +5,5 @@ package com.teamzenith.game.zpuzzle.model;
  */
 
 public enum LevelType {
-    HARD, KIDS, MEDIUM
+    HARD, EASY, MEDIUM
 }
