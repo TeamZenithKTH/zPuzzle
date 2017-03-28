@@ -87,13 +87,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             level = levelFactory.createNiveau(LevelType.EASY);
         }
 
-      /*  Intent intent = new Intent(this, Game.class);
+        Intent intent = new Intent(this, Game.class);
         intent.putExtra("Level", level);
-        startActivity(intent); */
+        startActivity(intent);
 
-         Intent intent = new Intent( this , PickImage.class);
+       /*  Intent intent = new Intent( this , PickImage.class);
          intent.putExtra("Level", level);
-         startActivity(intent);
+         startActivity(intent);*/
     }
 
     @Override
