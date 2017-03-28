@@ -70,7 +70,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "Game";
     final GetCurrentStatus getCurrentStatus = new GetCurrentStatus();
     float scale;
-    Bundle savedInstanceState;
 
     public Game() {
     }
@@ -87,10 +86,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         ActivityCompat.requestPermissions(Game.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
-
-
-        savedInstanceState=bundle;
-
     }
 
 
