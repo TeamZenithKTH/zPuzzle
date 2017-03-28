@@ -22,7 +22,7 @@ import android.widget.Toast;
 import com.teamzenith.game.zpuzzle.R;
 
 import com.teamzenith.game.zpuzzle.model.Hard;
-import com.teamzenith.game.zpuzzle.model.Kids;
+import com.teamzenith.game.zpuzzle.model.Easy;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.Medium;
 import com.teamzenith.game.zpuzzle.util.GetCurrentStatus;
@@ -35,8 +35,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import static java.security.AccessController.getContext;
 
 public class Game extends AppCompatActivity implements View.OnClickListener {
 
@@ -100,8 +98,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             row = Medium.ROW;
             column = Medium.COLUMN;
         } else {
-            row = Kids.ROW;
-            column = Kids.COLUMN;
+            row = Easy.ROW;
+            column = Easy.COLUMN;
 
         }
 
@@ -175,7 +173,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 imagesIDs.setposition(im.getId(), i);
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
 
-                if(level instanceof Kids){
+                if(level instanceof Easy){
                     params.width = (int)(100 * scale);
                     params.height = (int)(100 * scale);
                 }
@@ -204,7 +202,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 im.setImageBitmap(tmpbmp[i]);
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
                 params.setMargins(1, 1, 1, 1);
-                if(level instanceof Kids){
+                if(level instanceof Easy){
                     params.width = (int)(100 * scale);
                     params.height = (int)(100 * scale);
                 }
@@ -894,7 +892,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
-        imageButton16.setOnClickListener(new View.OnClickListener() {
+     imageButton16.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -1079,6 +1077,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         for (int i = 0; i < tmpbitMap.length; i++) {
             ImageButton im = (ImageButton) findViewById(i);
             im.setImageBitmap(tmpbitMap[i]);
+            Intent it= new Intent(getBaseContext(),AfterTheGameActivity.class);
+            startActivity(it);
+
         }
     }
 }
