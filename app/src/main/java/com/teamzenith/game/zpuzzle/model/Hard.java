@@ -1,9 +1,13 @@
 package com.teamzenith.game.zpuzzle.model;
 
 /**
- * Created by memmi on 2017-03-09.
+ * Created by Hichem Memmi on 2017-03-09.
  */
 
+
+/**
+ * This class is a Game level that extends from Level
+ */
 public class Hard extends Level {
 
 
