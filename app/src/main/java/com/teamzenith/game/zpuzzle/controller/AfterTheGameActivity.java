@@ -10,7 +10,7 @@ import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.Level;
 
 /**
- * Created by memmi on 2017-03-27.
+ * Created by Hichem Memmi on 2017-03-27.
  */
 
 public class AfterTheGameActivity extends AppCompatActivity implements View.OnClickListener {

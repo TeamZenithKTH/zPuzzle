@@ -36,8 +36,14 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static android.util.Log.VERBOSE;
+/**
+ * Created by Hichem Memmi on 2017-03-09.
+ */
 
+
+/**
+ * This is the the activity of the GamePlay
+ */
 public class Game extends AppCompatActivity implements View.OnClickListener {
 
 
