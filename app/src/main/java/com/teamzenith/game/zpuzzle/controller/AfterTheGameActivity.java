@@ -49,8 +49,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             startActivity(playAgainIntent);
         }
         else{
-            Intent goBackToMain=new Intent(getBaseContext(),Game.class);
-            goBackToMain.putExtra("Level",level);
+            Intent goBackToMain=new Intent(getBaseContext(),MainActivity.class);
             startActivity(goBackToMain);
         }
     }
