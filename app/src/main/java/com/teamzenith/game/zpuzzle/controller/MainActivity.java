@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (btn.getId() == R.id.medelBtn) {
             level = levelFactory.createNiveau(LevelType.MEDIUM);
         } else {
-            level = levelFactory.createNiveau(LevelType.KIDS);
+            level = levelFactory.createNiveau(LevelType.EASY);
         }
 
         Intent intent = new Intent(this, Game.class);
