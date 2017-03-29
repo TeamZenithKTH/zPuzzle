@@ -112,8 +112,7 @@ public class GalleryImageAdapter extends Activity {
 
                 }
             }
-            //
-            //
+
             else if( strSelectedImage.equals("Random")){
 
             }

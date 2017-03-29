@@ -11,9 +11,11 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -30,6 +32,7 @@ import com.teamzenith.game.zpuzzle.util.ImagesIDs;
 import com.teamzenith.game.zpuzzle.util.MoveImage;
 import com.teamzenith.game.zpuzzle.util.ShufflingImage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -53,7 +56,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     boolean isFinish = false;
     private ArrayList<Integer> images;
     private TextView textView;
-    private Button photoButton;
+    private ImageView photoButton;
     private TableLayout ll;
     private TableRow tableRow;
     private int row;
@@ -76,7 +79,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private TextView currentMovement;
     Timer T=new Timer();
     private TextView timerCounter;
+    private Bitmap imageToSend;
     int count=0;
+    File imgFile1;
 
 
 
@@ -93,21 +98,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         initComponent();
         actions();
 
-       T.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        timerCounter.setText("count="+count);
-                        count++;
-                    }
-                });
-            }
-        }, 1000, 1000);
-
         ActivityCompat.requestPermissions(Game.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
@@ -115,11 +105,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
     }
 
-
-
-
     private void createComponents() {
-        photoButton = (Button) this.findViewById(R.id.takePicture);
+        photoButton = (ImageView) this.findViewById(R.id.takePicture);
         currentMovement = (TextView) findViewById(R.id.currentMovement);
         timerCounter = (TextView) findViewById(R.id.timerCounter);
     }
@@ -154,6 +141,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
         if (ll != null) {
             count=0;
+            countMovement=0;
             ll.removeAllViews();
             ll.refreshDrawableState();
         }
@@ -172,7 +160,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            File imgFile1 = new File(Environment.getExternalStorageDirectory() + "/images.jpeg");
+            imgFile1 = new File(Environment.getExternalStorageDirectory() + "/images.jpeg");
             Bitmap photo;
             if (level instanceof Hard) {
                 photo = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int)(350 * scale), (int)(350 * scale), true);
@@ -183,6 +171,21 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             }
             try {
                 bmp = imageSplit.get(photo, row, column);
+                T.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                String next = "<font color='#EE0000'>"+String.valueOf(count)+"</font>";
+                                timerCounter.setText(Html.fromHtml("Timer: "+next));
+                                count++;
+                            }
+                        });
+                    }
+                }, 1000, 1000);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -1111,12 +1114,15 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         this.SHMap = SHMap;
         countMovement++;
 
+        String next = "<font color='#EE0000'>"+String.valueOf(countMovement)+"</font>";
+
+        currentMovement.setText("your current move is ");
         int lastIndexSpace=currentMovement.getText().toString().lastIndexOf(" ");
         String currentText=currentMovement.getText().toString();
-        String newText=currentText.substring(0,lastIndexSpace)+" "+String.valueOf(countMovement);
+        String newText=currentText.substring(0,lastIndexSpace)+" "+next;
 
 
-        currentMovement.setText(newText);
+        currentMovement.setText(Html.fromHtml(newText));
 
         for (int i = 0; i < SHMap.size(); i++) {
 
@@ -1138,6 +1144,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             Intent it= new Intent(getBaseContext(),AfterTheGameActivity.class);
             it.putExtra("Level",level);
             it.putExtra("CountMovement",String.valueOf(countMovement));
+            it.putExtra("TimerCounter",String.valueOf(count));
+            it.putExtra("Image",imgFile1);
+
             T.cancel();
             startActivity(it);
 

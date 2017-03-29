@@ -20,9 +20,7 @@ import com.teamzenith.game.zpuzzle.model.Level;
 public class RandomImageAdapter  extends PagerAdapter {
 
     Context mContext;
-    Intent gintent;
-    Level level;
-
+    
     RandomImageAdapter(Context context) {
         this.mContext = context;
     }

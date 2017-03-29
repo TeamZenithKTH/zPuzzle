@@ -43,16 +43,8 @@ public class ImageSplit {
             }
         }
 
-       /* if (row * column < 16) {
-            //Set the right lower corner in the matrix to be empty.*/
             bmp[(row * column) - 1] = null;
             return bmp;
-        /*} else {
-            //Set the right lower corner and the left upper corner to be empty when the matrex is 16 pieces or more.
-            bmp[0] = null;
-            bmp[(row * column) - 1] = null;
-            return bmp;
-        }*/
 
     }
 
