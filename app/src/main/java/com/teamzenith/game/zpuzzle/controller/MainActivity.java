@@ -1,6 +1,7 @@
 package com.teamzenith.game.zpuzzle.controller;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -87,13 +88,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             level = levelFactory.createNiveau(LevelType.EASY);
         }
 
-        Intent intent = new Intent(this, Game.class);
+        /*Intent intent = new Intent(this, Game.class);
         intent.putExtra("Level", level);
-        startActivity(intent);
+        startActivity(intent);*/
 
-       /*  Intent intent = new Intent( this , PickImage.class);
+        Intent intent = new Intent( this , ImageChooser.class);
          intent.putExtra("Level", level);
-         startActivity(intent);*/
+         startActivity(intent);
     }
 
     @Override
