@@ -3,18 +3,26 @@ package com.teamzenith.game.zpuzzle.controller;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -24,6 +32,7 @@ import com.teamzenith.game.zpuzzle.model.Hard;
 import com.teamzenith.game.zpuzzle.model.Easy;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.Medium;
+import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.util.GetCurrentStatus;
 import com.teamzenith.game.zpuzzle.util.ImageSplit;
 import com.teamzenith.game.zpuzzle.util.ImagesIDs;
@@ -72,8 +81,14 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private TextView timerCounter;
     private Bitmap imageToSend;
     private int count = 0;
-    private File imgFile1;
-    File imageFile;
+    private File imageFile=null;
+    private Drawable d;
+    private int idOfDrawable=0;
+    private User player;
+    private ImageChooser.Method method;
+    private static int GALERI_RESULT = 1;
+    private RandomImageAdapter adapterView=null;
+
 
     public Game() {
     }
@@ -86,11 +101,48 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         createComponents();
         initComponent();
 
+        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.line1);
 
+        if(method.equals(ImageChooser.Method.GALERI)){
+            photoButton = new ImageView(this);
+            photoButton.setImageResource(R.drawable.photofromgaleri);
+            photoButton.setId(R.id.pickphotogaleri);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            layoutParams.gravity= Gravity.CENTER;
+            photoButton.setLayoutParams(layoutParams);
+            linearLayout.addView(photoButton);
+            prepareAnImage();
 
-        if(imageFile!=null){
+        }
+        else if(method.equals(ImageChooser.Method.CAMERA)){
+            photoButton = new ImageView(this);
+            photoButton.setImageResource(R.drawable.cm);
+            photoButton.setId(R.id.pickphotocamera);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            layoutParams.gravity= Gravity.CENTER;
+            photoButton.setLayoutParams(layoutParams);
+            linearLayout.addView(photoButton);
             prepareAnImage();
         }
+        else{
+            ViewPager viewPager=new ViewPager(this);
+            adapterView = new RandomImageAdapter(this.getBaseContext());
+            viewPager.setId(R.id.pickphotorandom);
+            viewPager.setAdapter(adapterView);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            layoutParams.gravity= Gravity.CENTER;
+            viewPager.setLayoutParams(layoutParams);
+            linearLayout.addView(viewPager);
+            Intent it=getIntent();
+            String fileName = it.getStringExtra("file");
+
+            File filePath = getFileStreamPath(fileName);
+            idOfDrawable=it.getIntExtra("idOfDrawable",0);
+            d = Drawable.createFromPath(filePath.toString());
+            System.out.println(d);
+            prepareAnImage();
+        }
+
              actions();
 
         ActivityCompat.requestPermissions(Game.this,
@@ -99,7 +151,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void createComponents() {
-        photoButton = (ImageView) this.findViewById(R.id.takePicture);
         currentMovement = (TextView) findViewById(R.id.currentMovement);
         timerCounter = (TextView) findViewById(R.id.timerCounter);
     }
@@ -108,6 +159,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         Intent intent = this.getIntent();
         imageFile = (File)intent.getSerializableExtra("Image");
         level = (Level) intent.getSerializableExtra("Level");
+        player = (User) intent.getSerializableExtra("player");
+        method=(ImageChooser.Method) intent.getSerializableExtra("method");
         if (level instanceof Hard) {
             row = Hard.ROW;
             column = Hard.COLUMN;
@@ -121,7 +174,26 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void actions() {
-        photoButton.setOnClickListener(this);
+        if(photoButton!=null){
+            photoButton.setOnClickListener(this);
+        }
+        else{
+            adapterView.setOnPrepareListener(new PrepareForClick() {
+                @Override
+                public void setOnPrepare(View p) {
+                    if (ll != null) {
+                        count = 0;
+                        countMovement = 0;
+                        ll.removeAllViews();
+                        ll.refreshDrawableState();
+                    }
+                    ImageView imageView=(ImageView) p;
+                    idOfDrawable = (Integer)imageView.getTag();
+                    prepareAnImage();
+                }
+            });
+        }
+
     }
 
     @Override
@@ -133,20 +205,50 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             ll.removeAllViews();
             ll.refreshDrawableState();
         }
+        if(method.equals(ImageChooser.Method.CAMERA)){
         Uri relativePath = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/images.jpeg"));
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, relativePath);
         startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        }
+        else if(method.equals(ImageChooser.Method.GALERI)){
+            Intent galeriIntent = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+            startActivityForResult(galeriIntent, GALERI_RESULT);
+        }
+
+
     }
-
-
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            prepareAnImage();
+            if(requestCode==CAMERA_REQUEST){
+                prepareAnImage();
+            }
+            else if(requestCode==GALERI_RESULT){
+                Uri selectedImageURI = data.getData();
+                imageFile = new File(getRealPathFromURI(selectedImageURI));
+                prepareAnImage();
+            }
+
         }
 
+    }
+
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
     }
 
 public Bitmap createBitmap(File imgFile1){
@@ -161,12 +263,25 @@ public Bitmap createBitmap(File imgFile1){
 
     public void prepareAnImage(){
         Bitmap photo;
-        if(imageFile!=null){
+        if(method.equals(ImageChooser.Method.RANDOM)){
+            photo = BitmapFactory.decodeResource(getResources(), idOfDrawable);
+            if (level instanceof Hard) {
+                photo =Bitmap.createScaledBitmap(photo, (int) (350 * scale), (int) (350 * scale), false);
+
+            } else if (level instanceof Medium) {
+                photo =Bitmap.createScaledBitmap(photo, (int) (344 * scale), (int) (344 * scale), false);
+
+            } else {
+                photo =Bitmap.createScaledBitmap(photo, (int) (300 * scale), (int) (300 * scale), false);
+            }
+
+        }
+        else if(method.equals(ImageChooser.Method.GALERI)){
             photo=createBitmap(imageFile);
         }
         else
-        { imgFile1 = new File(Environment.getExternalStorageDirectory() + "/images.jpeg");
-            photo=createBitmap(imgFile1);}
+        { imageFile = new File(Environment.getExternalStorageDirectory() + "/images.jpeg");
+            photo=createBitmap(imageFile);}
 
         try {
             bmp = imageSplit.get(photo, row, column);
@@ -331,7 +446,16 @@ public Bitmap createBitmap(File imgFile1){
             it.putExtra("Level", level);
             it.putExtra("CountMovement", String.valueOf(countMovement));
             it.putExtra("TimerCounter", String.valueOf(count));
-            it.putExtra("Image", imgFile1);
+           if(method.equals(ImageChooser.Method.RANDOM))
+            {
+                it.putExtra("Image", idOfDrawable);
+            }
+            else{
+                it.putExtra("Image", imageFile);
+            }
+
+            it.putExtra("player",player);
+            it.putExtra("method",method);
             T.cancel();
             startActivity(it);
         }
