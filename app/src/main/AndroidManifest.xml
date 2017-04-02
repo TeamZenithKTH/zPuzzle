@@ -20,39 +20,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.MainActivity">
-
-        </activity>
-
-        <activity android:name="com.teamzenith.game.zpuzzle.controller.Game"  android:configChanges="orientation|screenSize">
-
-        </activity>
-
-        <activity android:name=".controller.Profile" />
+        <activity android:name=".controller.MainActivity"/>
+        <activity
+            android:name=".controller.Game"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".controller.ProfileActivity" />
         <activity android:name=".controller.SettingsActivity" />
         <activity android:name=".controller.HistoryActivity" />
         <activity
             android:name=".controller.LoginActivity"
             android:label="@string/title_activity_login">
-
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.teamzenith.game.zpuzzle.controller.PickImage"></activity>
-        <activity android:name="com.teamzenith.game.zpuzzle.controller.GalleryImageAdapter"></activity>
-
-        <activity
-            android:name=".controller.AfterTheGameActivity" />
+        <activity android:name=".controller.PickImage" />
+        <activity android:name=".controller.GalleryImageAdapter" />
+        <activity android:name=".controller.AfterTheGameActivity" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity
-            android:name=".controller.ImageChooser" />
+        <activity android:name=".controller.SignupActivity"/>
+       <activity android:name=".controller.ImageChooser" />
     </application>
 
 </manifest>
