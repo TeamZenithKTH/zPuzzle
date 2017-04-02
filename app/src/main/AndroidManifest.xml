@@ -36,7 +36,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.PickImage" />
         <activity android:name=".controller.GalleryImageAdapter" />
         <activity android:name=".controller.AfterTheGameActivity" />
 

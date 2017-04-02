@@ -1,11 +1,9 @@
 package com.teamzenith.game.zpuzzle.controller;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,37 +13,71 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
+import com.squareup.picasso.Picasso;
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.LevelFactory;
 import com.teamzenith.game.zpuzzle.model.LevelType;
+import com.teamzenith.game.zpuzzle.model.User;
+
+import java.text.ParseException;
 
 /**
  *
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+    boolean doubleBackToExitPressedOnce = false;
 
     private Button hardBtn;
     private Button medelBtn;
     private Button kidsBtn;
+    private FirebaseAuth firebaseAuth;
+    private String userEmail;
+    private String userImage;
+    private String userID;
+    private String userName;
+    private User player;
+    private String facebook_id, f_name, m_name, l_name, gender, full_name, email_id;
+    private String profile_image;
+    private User user;
+    private Profile profile;
+    private ProfileController profileController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        profile = Profile.getCurrentProfile();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        user = new User();
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        Intent mIntent = getIntent();
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        firebaseAuth = FirebaseAuth.getInstance();
+
+
+        profile = Profile.getCurrentProfile();
+
+            player = (User) mIntent.getSerializableExtra("player");
+          //  userEmail = player.getUserEmail();
+            userID = player.getUserID();
+            userImage = player.getUserImage();
+            userName = player.getUserName();
+
+
+
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -53,11 +85,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+
+
+        TextView userNameView = (TextView) headerView.findViewById(R.id.user_name);
+        userNameView.setText(userName);
+
+
+        TextView userEmailView = (TextView) headerView.findViewById(R.id.user_email_header);
+        userEmailView.setText(userEmail);
+        ImageView userImageView = (ImageView) headerView.findViewById(R.id.user_image);
+        Picasso.with(getBaseContext()).load(userImage).into(userImageView);
+
         createComponents();
         Actions();
     }
+
 
     private void createComponents() {
         hardBtn = (Button) findViewById(R.id.hardBtn);
@@ -88,23 +134,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             level = levelFactory.createNiveau(LevelType.EASY);
         }
 
-        /*Intent intent = new Intent(this, Game.class);
+        Intent intent = new Intent(this, ImageChooser.class);
+        intent.putExtra("player", player);
         intent.putExtra("Level", level);
-        startActivity(intent);*/
-
-        Intent intent = new Intent( this , ImageChooser.class);
-         intent.putExtra("Level", level);
-         startActivity(intent);
+        startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        if (doubleBackToExitPressedOnce) {
+            this.finishAffinity();
         }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+
+            }
+        }, 2000);
     }
 
     @Override
@@ -136,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_profile) {
-            Intent i = new Intent(MainActivity.this, Profile.class);
+            Intent i = new Intent(MainActivity.this, ProfileActivity.class);
             startActivity(i);
         } else if (id == R.id.nav_history) {
             Intent i = new Intent(MainActivity.this, HistoryActivity.class);
@@ -147,15 +199,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(i);
 
         } else if (id == R.id.nav_logout) {
+            firebaseAuth.signOut();
             LoginManager.getInstance().logOut();
             Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);
         }
-        /*else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

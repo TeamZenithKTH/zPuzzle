@@ -5,7 +5,7 @@
         Your Facebook App ID. See README.
     -->
     <!--  TODO(developer): REPLACE -->
-    <string name="facebook_app_id">316389762109196</string>
+    <string name="facebook_app_id">612655412259708</string>
 
     <!--
       Your Twitter Key and Secret, see README.
@@ -13,4 +13,9 @@
     <!-- TODO(developer): REPLACE -->
     <string name="twitter_consumer_key">REPLACE_ME</string>
     <string name="twitter_consumer_secret">REPLACE_ME</string>
+
+
+    <item type="id" name="pickphotocamera" />
+    <item type="id" name="pickphotogaleri" />
+    <item type="id" name="pickphotorandom" />
 </resources>
