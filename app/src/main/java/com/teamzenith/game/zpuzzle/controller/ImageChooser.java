@@ -116,6 +116,7 @@ public class ImageChooser extends AppCompatActivity {
                 it.putExtra("method",Method.RANDOM);
                 it.putExtra("file", fileName);
                 it.putExtra("idOfDrawable",adapterView.getSliderImagesId()[currentItem]);
+                it.putExtra("current",currentItem);
                 it.putExtra("Level",level);
                 it.putExtra("player",player);
                 startActivity(it);

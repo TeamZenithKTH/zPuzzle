@@ -34,7 +34,6 @@ public class ImageSplit {
         int count = 0;
         int width = photo.getWidth();
         int height = photo.getHeight();
-        FileOutputStream out = null;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 bmp[count] = Bitmap.createBitmap(photo, (width * j) / row, (i * height) / row, width / row, height / row);

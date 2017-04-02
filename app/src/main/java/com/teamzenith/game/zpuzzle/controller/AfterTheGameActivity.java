@@ -48,6 +48,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     private Bitmap solved;
     private  File imageFile;
     private String fileName;
+    private int current;
 
 
     public void onCreate(Bundle bundle){
@@ -98,6 +99,8 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             idOfDrawable=intentFromGameActivity.getIntExtra("Image",0);
             solved = BitmapFactory.decodeResource(getResources(), idOfDrawable);
             solved =Bitmap.createScaledBitmap(solved, (int) (300 * scale), (int) (300 * scale), false);
+            current=intentFromGameActivity.getIntExtra("current",current);
+
 
         }
 
@@ -123,6 +126,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             if(method.equals(ImageChooser.Method.RANDOM)){
                 playAgainIntent.putExtra("file",fileName);
                 playAgainIntent.putExtra("idOfDrawable",idOfDrawable);
+                playAgainIntent.putExtra("current",current);
 
             }
             else{
@@ -144,6 +148,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             Intent goBackToMain=new Intent(getBaseContext(),MainActivity.class);
             goBackToMain.putExtra("player",player);
             startActivity(goBackToMain);
+
         }
     }
 }

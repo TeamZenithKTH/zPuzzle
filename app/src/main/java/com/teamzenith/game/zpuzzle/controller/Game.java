@@ -89,6 +89,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private static int GALERI_RESULT = 1;
     private RandomImageAdapter adapterView=null;
     private String fileName;
+    private int current;
+    private ViewPager viewPager;
 
 
     public Game() {
@@ -126,17 +128,18 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             prepareAnImage();
         }
         else{
-            ViewPager viewPager=new ViewPager(this);
+            viewPager=new ViewPager(this);
             adapterView = new RandomImageAdapter(this.getBaseContext());
             viewPager.setId(R.id.pickphotorandom);
             viewPager.setAdapter(adapterView);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             layoutParams.gravity= Gravity.CENTER;
             viewPager.setLayoutParams(layoutParams);
-            linearLayout.addView(viewPager);
             Intent it=getIntent();
+            current=it.getIntExtra("current",0);
+            viewPager.setCurrentItem(current);
+            linearLayout.addView(viewPager);
             fileName = it.getStringExtra("file");
-
             File filePath = getFileStreamPath(fileName);
             idOfDrawable=it.getIntExtra("idOfDrawable",0);
             d = Drawable.createFromPath(filePath.toString());
@@ -149,6 +152,18 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         ActivityCompat.requestPermissions(Game.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
+
+
+
+        if (d instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) d;
+            if (bitmapDrawable != null) {
+                Bitmap bitmap = bitmapDrawable.getBitmap();
+
+                if (bitmap != null && !bitmap.isRecycled())
+                    bitmap.recycle();
+            }
+        }
     }
 
     private void createComponents() {
@@ -451,6 +466,7 @@ public Bitmap createBitmap(File imgFile1){
             {
                 it.putExtra("Image", idOfDrawable);
                 it.putExtra("file", fileName);
+                it.putExtra("current",viewPager.getCurrentItem());
             }
             else{
                 it.putExtra("Image", imageFile);
@@ -460,6 +476,7 @@ public Bitmap createBitmap(File imgFile1){
             it.putExtra("method",method);
             T.cancel();
             startActivity(it);
+
         }
     }
 }
