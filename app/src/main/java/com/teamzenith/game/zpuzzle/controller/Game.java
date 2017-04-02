@@ -88,6 +88,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private ImageChooser.Method method;
     private static int GALERI_RESULT = 1;
     private RandomImageAdapter adapterView=null;
+    private String fileName;
 
 
     public Game() {
@@ -134,7 +135,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             viewPager.setLayoutParams(layoutParams);
             linearLayout.addView(viewPager);
             Intent it=getIntent();
-            String fileName = it.getStringExtra("file");
+            fileName = it.getStringExtra("file");
 
             File filePath = getFileStreamPath(fileName);
             idOfDrawable=it.getIntExtra("idOfDrawable",0);
@@ -449,6 +450,7 @@ public Bitmap createBitmap(File imgFile1){
            if(method.equals(ImageChooser.Method.RANDOM))
             {
                 it.putExtra("Image", idOfDrawable);
+                it.putExtra("file", fileName);
             }
             else{
                 it.putExtra("Image", imageFile);

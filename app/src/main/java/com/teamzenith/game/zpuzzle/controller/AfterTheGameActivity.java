@@ -44,6 +44,10 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     private UserHistoryEntry userHistoryEntry;
     private User player;
     private ImageChooser.Method method;
+    private int idOfDrawable;
+    private Bitmap solved;
+    private  File imageFile;
+    private String fileName;
 
 
     public void onCreate(Bundle bundle){
@@ -67,6 +71,9 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
         solvedImage=(ImageView) findViewById(R.id.solvedImage);
         player = (User) intentFromGameActivity.getSerializableExtra("player");
         method=(ImageChooser.Method)intentFromGameActivity.getSerializableExtra("method");
+        if(method.equals(ImageChooser.Method.RANDOM)){
+            fileName=intentFromGameActivity.getStringExtra("file");
+        }
     }
 
 
@@ -85,16 +92,17 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
 
 
 
-        Bitmap solved=null;
+        solved=null;
 
         if(method.equals(ImageChooser.Method.RANDOM)){
-            int idOfDrawable=intentFromGameActivity.getIntExtra("Image",0);
+            idOfDrawable=intentFromGameActivity.getIntExtra("Image",0);
             solved = BitmapFactory.decodeResource(getResources(), idOfDrawable);
             solved =Bitmap.createScaledBitmap(solved, (int) (300 * scale), (int) (300 * scale), false);
+
         }
 
         else{
-            File imageFile = (File)intentFromGameActivity.getSerializableExtra("Image");
+            imageFile = (File)intentFromGameActivity.getSerializableExtra("Image");
             solved = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath()), (int)(300 * scale), (int)(300 * scale), true);
         }
 
@@ -108,9 +116,19 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.playAgain){
-            Intent playAgainIntent=new Intent(getBaseContext(),ImageChooser.class);
+            Intent playAgainIntent=new Intent(getBaseContext(),Game.class);
             playAgainIntent.putExtra("Level",level);
             playAgainIntent.putExtra("player",player);
+            playAgainIntent.putExtra("method",method);
+            if(method.equals(ImageChooser.Method.RANDOM)){
+                playAgainIntent.putExtra("file",fileName);
+                playAgainIntent.putExtra("idOfDrawable",idOfDrawable);
+
+            }
+            else{
+                playAgainIntent.putExtra("Image",imageFile);
+            }
+
             startActivity(playAgainIntent);
         }
         else if (v.getId() == R.id.save_history) {
