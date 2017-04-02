@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/zPuzzle.iml" filepath="$PROJECT_DIR$/zPuzzle.iml" />
-      <module fileurl="file://$PROJECT_DIR$/zPuzzle-2.iml" filepath="$PROJECT_DIR$/zPuzzle-2.iml" />
     </modules>
   </component>
 </project>

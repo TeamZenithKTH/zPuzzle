@@ -12,15 +12,30 @@ import android.widget.ImageView;
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.Level;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * Created by Krish on 28-03-2017.
  */
 
+
 public class RandomImageAdapter  extends PagerAdapter {
 
     Context mContext;
-    
+
+
+    private int[] sliderImagesId = new int[]{
+            R.drawable.naruto, R.drawable.son_goku,
+            R.drawable.one_piece, R.drawable.hatake_kakashi,
+            R.drawable.son_goku_ssj,
+            R.drawable.stockholm, R.drawable.stockholm_1,
+            R.drawable.kth, R.drawable.gamla_stam,
+            R.drawable.zlatan_ibrahimovic
+    };
+    private PrepareForClick prepareForClick;
+
     RandomImageAdapter(Context context) {
         this.mContext = context;
     }
@@ -30,13 +45,9 @@ public class RandomImageAdapter  extends PagerAdapter {
         return sliderImagesId.length;
     }
 
-    private int[] sliderImagesId = new int[]{
-            R.drawable.image1, R.drawable.image2,
-            R.drawable.image3, R.drawable.image4,
-            R.drawable.image5, R.drawable.image1,
-            R.drawable.image2, R.drawable.image3,
-            R.drawable.image4, R.drawable.image5
-    };
+    public int[] getSliderImagesId() {
+        return sliderImagesId;
+    }
 
     @Override
     public boolean isViewFromObject(View v, Object obj) {
@@ -49,6 +60,18 @@ public class RandomImageAdapter  extends PagerAdapter {
 
         ImageView mImageView = new ImageView(mContext);
         mImageView.setImageResource(sliderImagesId[i]);
+        mImageView.setTag(sliderImagesId[i]);
+
+
+        mImageView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                prepareForClick.setOnPrepare(v);
+
+            }
+        });
         ((ViewPager) container).addView(mImageView, 0);
          return mImageView;
 
@@ -58,4 +81,12 @@ public class RandomImageAdapter  extends PagerAdapter {
     public void destroyItem(ViewGroup container, int i, Object obj) {
         ((ViewPager) container).removeView((ImageView) obj);
     }
+
+
+    public void setOnPrepareListener(PrepareForClick prepareForClick) {
+
+       this.prepareForClick=prepareForClick;
+
+    }
 }
+

@@ -7,14 +7,18 @@ import android.view.MenuItem;
 
 import com.teamzenith.game.zpuzzle.R;
 
-public class SettingsActivity extends AppCompatActivity {
+/**
+ * Created by alaaalkassar on 4/1/17.
+ */
+
+public class ProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.settings_toolbar);
-        toolbar.setTitle("Settings");
+        setContentView(R.layout.activity_profile);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
+        toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
         // add back arrow to toolbar
         if (getSupportActionBar() != null) {
@@ -33,4 +37,3 @@ public class SettingsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
-

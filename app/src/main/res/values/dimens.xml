@@ -11,4 +11,11 @@
     <dimen name="icon_bottom_margin">24dp</dimen>
     <dimen name="title_bottom_margin">16dp</dimen>
     <dimen name="field_width_standard">160dp</dimen>
+
+
+    <dimen name="imageview_width">100dp</dimen>
+    <dimen name="imageview_height">100dp</dimen>
+
+
+    <dimen name="viewPager_height">151dp</dimen>
 </resources>
