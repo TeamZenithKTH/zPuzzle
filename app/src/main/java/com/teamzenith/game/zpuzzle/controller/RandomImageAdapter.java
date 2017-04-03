@@ -27,11 +27,16 @@ public class RandomImageAdapter  extends PagerAdapter {
 
 
     private int[] sliderImagesId = new int[]{
-            R.drawable.naruto, R.drawable.son_goku,
-            R.drawable.one_piece, R.drawable.hatake_kakashi,
+            R.drawable.naruto,
+            R.drawable.son_goku,
+            R.drawable.one_piece,
+            R.drawable.hatake_kakashi,
+            R.drawable.son_goku_ssj2,
             R.drawable.son_goku_ssj,
-            R.drawable.stockholm, R.drawable.stockholm_1,
-            R.drawable.kth, R.drawable.gamla_stam,
+            R.drawable.stockholm,
+            R.drawable.stockholm_1,
+            R.drawable.kth,
+            R.drawable.gamla_stam,
             R.drawable.zlatan_ibrahimovic
     };
     private PrepareForClick prepareForClick;
