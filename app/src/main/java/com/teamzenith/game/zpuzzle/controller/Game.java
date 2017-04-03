@@ -82,7 +82,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private int countMovement = 0;
     private float scale;
     private TextView currentMovement;
-    private Timer T = new Timer();
+    private Timer T;
     private TextView timerCounter;
     private Bitmap imageToSend;
     private int count = 0;
@@ -93,13 +93,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private ImageChooser.Method method;
     private static int GALERI_RESULT = 1;
     private RandomImageAdapter adapterView = null;
-    private String fileName;
     private int current;
     private ViewPager viewPager;
-
-
-    public Game() {
-    }
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -110,6 +105,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         initComponent();
 
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.line1);
+        T= new Timer();
 
         if (method.equals(ImageChooser.Method.GALERI)) {
             photoButton = new ImageView(this);
@@ -142,8 +138,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             current = it.getIntExtra("current", 0);
             viewPager.setCurrentItem(current);
             linearLayout.addView(viewPager);
-
-            // File filePath = getFileStreamPath(fileName);
             idOfDrawable = it.getIntExtra("idOfDrawable", 0);
             prepareAnImage();
         }
@@ -166,16 +160,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         level = (Level) intent.getSerializableExtra("Level");
         player = (User) intent.getSerializableExtra("player");
         method = (ImageChooser.Method) intent.getSerializableExtra("method");
-        if (level instanceof Hard) {
-            row = Hard.ROW;
-            column = Hard.COLUMN;
-        } else if (level instanceof Medium) {
-            row = Medium.ROW;
-            column = Medium.COLUMN;
-        } else {
-            row = Easy.ROW;
-            column = Easy.COLUMN;
-        }
+        row = level.getSizeOfRow();
+        column = level.getSizeOfColumn();
+
     }
 
     private void actions() {
@@ -185,15 +172,20 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             adapterView.setOnPrepareListener(new PrepareForClick() {
                 @Override
                 public void setOnPrepare(View p) {
+                    countMovement = 0;
                     if (ll != null) {
-                        count = 0;
+                      //  count = 0;
                         countMovement = 0;
                         ll.removeAllViews();
                         ll.refreshDrawableState();
+                        T.cancel();
+                        T= new Timer();
                     }
                     ImageView imageView = (ImageView) p;
                     idOfDrawable = (Integer) imageView.getTag();
                     prepareAnImage();
+
+                    currentMovement.setText(Html.fromHtml("your current move is <font color='#EE0000'> 0 </font>"));
                 }
             });
         }
@@ -204,10 +196,12 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
 
         if (ll != null) {
-            count = 0;
+           // count = 0;
             countMovement = 0;
             ll.removeAllViews();
             ll.refreshDrawableState();
+            T.cancel();
+            T= new Timer();
         }
         if (method.equals(ImageChooser.Method.CAMERA)) {
             Uri relativePath = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/images.jpeg"));
@@ -255,26 +249,28 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
     public Bitmap createBitmap(File imgFile1) {
 
+        Bitmap bitmapNeedsToRotate;
+        Matrix matrix;
+
         int exifOrientation = getImageOrientation(imgFile1);
-
-        if (level instanceof Hard) {
-
-            if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
-                Bitmap bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (350 * scale), (int) (350 * scale), true);
-                Matrix matrix = new Matrix();
-                matrix.postRotate(90);
-                return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
-            } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
-                Bitmap bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (350 * scale), (int) (350 * scale), true);
-                Matrix matrix = new Matrix();
-                matrix.postRotate(180);
-                return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
-            } else
-                return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (350 * scale), (int) (350 * scale), true);
-        } else if (level instanceof Medium) {
-            return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (344 * scale), (int) (344 * scale), true);
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
+            matrix = new Matrix();
+            matrix.postRotate(90);
+            Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+            return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
+            matrix = new Matrix();
+            matrix.postRotate(180);
+            return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
+            matrix = new Matrix();
+            matrix.postRotate(270);
+            return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
         } else {
-            return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (300 * scale), (int) (300 * scale), true);
+            return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
         }
     }
 
@@ -291,29 +287,18 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     public void prepareAnImage() {
         Bitmap photo;
         if (method.equals(ImageChooser.Method.RANDOM)) {
-
             photo = BitmapFactory.decodeResource(getResources(), idOfDrawable);
-
-            if (level instanceof Hard) {
-                photo = Bitmap.createScaledBitmap(photo, (int) (350 * scale), (int) (350 * scale), false);
-
-            } else if (level instanceof Medium) {
-                photo = Bitmap.createScaledBitmap(photo, (int) (344 * scale), (int) (344 * scale), false);
-
-            } else {
-                photo = Bitmap.createScaledBitmap(photo, (int) (300 * scale), (int) (300 * scale), false);
-            }
-
+            photo = Bitmap.createScaledBitmap(photo, (int) (level.getSize() * scale), (int) (level.getSize() * scale), false);
         } else if (method.equals(ImageChooser.Method.GALERI)) {
             photo = createBitmap(imageFile);
-
         } else {
             imageFile = new File(Environment.getExternalStorageDirectory() + "/images.jpeg");
             photo = createBitmap(imageFile);
-
         }
 
         try {
+            count=0;
+
             bmp = imageSplit.get(photo, row, column);
             T.scheduleAtFixedRate(new TimerTask() {
                 @Override
@@ -335,8 +320,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         tmpbmp = shufflingImage.shuffle(bmp);
         SHMap = shufflingImage.getShuffledOrder();
         settingImages(SHMap);
-
-
         createImageViews(SHMap);
     }
 
@@ -353,17 +336,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 im.setImageBitmap(tmpbmp[i]);
                 imagesIDs.setposition(im.getId(), i);
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
-
-                if (level instanceof Easy) {
-                    params.width = (int) (100 * scale);
-                    params.height = (int) (100 * scale);
-                } else if (level instanceof Medium) {
-                    params.width = (int) (86 * scale);
-                    params.height = (int) (86 * scale);
-                } else {
-                    params.width = (int) (70 * scale);
-                    params.height = (int) (70 * scale);
-                }
+                params.width = (int) (level.getSizeOfPiece() * scale);
+                params.height = (int) (level.getSizeOfPiece() * scale);
                 im.setLayoutParams(params);
                 tableRow.addView(im, params);
                 ll.addView(tableRow);
@@ -380,16 +354,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 im.setImageBitmap(tmpbmp[i]);
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
                 params.setMargins(1, 1, 1, 1);
-                if (level instanceof Easy) {
-                    params.width = (int) (100 * scale);
-                    params.height = (int) (100 * scale);
-                } else if (level instanceof Medium) {
-                    params.width = (int) (86 * scale);
-                    params.height = (int) (86 * scale);
-                } else {
-                    params.width = (int) (70 * scale);
-                    params.height = (int) (70 * scale);
-                }
+                params.width = (int) (level.getSizeOfPiece() * scale);
+                params.height = (int) (level.getSizeOfPiece() * scale);
                 im.setLayoutParams(params);
                 tableRow.addView(im, params);
                 imageButtons[i] = im;
@@ -475,22 +441,21 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         for (int i = 0; i < tmpbitMap.length; i++) {
             ImageButton im = (ImageButton) findViewById(i);
             im.setImageBitmap(tmpbitMap[i]);
-            Intent it = new Intent(getBaseContext(), AfterTheGameActivity.class);
-            it.putExtra("Level", level);
-            it.putExtra("CountMovement", String.valueOf(countMovement));
-            it.putExtra("TimerCounter", String.valueOf(count));
-            if (method.equals(ImageChooser.Method.RANDOM)) {
-                it.putExtra("Image", idOfDrawable);
-                it.putExtra("current", viewPager.getCurrentItem());
-            } else {
-                it.putExtra("Image", imageFile);
-            }
-
-            it.putExtra("player", player);
-            it.putExtra("method", method);
-            T.cancel();
-            startActivity(it);
-
         }
+        Intent it = new Intent(getBaseContext(), AfterTheGameActivity.class);
+        it.putExtra("Level", level);
+        it.putExtra("CountMovement", String.valueOf(countMovement));
+        it.putExtra("TimerCounter", String.valueOf(count));
+        if (method.equals(ImageChooser.Method.RANDOM)) {
+            it.putExtra("Image", idOfDrawable);
+            it.putExtra("current", viewPager.getCurrentItem());
+        } else {
+            it.putExtra("Image", imageFile);
+        }
+
+        it.putExtra("player", player);
+        it.putExtra("method", method);
+        //T.cancel();
+        startActivity(it);
     }
 }

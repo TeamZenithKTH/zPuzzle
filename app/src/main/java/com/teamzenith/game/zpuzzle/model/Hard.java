@@ -11,8 +11,11 @@ package com.teamzenith.game.zpuzzle.model;
 public class Hard extends Level {
 
 
-    public static final int ROW = 5;
-    public static final int COLUMN = 5;
+    public final int ROW = 5;
+    public final int COLUMN = 5;
+
+    private final int size=350;
+    private final int sizeOfPiece=70;
 
     /**
      * @return
@@ -22,7 +25,22 @@ public class Hard extends Level {
     }
 
     @Override
-    public void test() {
+    public int getSize() {
+        return size;
+    }
 
+    @Override
+    public int getSizeOfPiece() {
+        return sizeOfPiece;
+    }
+
+    @Override
+    public int getSizeOfRow() {
+        return ROW;
+    }
+
+    @Override
+    public int getSizeOfColumn() {
+        return COLUMN;
     }
 }
