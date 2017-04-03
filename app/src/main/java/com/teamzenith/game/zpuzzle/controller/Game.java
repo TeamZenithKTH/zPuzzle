@@ -145,8 +145,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
             // File filePath = getFileStreamPath(fileName);
             idOfDrawable = it.getIntExtra("idOfDrawable", 0);
-
-            System.out.println(d);
             prepareAnImage();
         }
 
