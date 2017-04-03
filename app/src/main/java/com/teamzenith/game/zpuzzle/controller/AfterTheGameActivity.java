@@ -8,6 +8,7 @@ import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -133,9 +135,15 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
 
         solvedImage.setImageBitmap(solved);
 
+        //Bitmap bmp =  BitmapFactory.decodeResource(getResources(), R.drawable.chicken);//your image
+        ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
+        solved.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
+        //solved.recycle();
+        byte[] byteArray = bYtE.toByteArray();
+        String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
         userID = player.getUserID();
-        userHistoryEntry = new UserHistoryEntry(userID, level, countMovementString, timerCounterString);
+        userHistoryEntry = new UserHistoryEntry(userID, level, countMovementString, timerCounterString,imageFile);
     }
 
     private int getImageOrientation(File imgFile1){

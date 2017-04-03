@@ -29,7 +29,7 @@ public class ShufflingImage {
         for (int i = 0; i < img.length-1; i++) {//fixed
             list.add(i);
 
-       // meMap.put(i, img[i]); //******** décomment
+        //meMap.put(i, img[i]); //******** décomment
 
         }
 
