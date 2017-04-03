@@ -124,7 +124,6 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             playAgainIntent.putExtra("player",player);
             playAgainIntent.putExtra("method",method);
             if(method.equals(ImageChooser.Method.RANDOM)){
-                playAgainIntent.putExtra("file",fileName);
                 playAgainIntent.putExtra("idOfDrawable",idOfDrawable);
                 playAgainIntent.putExtra("current",current);
 
