@@ -97,24 +97,8 @@ public class ImageChooser extends AppCompatActivity {
             public void setOnPrepare(View p) {
 
                 int currentItem =viewPager.getCurrentItem();
-                Drawable drawable = mContext.getDrawable(adapterView.getSliderImagesId()[currentItem]);
-                System.out.println(drawable);
-                Bitmap bm =((BitmapDrawable) drawable).getBitmap();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                byte[] b = baos.toByteArray();
-                String fileName = "SomeName.png";
-                try {
-                    FileOutputStream fileOutStream = openFileOutput(fileName, MODE_PRIVATE);
-                    fileOutStream.write(b);
-                    fileOutStream.close();
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
-
                 Intent it=new Intent(ImageChooser.this,Game.class);
                 it.putExtra("method",Method.RANDOM);
-                it.putExtra("file", fileName);
                 it.putExtra("idOfDrawable",adapterView.getSliderImagesId()[currentItem]);
                 it.putExtra("current",currentItem);
                 it.putExtra("Level",level);
@@ -122,21 +106,6 @@ public class ImageChooser extends AppCompatActivity {
                 startActivity(it);
             }
         });
-
-
-      /* int current= viewPager.getCurrentItem();
-
-        ImageView im=(ImageView)findViewById(adapterView.getSliderImagesId()[current]) ;*/
-
-
-       // adapterView.
-
-     /* viewPager.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });*/
 
 
         ActivityCompat.requestPermissions(ImageChooser.this,

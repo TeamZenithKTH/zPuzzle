@@ -6,8 +6,10 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -27,6 +29,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.Hard;
 import com.teamzenith.game.zpuzzle.model.Easy;
@@ -38,8 +41,10 @@ import com.teamzenith.game.zpuzzle.util.ImageSplit;
 import com.teamzenith.game.zpuzzle.util.ImagesIDs;
 import com.teamzenith.game.zpuzzle.util.MoveImage;
 import com.teamzenith.game.zpuzzle.util.ShufflingImage;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
@@ -81,13 +86,13 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private TextView timerCounter;
     private Bitmap imageToSend;
     private int count = 0;
-    private File imageFile=null;
+    private File imageFile = null;
     private Drawable d;
-    private int idOfDrawable=0;
+    private int idOfDrawable = 0;
     private User player;
     private ImageChooser.Method method;
     private static int GALERI_RESULT = 1;
-    private RandomImageAdapter adapterView=null;
+    private RandomImageAdapter adapterView = null;
     private String fileName;
     private int current;
     private ViewPager viewPager;
@@ -104,66 +109,52 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         createComponents();
         initComponent();
 
-        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.line1);
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.line1);
 
-        if(method.equals(ImageChooser.Method.GALERI)){
+        if (method.equals(ImageChooser.Method.GALERI)) {
             photoButton = new ImageView(this);
             photoButton.setImageResource(R.drawable.photofromgaleri);
             photoButton.setId(R.id.pickphotogaleri);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            layoutParams.gravity= Gravity.CENTER;
+            layoutParams.gravity = Gravity.CENTER;
             photoButton.setLayoutParams(layoutParams);
             linearLayout.addView(photoButton);
             prepareAnImage();
 
-        }
-        else if(method.equals(ImageChooser.Method.CAMERA)){
+        } else if (method.equals(ImageChooser.Method.CAMERA)) {
             photoButton = new ImageView(this);
             photoButton.setImageResource(R.drawable.cm);
             photoButton.setId(R.id.pickphotocamera);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            layoutParams.gravity= Gravity.CENTER;
+            layoutParams.gravity = Gravity.CENTER;
             photoButton.setLayoutParams(layoutParams);
             linearLayout.addView(photoButton);
             prepareAnImage();
-        }
-        else{
-            viewPager=new ViewPager(this);
+        } else {
+            viewPager = new ViewPager(this);
             adapterView = new RandomImageAdapter(this.getBaseContext());
             viewPager.setId(R.id.pickphotorandom);
             viewPager.setAdapter(adapterView);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            layoutParams.gravity= Gravity.CENTER;
+            layoutParams.gravity = Gravity.CENTER;
             viewPager.setLayoutParams(layoutParams);
-            Intent it=getIntent();
-            current=it.getIntExtra("current",0);
+            Intent it = getIntent();
+            current = it.getIntExtra("current", 0);
             viewPager.setCurrentItem(current);
             linearLayout.addView(viewPager);
-            fileName = it.getStringExtra("file");
-            File filePath = getFileStreamPath(fileName);
-            idOfDrawable=it.getIntExtra("idOfDrawable",0);
-            d = Drawable.createFromPath(filePath.toString());
+
+            // File filePath = getFileStreamPath(fileName);
+            idOfDrawable = it.getIntExtra("idOfDrawable", 0);
+
             System.out.println(d);
             prepareAnImage();
         }
 
-             actions();
+        actions();
 
         ActivityCompat.requestPermissions(Game.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
-
-
-
-        if (d instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) d;
-            if (bitmapDrawable != null) {
-                Bitmap bitmap = bitmapDrawable.getBitmap();
-
-                if (bitmap != null && !bitmap.isRecycled())
-                    bitmap.recycle();
-            }
-        }
     }
 
     private void createComponents() {
@@ -173,10 +164,10 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
     private void initComponent() {
         Intent intent = this.getIntent();
-        imageFile = (File)intent.getSerializableExtra("Image");
+        imageFile = (File) intent.getSerializableExtra("Image");
         level = (Level) intent.getSerializableExtra("Level");
         player = (User) intent.getSerializableExtra("player");
-        method=(ImageChooser.Method) intent.getSerializableExtra("method");
+        method = (ImageChooser.Method) intent.getSerializableExtra("method");
         if (level instanceof Hard) {
             row = Hard.ROW;
             column = Hard.COLUMN;
@@ -190,10 +181,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void actions() {
-        if(photoButton!=null){
+        if (photoButton != null) {
             photoButton.setOnClickListener(this);
-        }
-        else{
+        } else {
             adapterView.setOnPrepareListener(new PrepareForClick() {
                 @Override
                 public void setOnPrepare(View p) {
@@ -203,8 +193,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                         ll.removeAllViews();
                         ll.refreshDrawableState();
                     }
-                    ImageView imageView=(ImageView) p;
-                    idOfDrawable = (Integer)imageView.getTag();
+                    ImageView imageView = (ImageView) p;
+                    idOfDrawable = (Integer) imageView.getTag();
                     prepareAnImage();
                 }
             });
@@ -221,13 +211,12 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             ll.removeAllViews();
             ll.refreshDrawableState();
         }
-        if(method.equals(ImageChooser.Method.CAMERA)){
-        Uri relativePath = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/images.jpeg"));
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, relativePath);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
-        }
-        else if(method.equals(ImageChooser.Method.GALERI)){
+        if (method.equals(ImageChooser.Method.CAMERA)) {
+            Uri relativePath = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/images.jpeg"));
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, relativePath);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST);
+        } else if (method.equals(ImageChooser.Method.GALERI)) {
             Intent galeriIntent = new Intent(Intent.ACTION_PICK,
                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
@@ -240,10 +229,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if(requestCode==CAMERA_REQUEST){
+            if (requestCode == CAMERA_REQUEST) {
                 prepareAnImage();
-            }
-            else if(requestCode==GALERI_RESULT){
+            } else if (requestCode == GALERI_RESULT) {
                 Uri selectedImageURI = data.getData();
                 imageFile = new File(getRealPathFromURI(selectedImageURI));
                 prepareAnImage();
@@ -267,37 +255,65 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         return result;
     }
 
-public Bitmap createBitmap(File imgFile1){
-    if (level instanceof Hard) {
-        return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (350 * scale), (int) (350 * scale), true);
-    } else if (level instanceof Medium) {
-        return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (344 * scale), (int) (344 * scale), true);
-    } else {
-        return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (300 * scale), (int) (300 * scale), true);
-    }
-}
+    public Bitmap createBitmap(File imgFile1) {
 
-    public void prepareAnImage(){
+        int exifOrientation = getImageOrientation(imgFile1);
+
+        if (level instanceof Hard) {
+
+            if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                Bitmap bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (350 * scale), (int) (350 * scale), true);
+                Matrix matrix = new Matrix();
+                matrix.postRotate(90);
+                return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+            } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+                Bitmap bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (350 * scale), (int) (350 * scale), true);
+                Matrix matrix = new Matrix();
+                matrix.postRotate(180);
+                return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+            } else
+                return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (350 * scale), (int) (350 * scale), true);
+        } else if (level instanceof Medium) {
+            return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (344 * scale), (int) (344 * scale), true);
+        } else {
+            return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (300 * scale), (int) (300 * scale), true);
+        }
+    }
+
+    private int getImageOrientation(File imgFile1) {
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imgFile1.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+    }
+
+    public void prepareAnImage() {
         Bitmap photo;
-        if(method.equals(ImageChooser.Method.RANDOM)){
+        if (method.equals(ImageChooser.Method.RANDOM)) {
+
             photo = BitmapFactory.decodeResource(getResources(), idOfDrawable);
+
             if (level instanceof Hard) {
-                photo =Bitmap.createScaledBitmap(photo, (int) (350 * scale), (int) (350 * scale), false);
+                photo = Bitmap.createScaledBitmap(photo, (int) (350 * scale), (int) (350 * scale), false);
 
             } else if (level instanceof Medium) {
-                photo =Bitmap.createScaledBitmap(photo, (int) (344 * scale), (int) (344 * scale), false);
+                photo = Bitmap.createScaledBitmap(photo, (int) (344 * scale), (int) (344 * scale), false);
 
             } else {
-                photo =Bitmap.createScaledBitmap(photo, (int) (300 * scale), (int) (300 * scale), false);
+                photo = Bitmap.createScaledBitmap(photo, (int) (300 * scale), (int) (300 * scale), false);
             }
 
+        } else if (method.equals(ImageChooser.Method.GALERI)) {
+            photo = createBitmap(imageFile);
+
+        } else {
+            imageFile = new File(Environment.getExternalStorageDirectory() + "/images.jpeg");
+            photo = createBitmap(imageFile);
+
         }
-        else if(method.equals(ImageChooser.Method.GALERI)){
-            photo=createBitmap(imageFile);
-        }
-        else
-        { imageFile = new File(Environment.getExternalStorageDirectory() + "/images.jpeg");
-            photo=createBitmap(imageFile);}
 
         try {
             bmp = imageSplit.get(photo, row, column);
@@ -325,6 +341,7 @@ public Bitmap createBitmap(File imgFile1){
 
         createImageViews(SHMap);
     }
+
     private void settingImages(HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
         imageButtons = new ImageButton[row * column];
@@ -407,6 +424,7 @@ public Bitmap createBitmap(File imgFile1){
             });
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -449,6 +467,7 @@ public Bitmap createBitmap(File imgFile1){
             im.setImageBitmap(SHMap.get(i));
         }
     }
+
     /**
      * Set the Original image's pieces after the user solve the puzzle.
      */
@@ -462,18 +481,15 @@ public Bitmap createBitmap(File imgFile1){
             it.putExtra("Level", level);
             it.putExtra("CountMovement", String.valueOf(countMovement));
             it.putExtra("TimerCounter", String.valueOf(count));
-           if(method.equals(ImageChooser.Method.RANDOM))
-            {
+            if (method.equals(ImageChooser.Method.RANDOM)) {
                 it.putExtra("Image", idOfDrawable);
-                it.putExtra("file", fileName);
-                it.putExtra("current",viewPager.getCurrentItem());
-            }
-            else{
+                it.putExtra("current", viewPager.getCurrentItem());
+            } else {
                 it.putExtra("Image", imageFile);
             }
 
-            it.putExtra("player",player);
-            it.putExtra("method",method);
+            it.putExtra("player", player);
+            it.putExtra("method", method);
             T.cancel();
             startActivity(it);
 
