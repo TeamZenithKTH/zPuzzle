@@ -150,7 +150,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         //checking if success
                         if (task.isSuccessful()) {
-                            Toast.makeText(SignupActivity.this, "Wellcome To Our App", Toast.LENGTH_LONG).show();
+                           // Toast.makeText(SignupActivity.this, "Wellcome To Our App", Toast.LENGTH_LONG).show();
                             user = firebaseAuth.getCurrentUser();
                             status = true;
                             User player = new User(user.getUid(), userName, user.getEmail(), default_userImage);

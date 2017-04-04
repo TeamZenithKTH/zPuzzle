@@ -7,13 +7,11 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
@@ -21,21 +19,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamzenith.game.zpuzzle.R;
-import com.teamzenith.game.zpuzzle.model.Hard;
-import com.teamzenith.game.zpuzzle.model.Easy;
 import com.teamzenith.game.zpuzzle.model.Level;
-import com.teamzenith.game.zpuzzle.model.Medium;
 import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.util.GetCurrentStatus;
 import com.teamzenith.game.zpuzzle.util.ImageSplit;
@@ -143,6 +136,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             current = it.getIntExtra("current", 0);
             viewPager.setCurrentItem(current);
             linearLayout.addView(viewPager);
+
             idOfDrawable = it.getIntExtra("idOfDrawable", 0);
             prepareAnImage();
         }
@@ -152,6 +146,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         ActivityCompat.requestPermissions(Game.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
+
+
     }
 
     private void createComponents() {
@@ -180,9 +176,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                     countMovement = 0;
                     if (ll != null) {
                         count = 0;
-                        hour=0;
-                        seconds=0;
-                        minute=0;
+                        hour = 0;
+                        seconds = 0;
+                        minute = 0;
                         countMovement = 0;
                         ll.removeAllViews();
                         ll.refreshDrawableState();
@@ -207,9 +203,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             // count = 0;
             countMovement = 0;
             count = 0;
-            hour=0;
-            seconds=0;
-            minute=0;
+            hour = 0;
+            seconds = 0;
+            minute = 0;
             ll.removeAllViews();
             ll.refreshDrawableState();
             T.cancel();
@@ -260,6 +256,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     }
 
     public Bitmap createBitmap(File imgFile1) {
+
 
         Bitmap bitmapNeedsToRotate;
         Matrix matrix;
@@ -316,11 +313,11 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            next = "<font color='#EE0000'>" + ((String.valueOf(hour).length() > 1) ? hour : "0" + hour) + ":" + ((String.valueOf(minute).length() > 1) ? minute : "0" + minute) + ":"+ ((String.valueOf(seconds).length() > 1) ? seconds : "0" + seconds) +":"+
+                            next = "<font color='#EE0000'>" + ((String.valueOf(hour).length() > 1) ? hour : "0" + hour) + ":" + ((String.valueOf(minute).length() > 1) ? minute : "0" + minute) + ":" + ((String.valueOf(seconds).length() > 1) ? seconds : "0" + seconds) + ":" +
                                     ((String.valueOf(count).length() > 1) ?
-                                            (String.valueOf(count).length() > 2)?
+                                            (String.valueOf(count).length() > 2) ?
                                                     count
-                                                    :"0"+count
+                                                    : "0" + count
                                             : "00" + count) + "</font>";
                             timerCounter.setText(Html.fromHtml("Timer: " + next));
                             count++;
@@ -329,7 +326,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                                 count = 0;
                                 if (seconds == 59) {
                                     minute++;
-                                    seconds=0;
+                                    seconds = 0;
                                     if (minute == 59) {
                                         minute = 0;
                                         hour++;
@@ -380,7 +377,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 im = new ImageButton(this);
                 im.setId(i);
                 imagesIDs.setposition(im.getId(), i);
-                System.out.println("Image ID2 " + im.getId());
+                //System.out.println("Image ID2 " + im.getId());
                 im.setImageBitmap(tmpbmp[i]);
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
                 params.setMargins(1, 1, 1, 1);
@@ -398,7 +395,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private void createImageViews(final HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
         final GetCurrentStatus getCurrentStatus = new GetCurrentStatus();
-        final Toast toast = Toast.makeText(this, moveImage.getMsg(), Toast.LENGTH_LONG);
+        //final Toast toast = Toast.makeText(this, moveImage.getMsg(), Toast.LENGTH_LONG);
         for (int i = 0; i < imageButtons.length; i++) {
             imageButtons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -411,7 +408,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                     isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
 
                     if (isFinish) {
-                        toast.show();
+                        // toast.show();
                         SetOriginalImagesToMatrix();
                         isFinish = false;
                     }

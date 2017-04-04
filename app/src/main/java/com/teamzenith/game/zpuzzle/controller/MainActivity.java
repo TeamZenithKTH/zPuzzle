@@ -126,12 +126,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         if (btn.getId() == R.id.hardBtn) {
-            level = levelFactory.createNiveau(LevelType.HARD);
+            level = levelFactory.createLevel(LevelType.HARD);
 
         } else if (btn.getId() == R.id.medelBtn) {
-            level = levelFactory.createNiveau(LevelType.MEDIUM);
+            level = levelFactory.createLevel(LevelType.MEDIUM);
         } else {
-            level = levelFactory.createNiveau(LevelType.EASY);
+            level = levelFactory.createLevel(LevelType.EASY);
         }
 
         Intent intent = new Intent(this, ImageChooser.class);

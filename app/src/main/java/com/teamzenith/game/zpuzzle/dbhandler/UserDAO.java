@@ -11,8 +11,8 @@ import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -22,6 +22,7 @@ import java.util.Map;
 
 public class UserDAO {
     private DatabaseReference mDatabase;
+    private DatabaseReference historyDatabase;
     private String date;
     private Level level;
     private String userID;
@@ -44,11 +45,19 @@ public class UserDAO {
         this.level = userHistoryEntry.getLevel();
         this.countMovementString = userHistoryEntry.getCountMovementString();
         this.timerCounterString = userHistoryEntry.getTimerCounterString();
-        this.imageFile=userHistoryEntry.getImageFile();
+        this.imageFile = userHistoryEntry.getImageFile();
         date = date();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("History").child("userID: "+userID).child("date: "+date).child("Level: "+level.toString()).child("count: "+countMovementString).setValue("time"+timerCounterString);
-        //getUserHistory(userID);
+        DatabaseReference usersRef = mDatabase.child("History").child(userID).child(date);
+        Map<String, String> userHistory = new HashMap<String, String>();
+        userHistory.put("Date", date);
+        userHistory.put("Level", level.toString());
+        userHistory.put("Count", countMovementString);
+        userHistory.put("Time", timerCounterString);
+        userHistory.put("Image",imageFile);
+        usersRef.setValue(userHistory);
+        getUserHistory(userID);
+
     }
 
     public void insertNewUser(User user) {
@@ -58,8 +67,11 @@ public class UserDAO {
         this.userName = user.getUserName();
         this.userImage = user.getUserImage();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("Users").child(userID).child(userName).setValue(userImage);
-
+        DatabaseReference usersRef = mDatabase.child("Users").child(userID);
+        Map<String, String> uerMap = new HashMap<String, String>();
+        uerMap.put("UserName", userName);
+        uerMap.put("UserImage", userImage);
+        usersRef.setValue(uerMap);
     }
 
     private String date() throws ParseException {
@@ -67,38 +79,37 @@ public class UserDAO {
         return currentDateTimeString;
     }
 
-    private void getUserHistory(String userID) {
-        this.userID = userID;
-        //mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("History").child(userID);
-        ref.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        //Get map of users in datasnapshot
-                        userHistory((Map<String, Object>) dataSnapshot.getValue());
-                    }
+    public Map<String, String> getUserHistory(String userID) {
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        //handle databaseError
-                    }
-                });
+        historyDatabase = FirebaseDatabase.getInstance().getReference().child("History");
+        final DatabaseReference historyRef = historyDatabase.child(userID);
+        final Map<String, String> userHistory = new HashMap<String, String>();
+        historyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Long num = dataSnapshot.getChildrenCount();
+                System.out.println("Children Number: " + num);
+                for (DataSnapshot userHistorySnapshot : dataSnapshot.getChildren()) {
+                    String level = (String) userHistorySnapshot.child("Level").getValue();
+                    String count = (String) userHistorySnapshot.child("Count").getValue();
+                    String time = (String) userHistorySnapshot.child("Time").getValue();
+                    String date = (String) userHistorySnapshot.child("Date").getValue();
+                    String image = (String) userHistorySnapshot.child("Image").getValue();
+                    userHistory.put("Level", level);
+                    userHistory.put("Count", count);
+                    userHistory.put("Time", time);
+                    userHistory.put("Date", date);
+                    userHistory.put("Image",image);
+                    System.out.println("Date: " + date + " Level: " + level + " Count: " + count + " Time: " + time);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return userHistory;
     }
 
-    private void userHistory(Map<String, Object> users) {
-
-        ArrayList<Long> userHistorys = new ArrayList<>();
-
-        //iterate through each user, ignoring their UID
-        for (Map.Entry<String, Object> entry : users.entrySet()) {
-
-            //Get user map
-            Map singleUser = (Map) entry.getValue();
-            //Get phone field and append to list
-            userHistorys.add((Long) singleUser.get("phone"));
-        }
-
-        System.out.println(userHistorys.toString());
-    }
 }
