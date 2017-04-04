@@ -36,7 +36,7 @@ public class GetCurrentStatus {
         }
 
         if (count == newStatus.size() - 1) {
-            System.out.println("Done, You solved it");
+            //System.out.println("Done, You solved it");
             return status=true;
         } else {
             return status;

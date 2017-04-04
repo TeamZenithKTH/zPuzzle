@@ -18,7 +18,7 @@ public class Hard extends Level {
      * @return
      */
     public String toString() {
-        return "hard";
+        return "Hard";
     }
 
     @Override

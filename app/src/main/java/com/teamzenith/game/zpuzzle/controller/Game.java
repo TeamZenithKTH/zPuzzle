@@ -20,19 +20,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamzenith.game.zpuzzle.R;
-import com.teamzenith.game.zpuzzle.model.Hard;
 import com.teamzenith.game.zpuzzle.model.Easy;
+import com.teamzenith.game.zpuzzle.model.Hard;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.Medium;
 import com.teamzenith.game.zpuzzle.model.User;
@@ -143,11 +141,10 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             viewPager.setCurrentItem(current);
             linearLayout.addView(viewPager);
 
+
             // File filePath = getFileStreamPath(fileName);
             idOfDrawable = it.getIntExtra("idOfDrawable", 0);
-
-            System.out.println(d);
-            prepareAnImage();
+  prepareAnImage();
         }
 
         actions();
@@ -155,6 +152,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         ActivityCompat.requestPermissions(Game.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
+
+
     }
 
     private void createComponents() {
@@ -257,6 +256,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
     public Bitmap createBitmap(File imgFile1) {
 
+
         int exifOrientation = getImageOrientation(imgFile1);
 
         if (level instanceof Hard) {
@@ -294,7 +294,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         Bitmap photo;
         if (method.equals(ImageChooser.Method.RANDOM)) {
 
-            photo = BitmapFactory.decodeResource(getResources(), idOfDrawable);
+           photo = BitmapFactory.decodeResource(getResources(), idOfDrawable);
 
             if (level instanceof Hard) {
                 photo = Bitmap.createScaledBitmap(photo, (int) (350 * scale), (int) (350 * scale), false);
@@ -312,7 +312,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         } else {
             imageFile = new File(Environment.getExternalStorageDirectory() + "/images.jpeg");
             photo = createBitmap(imageFile);
-
         }
 
         try {
@@ -378,7 +377,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 im = new ImageButton(this);
                 im.setId(i);
                 imagesIDs.setposition(im.getId(), i);
-                System.out.println("Image ID2 " + im.getId());
+                //System.out.println("Image ID2 " + im.getId());
                 im.setImageBitmap(tmpbmp[i]);
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
                 params.setMargins(1, 1, 1, 1);
@@ -404,7 +403,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private void createImageViews(final HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
         final GetCurrentStatus getCurrentStatus = new GetCurrentStatus();
-        final Toast toast = Toast.makeText(this, moveImage.getMsg(), Toast.LENGTH_LONG);
+        //final Toast toast = Toast.makeText(this, moveImage.getMsg(), Toast.LENGTH_LONG);
         for (int i = 0; i < imageButtons.length; i++) {
             imageButtons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -416,7 +415,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                     // isFinish = getCurrentStatus.checkCurrentImage(bmp, newMoveedImagesList);
                     isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
                     if (isFinish) {
-                        toast.show();
+                       // toast.show();
                         SetOriginalImagesToMatrix();
                         isFinish = false;
                     }

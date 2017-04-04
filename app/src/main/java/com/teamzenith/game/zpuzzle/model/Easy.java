@@ -17,7 +17,7 @@ public class Easy extends Level {
      * @return String
      */
     public String toString() {
-        return "kids";
+        return "Easy";
     }
 
     @Override
