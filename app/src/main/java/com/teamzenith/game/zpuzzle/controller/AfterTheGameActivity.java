@@ -93,8 +93,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
         movementTextView.setText(Html.fromHtml("You solved on " + countMovementStringColored + " steps"));
 
         timerCounterString = intentFromGameActivity.getStringExtra("TimerCounter");
-        String timerCounterStringColored = "<font color='#EE0000'>" + timerCounterString + "</font>";
-        timerTextView.setText(Html.fromHtml("Your time was " + timerCounterStringColored + " seconds"));
+        timerTextView.setText(Html.fromHtml("Your time was " + timerCounterString));
 
 
         solved = null;

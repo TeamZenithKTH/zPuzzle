@@ -13,6 +13,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
@@ -95,6 +96,10 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private RandomImageAdapter adapterView = null;
     private int current;
     private ViewPager viewPager;
+    private int minute = 0;
+    private int hour = 0;
+    private int seconds = 0;
+    private String next;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -105,7 +110,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         initComponent();
 
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.line1);
-        T= new Timer();
+        T = new Timer();
 
         if (method.equals(ImageChooser.Method.GALERI)) {
             photoButton = new ImageView(this);
@@ -174,12 +179,15 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 public void setOnPrepare(View p) {
                     countMovement = 0;
                     if (ll != null) {
-                      //  count = 0;
+                        count = 0;
+                        hour=0;
+                        seconds=0;
+                        minute=0;
                         countMovement = 0;
                         ll.removeAllViews();
                         ll.refreshDrawableState();
                         T.cancel();
-                        T= new Timer();
+                        T = new Timer();
                     }
                     ImageView imageView = (ImageView) p;
                     idOfDrawable = (Integer) imageView.getTag();
@@ -196,12 +204,16 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
 
         if (ll != null) {
-           // count = 0;
+            // count = 0;
             countMovement = 0;
+            count = 0;
+            hour=0;
+            seconds=0;
+            minute=0;
             ll.removeAllViews();
             ll.refreshDrawableState();
             T.cancel();
-            T= new Timer();
+            T = new Timer();
         }
         if (method.equals(ImageChooser.Method.CAMERA)) {
             Uri relativePath = Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/images.jpeg"));
@@ -297,22 +309,40 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         }
 
         try {
-            count=0;
-
-            bmp = imageSplit.get(photo, row, column);
+            count = 0;
             T.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            String next = "<font color='#EE0000'>" + String.valueOf(count) + "</font>";
+                            next = "<font color='#EE0000'>" + ((String.valueOf(hour).length() > 1) ? hour : "0" + hour) + ":" + ((String.valueOf(minute).length() > 1) ? minute : "0" + minute) + ":"+ ((String.valueOf(seconds).length() > 1) ? seconds : "0" + seconds) +":"+
+                                    ((String.valueOf(count).length() > 1) ?
+                                            (String.valueOf(count).length() > 2)?
+                                                    count
+                                                    :"0"+count
+                                            : "00" + count) + "</font>";
                             timerCounter.setText(Html.fromHtml("Timer: " + next));
                             count++;
+                            if (count == 999) {
+                                seconds++;
+                                count = 0;
+                                if (seconds == 59) {
+                                    minute++;
+                                    seconds=0;
+                                    if (minute == 59) {
+                                        minute = 0;
+                                        hour++;
+                                    }
+
+                                }
+                            }
                         }
                     });
                 }
-            }, 1000, 1000);
+            }, 1, 1);
+            bmp = imageSplit.get(photo, row, column);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -379,6 +409,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                     //toast.show();
                     // isFinish = getCurrentStatus.checkCurrentImage(bmp, newMoveedImagesList);
                     isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
+
                     if (isFinish) {
                         toast.show();
                         SetOriginalImagesToMatrix();
@@ -386,7 +417,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                     }
                 }
             });
+
         }
+
     }
 
     @Override
@@ -445,7 +478,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         Intent it = new Intent(getBaseContext(), AfterTheGameActivity.class);
         it.putExtra("Level", level);
         it.putExtra("CountMovement", String.valueOf(countMovement));
-        it.putExtra("TimerCounter", String.valueOf(count));
+        it.putExtra("TimerCounter", String.valueOf(next));
         if (method.equals(ImageChooser.Method.RANDOM)) {
             it.putExtra("Image", idOfDrawable);
             it.putExtra("current", viewPager.getCurrentItem());
@@ -455,7 +488,13 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
         it.putExtra("player", player);
         it.putExtra("method", method);
-        //T.cancel();
+        T.cancel();
         startActivity(it);
+    }
+
+    @Override
+    public void onBackPressed() {
+        T.cancel();
+        finish();
     }
 }
