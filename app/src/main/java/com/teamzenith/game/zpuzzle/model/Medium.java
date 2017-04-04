@@ -10,8 +10,11 @@ package com.teamzenith.game.zpuzzle.model;
  */
 public class Medium extends Level {
 
-    public static final int ROW = 4;
-    public static final int COLUMN = 4;
+    public final int ROW = 4;
+    public  final int COLUMN = 4;
+
+    private final int size=344;
+    private final int sizeOfPiece=86;
 
     /**
      *
@@ -21,8 +24,24 @@ public class Medium extends Level {
         return "Medium";
     }
 
-    @Override
-    public void test() {
 
+    @Override
+    public int getSize() {
+        return size;
+    }
+
+    @Override
+    public int getSizeOfPiece() {
+        return sizeOfPiece;
+    }
+
+    @Override
+    public int getSizeOfRow() {
+        return ROW;
+    }
+
+    @Override
+    public int getSizeOfColumn() {
+        return COLUMN;
     }
 }

@@ -10,7 +10,7 @@ package com.teamzenith.game.zpuzzle.model;
  * This Class is a Factory to create instances of Hard, Easy and Medium
  */
 public class LevelFactory {
-    private static LevelFactory niveauFactory = null;
+    private static LevelFactory levelFactory = null;
 
     private LevelFactory() {
 
@@ -20,36 +20,36 @@ public class LevelFactory {
      * @return LevelFactory of type {@link LevelFactory}
      */
     public static LevelFactory getInstance() {
-        if (niveauFactory == null) {
-            niveauFactory = new LevelFactory();
+        if (levelFactory == null) {
+            levelFactory = new LevelFactory();
         }
-        return niveauFactory;
+        return levelFactory;
     }
 
     /**
      *
-     * @param niveauType of type {@link LevelType}
+     * @param levelType of type {@link LevelType}
      * @return Level of type {@link Level}
      */
-    public Level createNiveau(LevelType niveauType) {
-        Level niveau = null;
+    public Level createLevel(LevelType levelType) {
+        Level level = null;
 
-        switch (niveauType) {
+        switch (levelType) {
             case HARD: {
-                niveau = new Hard();
-                return niveau;
+                level = new Hard();
+                return level;
             }
             case EASY: {
-                niveau = new Easy();
-                return niveau;
+                level = new Easy();
+                return level;
             }
             case MEDIUM: {
-                niveau = new Medium();
-                return niveau;
+                level = new Medium();
+                return level;
             }
             default:
-                System.out.println("false");
-                return niveau;
+                //System.out.println("false");
+                return level;
 
         }
     }

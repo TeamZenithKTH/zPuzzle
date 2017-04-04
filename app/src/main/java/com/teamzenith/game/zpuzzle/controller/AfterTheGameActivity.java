@@ -3,9 +3,12 @@ package com.teamzenith.game.zpuzzle.controller;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +20,9 @@ import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 
 /**
@@ -30,7 +35,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     private ImageView goToMainBtn;
     private ImageView saveHistory;
     private Level level;
-    private  TextView movementTextView;
+    private TextView movementTextView;
     private Intent intentFromGameActivity;
     private TextView timerTextView;
     private ImageView solvedImage;
@@ -46,16 +51,16 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     private ImageChooser.Method method;
     private int idOfDrawable;
     private Bitmap solved;
-    private  File imageFile;
+    private File imageFile;
     private String fileName;
     private int current;
 
 
-    public void onCreate(Bundle bundle){
+    public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.after_the_game);
-        intentFromGameActivity=getIntent();
-       level=(Level) intentFromGameActivity.getSerializableExtra("Level");
+        intentFromGameActivity = getIntent();
+        level = (Level) intentFromGameActivity.getSerializableExtra("Level");
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
         historyController = new HistoryController();
 
@@ -64,16 +69,16 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void createComponents() {
-        playAgainBtn=(ImageView) findViewById(R.id.playAgain);
-        goToMainBtn=(ImageView) findViewById(R.id.backToMain);
+        playAgainBtn = (ImageView) findViewById(R.id.playAgain);
+        goToMainBtn = (ImageView) findViewById(R.id.backToMain);
         saveHistory = (ImageView) findViewById(R.id.save_history);
-        movementTextView=(TextView) findViewById(R.id.movementCounter);
-        timerTextView=(TextView) findViewById(R.id.timer);
-        solvedImage=(ImageView) findViewById(R.id.solvedImage);
+        movementTextView = (TextView) findViewById(R.id.movementCounter);
+        timerTextView = (TextView) findViewById(R.id.timer);
+        solvedImage = (ImageView) findViewById(R.id.solvedImage);
         player = (User) intentFromGameActivity.getSerializableExtra("player");
-        method=(ImageChooser.Method)intentFromGameActivity.getSerializableExtra("method");
-        if(method.equals(ImageChooser.Method.RANDOM)){
-            fileName=intentFromGameActivity.getStringExtra("file");
+        method = (ImageChooser.Method) intentFromGameActivity.getSerializableExtra("method");
+        if (method.equals(ImageChooser.Method.RANDOM)) {
+            fileName = intentFromGameActivity.getStringExtra("file");
         }
     }
 
@@ -83,58 +88,90 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
         goToMainBtn.setOnClickListener(this);
         saveHistory.setOnClickListener(this);
 
-        countMovementString=intentFromGameActivity.getStringExtra("CountMovement");
-        String countMovementStringColored = "<font color='#EE0000'>"+countMovementString+"</font>";
-        movementTextView.setText(Html.fromHtml("You solved on "+ countMovementStringColored+" steps"));
+        countMovementString = intentFromGameActivity.getStringExtra("CountMovement");
+        String countMovementStringColored = "<font color='#EE0000'>" + countMovementString + "</font>";
+        movementTextView.setText(Html.fromHtml("You solved on " + countMovementStringColored + " steps"));
 
-        timerCounterString=intentFromGameActivity.getStringExtra("TimerCounter");
-        String timerCounterStringColored = "<font color='#EE0000'>"+timerCounterString+"</font>";
-        timerTextView.setText(Html.fromHtml("Your time was "+timerCounterStringColored+" seconds"));
-
+        timerCounterString = intentFromGameActivity.getStringExtra("TimerCounter");
+        timerTextView.setText(Html.fromHtml("Your time was " + timerCounterString));
 
 
-        solved=null;
+        solved = null;
 
-        if(method.equals(ImageChooser.Method.RANDOM)){
-            idOfDrawable=intentFromGameActivity.getIntExtra("Image",0);
+        if (method.equals(ImageChooser.Method.RANDOM)) {
+            idOfDrawable = intentFromGameActivity.getIntExtra("Image", 0);
             solved = BitmapFactory.decodeResource(getResources(), idOfDrawable);
-            solved =Bitmap.createScaledBitmap(solved, (int) (300 * scale), (int) (300 * scale), false);
-            current=intentFromGameActivity.getIntExtra("current",current);
+            solved = Bitmap.createScaledBitmap(solved, (int) (300 * scale), (int) (300 * scale), false);
+            current = intentFromGameActivity.getIntExtra("current", current);
 
 
-        }
+        } else {
+            imageFile = (File) intentFromGameActivity.getSerializableExtra("Image");
 
-        else{
-            imageFile = (File)intentFromGameActivity.getSerializableExtra("Image");
-            solved = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath()), (int)(300 * scale), (int)(300 * scale), true);
+            Bitmap bitmapNeedsToRotate;
+            Matrix matrix;
+            int exifOrientation = getImageOrientation(imageFile);
+            if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+                bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
+                matrix = new Matrix();
+                matrix.postRotate(90);
+                Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+                solved= Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+            } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+                bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
+                matrix = new Matrix();
+                matrix.postRotate(180);
+                solved= Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+            } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+                bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
+                matrix = new Matrix();
+                matrix.postRotate(270);
+                solved= Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+            } else {
+                solved= Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
+            }
         }
 
         solvedImage.setImageBitmap(solved);
 
+        //Bitmap bmp =  BitmapFactory.decodeResource(getResources(), R.drawable.chicken);//your image
+        ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
+        solved.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
+        //solved.recycle();
+        byte[] byteArray = bYtE.toByteArray();
+        String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-        userID=player.getUserID();
-        userHistoryEntry = new UserHistoryEntry(userID,level,countMovementString,timerCounterString);
+        userID = player.getUserID();
+        userHistoryEntry = new UserHistoryEntry(userID, level, countMovementString, timerCounterString,imageFile);
+    }
+
+    private int getImageOrientation(File imgFile1){
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imgFile1.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId()==R.id.playAgain){
-            Intent playAgainIntent=new Intent(getBaseContext(),Game.class);
-            playAgainIntent.putExtra("Level",level);
-            playAgainIntent.putExtra("player",player);
-            playAgainIntent.putExtra("method",method);
-            if(method.equals(ImageChooser.Method.RANDOM)){
-                playAgainIntent.putExtra("idOfDrawable",idOfDrawable);
-                playAgainIntent.putExtra("current",current);
+        if (v.getId() == R.id.playAgain) {
+            Intent playAgainIntent = new Intent(getBaseContext(), Game.class);
+            playAgainIntent.putExtra("Level", level);
+            playAgainIntent.putExtra("player", player);
+            playAgainIntent.putExtra("method", method);
+            if (method.equals(ImageChooser.Method.RANDOM)) {
+                playAgainIntent.putExtra("idOfDrawable", idOfDrawable);
+                playAgainIntent.putExtra("current", current);
 
-            }
-            else{
-                playAgainIntent.putExtra("Image",imageFile);
+            } else {
+                playAgainIntent.putExtra("Image", imageFile);
             }
 
             startActivity(playAgainIntent);
-        }
-        else if (v.getId() == R.id.save_history) {
+        } else if (v.getId() == R.id.save_history) {
             Toast.makeText(this, "History Saved", Toast.LENGTH_SHORT).show();
 
             try {
@@ -142,12 +179,14 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
-        else{
-            Intent goBackToMain=new Intent(getBaseContext(),MainActivity.class);
-            goBackToMain.putExtra("player",player);
+        } else {
+            Intent goBackToMain = new Intent(getBaseContext(), MainActivity.class);
+            goBackToMain.putExtra("player", player);
             startActivity(goBackToMain);
 
-        }
+
+
+    }
+
     }
 }

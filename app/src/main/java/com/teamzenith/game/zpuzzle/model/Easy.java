@@ -10,8 +10,10 @@ package com.teamzenith.game.zpuzzle.model;
  */
 public class Easy extends Level {
 
-    public static final int ROW = 3;
-    public static final int COLUMN = 3;
+    public final int ROW = 3;
+    public final int COLUMN = 3;
+    private final int size=300;
+    private final int sizeOfPiece=100;
 
     /**
      * @return String
@@ -21,7 +23,22 @@ public class Easy extends Level {
     }
 
     @Override
-    public void test() {
+    public int getSize() {
+        return size;
+    }
 
+    @Override
+    public int getSizeOfPiece() {
+        return sizeOfPiece;
+    }
+
+    @Override
+    public int getSizeOfRow() {
+        return ROW;
+    }
+
+    @Override
+    public int getSizeOfColumn() {
+        return COLUMN;
     }
 }

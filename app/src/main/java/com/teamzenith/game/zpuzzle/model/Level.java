@@ -11,15 +11,16 @@ import java.io.Serializable;
  */
 public abstract class Level implements Serializable {
 
-    protected int i;
-
     /**
      *
      */
     public Level() {
 
     }
+    public abstract int getSize();
+    public abstract int getSizeOfPiece();
+    public abstract int getSizeOfRow();
+    public abstract int getSizeOfColumn();
 
-    abstract protected void test();
 
 }

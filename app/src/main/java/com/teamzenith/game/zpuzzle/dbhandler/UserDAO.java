@@ -33,6 +33,7 @@ public class UserDAO {
     private String userName;
     private String userEmail;
     private String userImage;
+    private String imageFile;
 
     /**
      * @param userHistoryEntry
@@ -44,6 +45,7 @@ public class UserDAO {
         this.level = userHistoryEntry.getLevel();
         this.countMovementString = userHistoryEntry.getCountMovementString();
         this.timerCounterString = userHistoryEntry.getTimerCounterString();
+        this.imageFile = userHistoryEntry.getImageFile();
         date = date();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference usersRef = mDatabase.child("History").child(userID).child(date);
@@ -52,6 +54,7 @@ public class UserDAO {
         userHistory.put("Level", level.toString());
         userHistory.put("Count", countMovementString);
         userHistory.put("Time", timerCounterString);
+        userHistory.put("Image",imageFile);
         usersRef.setValue(userHistory);
         getUserHistory(userID);
 
@@ -91,10 +94,12 @@ public class UserDAO {
                     String count = (String) userHistorySnapshot.child("Count").getValue();
                     String time = (String) userHistorySnapshot.child("Time").getValue();
                     String date = (String) userHistorySnapshot.child("Date").getValue();
+                    String image = (String) userHistorySnapshot.child("Image").getValue();
                     userHistory.put("Level", level);
                     userHistory.put("Count", count);
                     userHistory.put("Time", time);
                     userHistory.put("Date", date);
+                    userHistory.put("Image",image);
                     System.out.println("Date: " + date + " Level: " + level + " Count: " + count + " Time: " + time);
                 }
             }
