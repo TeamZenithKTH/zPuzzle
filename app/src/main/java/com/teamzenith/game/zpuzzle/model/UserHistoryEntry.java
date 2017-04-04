@@ -9,15 +9,15 @@ public class UserHistoryEntry {
     private Level level;
     private String countMovementString;
     private String timerCounterString;
+    private String imageFile;
 
-    public UserHistoryEntry(){
 
-    }
-    public UserHistoryEntry(String userID, Level level, String countMovementString,String timerCounterString){
+    public UserHistoryEntry(String userID, Level level, String countMovementString,String timerCounterString,String imageFile){
         this.userID = userID;
         this.level = level;
         this.countMovementString = countMovementString;
         this.timerCounterString = timerCounterString;
+        this.imageFile=imageFile;
     }
 
     public String getUserID() {
@@ -46,6 +46,9 @@ public class UserHistoryEntry {
 
     public String getTimerCounterString() {
         return timerCounterString;
+    }
+    public String getImageFile() {
+        return imageFile;
     }
 
     public void setTimerCounterString(String timerCounterString) {

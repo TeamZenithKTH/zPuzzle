@@ -32,6 +32,7 @@ public class UserDAO {
     private String userName;
     private String userEmail;
     private String userImage;
+    private String imageFile;
 
     /**
      * @param userHistoryEntry
@@ -43,6 +44,7 @@ public class UserDAO {
         this.level = userHistoryEntry.getLevel();
         this.countMovementString = userHistoryEntry.getCountMovementString();
         this.timerCounterString = userHistoryEntry.getTimerCounterString();
+        this.imageFile=userHistoryEntry.getImageFile();
         date = date();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("History").child("userID: "+userID).child("date: "+date).child("Level: "+level.toString()).child("count: "+countMovementString).setValue("time"+timerCounterString);
