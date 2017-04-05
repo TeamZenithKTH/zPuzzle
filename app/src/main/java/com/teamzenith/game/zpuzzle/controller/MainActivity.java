@@ -1,5 +1,6 @@
 package com.teamzenith.game.zpuzzle.controller;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,19 +22,19 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 import com.teamzenith.game.zpuzzle.R;
+import com.teamzenith.game.zpuzzle.dbhandler.GetUserInformation;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.LevelFactory;
 import com.teamzenith.game.zpuzzle.model.LevelType;
 import com.teamzenith.game.zpuzzle.model.User;
 
-import java.text.ParseException;
-
 /**
  *
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,GetUserInformation {
     boolean doubleBackToExitPressedOnce = false;
 
     private Button hardBtn;
@@ -50,7 +51,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private User user;
     private Profile profile;
     private ProfileController profileController;
-
+    private FirebaseUser firebaseUser;
+    private TextView userNameView,userEmailView;
+    private NavigationView navigationView;
+    private ImageView userImageView;
+    private View headerView;
+    private DrawerLayout drawer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,44 +70,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent mIntent = getIntent();
         FacebookSdk.sdkInitialize(getApplicationContext());
         firebaseAuth = FirebaseAuth.getInstance();
+        player = (User) mIntent.getSerializableExtra("player");
+        System.out.println(player.getUserName());
+        createComponents();
+        Actions();
 
-
-        profile = Profile.getCurrentProfile();
-
-            player = (User) mIntent.getSerializableExtra("player");
-          //  userEmail = player.getUserEmail();
-            userID = player.getUserID();
-            userImage = player.getUserImage();
-            userName = player.getUserName();
-
-
-
-
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0);
 
 
-        TextView userNameView = (TextView) headerView.findViewById(R.id.user_name);
-        userNameView.setText(userName);
+        //Picasso.with(getBaseContext()).load(userImage).into(userImageView);
+        // getUserImage(userID);
 
-
-        TextView userEmailView = (TextView) headerView.findViewById(R.id.user_email_header);
-        userEmailView.setText(userEmail);
-        ImageView userImageView = (ImageView) headerView.findViewById(R.id.user_image);
-        Picasso.with(getBaseContext()).load(userImage).into(userImageView);
-
-        createComponents();
-        Actions();
     }
 
 
@@ -109,12 +93,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         hardBtn = (Button) findViewById(R.id.hardBtn);
         medelBtn = (Button) findViewById(R.id.medelBtn);
         kidsBtn = (Button) findViewById(R.id.kidsBtn);
+        profileController = new ProfileController();
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        headerView = navigationView.getHeaderView(0);
+        userNameView = (TextView) headerView.findViewById(R.id.user_name);
+        userEmailView= (TextView) headerView.findViewById(R.id.user_email_header);
+        userImageView = (ImageView) headerView.findViewById(R.id.user_image);
+        drawer= (DrawerLayout) findViewById(R.id.drawer_layout);
+
     }
 
     private void Actions() {
         hardBtn.setOnClickListener(this);
         medelBtn.setOnClickListener(this);
         kidsBtn.setOnClickListener(this);
+        profileController.setToController(this,player);
     }
 
 
@@ -189,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = item.getItemId();
         if (id == R.id.nav_profile) {
             Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+            i.putExtra("player", player);
             startActivity(i);
         } else if (id == R.id.nav_history) {
             Intent i = new Intent(MainActivity.this, HistoryActivity.class);
@@ -208,5 +203,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void get(User user) {
+        userNameView.setText(user.getUserName());
+        userEmailView.setText(user.getUserEmail());
+        //userImageView.setImageBitmap();
+
     }
 }
