@@ -1,5 +1,6 @@
 package com.teamzenith.game.zpuzzle.controller;
 
+import com.teamzenith.game.zpuzzle.dbhandler.HistoryDAO;
 import com.teamzenith.game.zpuzzle.dbhandler.UserDAO;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
 
@@ -13,7 +14,8 @@ public class HistoryController {
 
     public void save(UserHistoryEntry userHistoryEntry) throws ParseException {
         this.userHistoryEntry = userHistoryEntry;
-        UserDAO userDAO = new UserDAO();
-        userDAO.insertOnHistoryEntry(userHistoryEntry);
+        HistoryDAO historyDAO = new HistoryDAO();
+        historyDAO.insertOnHistoryEntry(userHistoryEntry);
+
     }
 }

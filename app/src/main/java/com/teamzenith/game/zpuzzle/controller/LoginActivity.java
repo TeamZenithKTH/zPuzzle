@@ -45,6 +45,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.teamzenith.game.zpuzzle.R;
+import com.teamzenith.game.zpuzzle.dbhandler.UserDAO;
 import com.teamzenith.game.zpuzzle.model.User;
 
 import java.text.ParseException;
@@ -149,15 +150,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     //FireBase Login
     private void checkUserLogin() {
         if (firebaseAuth.getCurrentUser() != null) {
-            //starting Main activity
+
             loginStatus = true;
             user = firebaseAuth.getCurrentUser();
-
-            User player = new User(user.getUid(), user.getDisplayName(), user.getEmail(), default_userImage);
-
+            //String userID =user.getUid();
+            User player = new User();
+            player.setUserEmail(user.getEmail());
+            player.setUserID(user.getUid());
+            //player.setUserName(userName);
+            player.setUserImage(default_userImage);
             intent.putExtra("player", player);
             startActivity(intent);
-            finish();
+            //finish();
         }
     }
 
@@ -197,17 +201,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return false;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
 
     /**
      * Callback received when a permissions request has been completed.

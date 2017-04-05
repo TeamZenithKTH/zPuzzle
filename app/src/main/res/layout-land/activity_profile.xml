@@ -15,5 +15,30 @@
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp" />
 
+    <ScrollView
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/update_photo"
+                android:layout_width="127dp"
+                android:layout_height="64dp"/>
+
+
+            <ImageView
+                android:id="@+id/user_profile_image"
+                android:layout_width="145dp"
+                android:layout_height="152dp"
+                android:layout_gravity="center"
+                android:src="@drawable/avatar_icon" />
+        </LinearLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

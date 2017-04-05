@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -36,15 +35,14 @@ public class GalleryImageAdapter extends Activity {
     ImageButton pImageButton;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
 
         intent = this.getIntent();
-        level = ( Level ) intent.getSerializableExtra("Level");
-        strSelectedImage = ( String) intent.getSerializableExtra("PickImage");
+        level = (Level) intent.getSerializableExtra("Level");
+        strSelectedImage = (String) intent.getSerializableExtra("PickImage");
 
         imageViewLoad = (ImageView) findViewById(R.id.imageViewPic);
 
@@ -60,25 +58,25 @@ public class GalleryImageAdapter extends Activity {
         });
 
         // Loading the phone Gallery
-        if( strSelectedImage.equals("Gallery")) {
+        if (strSelectedImage.equals("Gallery")) {
             intent = new Intent(Intent.ACTION_PICK,
                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
             startActivityForResult(intent, IMG_RESULT);
         }
         // Loading the Camera for a Picture click
-        else if( strSelectedImage.equals("Camera")){
+        else if (strSelectedImage.equals("Camera")) {
 
-             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
             }
         }
         // Load Random selected image
-        else if( strSelectedImage.equals("Random")){
+        else if (strSelectedImage.equals("Random")) {
 
-                Bitmap bmp = (Bitmap) intent.getParcelableExtra("picture");
-                imageViewLoad.setImageBitmap(bmp);
+            Bitmap bmp = (Bitmap) intent.getParcelableExtra("picture");
+            imageViewLoad.setImageBitmap(bmp);
         }
     }
 
@@ -88,7 +86,7 @@ public class GalleryImageAdapter extends Activity {
         try {
             // Gallery related Activity
             //
-            if( strSelectedImage.equals("Gallery")) {
+            if (strSelectedImage.equals("Gallery")) {
                 if (requestCode == IMG_RESULT && resultCode == RESULT_OK && null != data) {
 
                     Uri photoUri = data.getData();
@@ -103,7 +101,7 @@ public class GalleryImageAdapter extends Activity {
             }
             // Camera related Activity
             //
-            else if( strSelectedImage.equals("Camera")){
+            else if (strSelectedImage.equals("Camera")) {
 
                 if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                     Bundle extras = data.getExtras();
@@ -111,9 +109,7 @@ public class GalleryImageAdapter extends Activity {
                     imageViewLoad.setImageBitmap(imageBitmap);
 
                 }
-            }
-
-            else if( strSelectedImage.equals("Random")){
+            } else if (strSelectedImage.equals("Random")) {
 
             }
         } catch (Exception e) {
