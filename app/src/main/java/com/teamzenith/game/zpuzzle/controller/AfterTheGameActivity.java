@@ -18,6 +18,7 @@ import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
+import com.teamzenith.game.zpuzzle.util.ImageConverter;
 
 
 import java.io.ByteArrayOutputStream;
@@ -135,11 +136,8 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
         solvedImage.setImageBitmap(solved);
 
         //Bitmap bmp =  BitmapFactory.decodeResource(getResources(), R.drawable.chicken);//your image
-        ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
-        solved.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
-        //solved.recycle();
-        byte[] byteArray = bYtE.toByteArray();
-        String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+        String imageFile = new ImageConverter().convertToString(solved);
 
         userID = player.getUserID();
         userHistoryEntry = new UserHistoryEntry(userID, level, countMovementString, timerCounterString,imageFile);
@@ -188,5 +186,11 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
 
     }
 
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

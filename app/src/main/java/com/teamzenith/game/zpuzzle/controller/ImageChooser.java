@@ -153,6 +153,11 @@ public class ImageChooser extends AppCompatActivity {
             cursor.close();
         }
         return result;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }}
 
 
