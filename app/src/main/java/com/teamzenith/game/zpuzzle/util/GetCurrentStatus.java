@@ -31,13 +31,11 @@ public class GetCurrentStatus {
 
                 // increase the number for each correct position.
                 count++;
-                System.out.println(count);
-            }
+                 }
         }
 
         if (count == newStatus.size() - 1) {
-            //System.out.println("Done, You solved it");
-            return status=true;
+             return status=true;
         } else {
             return status;
         }

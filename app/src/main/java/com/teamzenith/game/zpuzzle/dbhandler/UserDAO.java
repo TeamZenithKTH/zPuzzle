@@ -78,48 +78,4 @@ public class UserDAO {
     public void setListener(GetUserInformation getUserInformation) {
         this.getUserInformation = getUserInformation;
     }
-
-
-
-
-
-  /*  private void getUserName(String uid) {
-        this.userID = uid;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference userRef = ref.child("Users").child(userID).child("userName");
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                userName = dataSnapshot.getValue(String.class);
-                userNameView.setText(userName);
-                System.out.println(" Name: " + userName);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void getUserImage(String uid) {
-        this.userID = uid;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference userRef = ref.child("Users").child(userID).child("userImage");
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                userImage = dataSnapshot.getValue(String.class);
-                byte[] decodedString = Base64.decode(userImage, Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                userImageView.setImageBitmap(decodedByte);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-*/
 }

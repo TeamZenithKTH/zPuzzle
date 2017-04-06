@@ -48,7 +48,6 @@ public class LevelFactory {
                 return level;
             }
             default:
-                //System.out.println("false");
                 return level;
 
         }

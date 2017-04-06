@@ -53,19 +53,10 @@ public class UploadToDatabase {
                 @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 ;
                 getImageURL.get(downloadUrl.toString());
-                //System.out.println(downloadUrl.toString());
-            }
+                }
         });
     }
 
-    /* private void setUri(String imageUri) {
-         this.downloadUrl = imageUri;
-     }
-
-     public String getUri() {
-         return downloadUrl;
-     }
- */
     public void setListener(GetImageURL getImageURL, ImageView imageView) {
         this.getImageURL = getImageURL;
         this.uploadImageView=imageView;

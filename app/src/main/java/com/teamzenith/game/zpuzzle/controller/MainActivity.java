@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FacebookSdk.sdkInitialize(getApplicationContext());
         firebaseAuth = FirebaseAuth.getInstance();
         player = (User) mIntent.getSerializableExtra("player");
-        System.out.println(player.getUserName());
         createComponents();
         Actions();
 
@@ -194,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.nav_settings) {
             Intent i = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(i);
-            finish();
+           finish();
         } else if (id == R.id.nav_logout) {
             firebaseAuth.signOut();
             LoginManager.getInstance().logOut();
