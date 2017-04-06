@@ -1,5 +1,7 @@
 package com.teamzenith.game.zpuzzle.model;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 
 /**

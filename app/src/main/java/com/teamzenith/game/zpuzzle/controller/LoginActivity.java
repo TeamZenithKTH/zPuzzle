@@ -45,7 +45,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.teamzenith.game.zpuzzle.R;
-import com.teamzenith.game.zpuzzle.dbhandler.UserDAO;
 import com.teamzenith.game.zpuzzle.model.User;
 
 import java.text.ParseException;
@@ -451,6 +450,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             intent.putExtra("player", player);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -480,6 +480,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             User player = new User(facebook_id, full_name, null, profile_image);
                             intent.putExtra("player", player);
                             startActivity(intent);
+                            finish();
                             try {
                                 profileController.save(player);
                             } catch (ParseException e) {

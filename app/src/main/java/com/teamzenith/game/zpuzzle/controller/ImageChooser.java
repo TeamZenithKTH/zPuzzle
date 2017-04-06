@@ -95,6 +95,7 @@ public class ImageChooser extends AppCompatActivity {
                 it.putExtra("Level", level);
                 it.putExtra("player", player);
                 startActivity(it);
+                finish();
             }
         });
 
@@ -116,6 +117,7 @@ public class ImageChooser extends AppCompatActivity {
                 it.putExtra("Level", level);
                 it.putExtra("player", player);
                 startActivity(it);
+                finish();
             } else if (requestCode == GALERI_RESULT) {
                 Uri selectedImageURI = data.getData();
                 File imageFile = new File(getRealPathFromURI(selectedImageURI));
@@ -125,6 +127,7 @@ public class ImageChooser extends AppCompatActivity {
                 it.putExtra("Level", level);
                 it.putExtra("player", player);
                 startActivity(it);
+                finish();
             }
 
 

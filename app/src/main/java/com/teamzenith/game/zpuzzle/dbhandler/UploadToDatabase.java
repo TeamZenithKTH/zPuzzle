@@ -18,21 +18,29 @@ import java.io.ByteArrayOutputStream;
  */
 
 public class UploadToDatabase {
-    private FirebaseStorage storage;
 
-    public void upload(ImageView imageView){
-        imageView.setDrawingCacheEnabled(true);
-        imageView.buildDrawingCache();
-        Bitmap bitmap = imageView.getDrawingCache();
+    private FirebaseStorage storage;
+    private String userID;
+    private String downloadUrl;
+    private GetImageURL getImageURL;
+    private ImageView uploadImageView;
+
+    public void upload(String userID) {
+        this.userID = userID;
+        uploadImageView.setDrawingCacheEnabled(true);
+        uploadImageView.buildDrawingCache();
+        Bitmap bitmap = uploadImageView.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 5, baos);
         byte[] data = baos.toByteArray();
+        storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-// Create a reference to "mountains.jpg"
-        StorageReference mountainsRef = storageRef.child("mountains.jpg");
+        // Create a reference to "mountains.jpg"
+        StorageReference mountainsRef = storageRef.child(userID).child("user.jpg");
 
         UploadTask uploadTask = mountainsRef.putBytes(data);
+
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
@@ -41,9 +49,27 @@ public class UploadToDatabase {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-               // Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                //taskSnapshot.getMetadata() ;//contains file metadata such as size, content-type, and download URL.
+                @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                ;
+                getImageURL.get(downloadUrl.toString());
+                //System.out.println(downloadUrl.toString());
             }
         });
     }
+
+    /* private void setUri(String imageUri) {
+         this.downloadUrl = imageUri;
+     }
+
+     public String getUri() {
+         return downloadUrl;
+     }
+ */
+    public void setListener(GetImageURL getImageURL, ImageView imageView) {
+        this.getImageURL = getImageURL;
+        this.uploadImageView=imageView;
+    }
+
+
 }

@@ -23,7 +23,6 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.squareup.picasso.Picasso;
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.dbhandler.GetUserInformation;
 import com.teamzenith.game.zpuzzle.model.Level;
@@ -34,7 +33,7 @@ import com.teamzenith.game.zpuzzle.model.User;
 /**
  *
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,GetUserInformation {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, GetUserInformation {
     boolean doubleBackToExitPressedOnce = false;
 
     private Button hardBtn;
@@ -52,11 +51,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Profile profile;
     private ProfileController profileController;
     private FirebaseUser firebaseUser;
-    private TextView userNameView,userEmailView;
+    private TextView userNameView, userEmailView;
     private NavigationView navigationView;
     private ImageView userImageView;
     private View headerView;
     private DrawerLayout drawer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,8 +81,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toggle.syncState();
 
 
-
-
         //Picasso.with(getBaseContext()).load(userImage).into(userImageView);
         // getUserImage(userID);
 
@@ -98,9 +96,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationView.setNavigationItemSelectedListener(this);
         headerView = navigationView.getHeaderView(0);
         userNameView = (TextView) headerView.findViewById(R.id.user_name);
-        userEmailView= (TextView) headerView.findViewById(R.id.user_email_header);
+        userEmailView = (TextView) headerView.findViewById(R.id.user_email_header);
         userImageView = (ImageView) headerView.findViewById(R.id.user_image);
-        drawer= (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
     }
 
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         hardBtn.setOnClickListener(this);
         medelBtn.setOnClickListener(this);
         kidsBtn.setOnClickListener(this);
-        profileController.setToController(this,player);
+        profileController.setToController(this, player);
     }
 
 
@@ -132,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("player", player);
         intent.putExtra("Level", level);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -185,19 +184,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent i = new Intent(MainActivity.this, ProfileActivity.class);
             i.putExtra("player", player);
             startActivity(i);
+            finish();
         } else if (id == R.id.nav_history) {
             Intent i = new Intent(MainActivity.this, HistoryActivity.class);
+            i.putExtra("player", player);
             startActivity(i);
+            finish();
 
         } else if (id == R.id.nav_settings) {
             Intent i = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(i);
-
+            finish();
         } else if (id == R.id.nav_logout) {
             firebaseAuth.signOut();
             LoginManager.getInstance().logOut();
             Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
