@@ -45,6 +45,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.teamzenith.game.zpuzzle.R;
+import com.teamzenith.game.zpuzzle.dbhandler.UserDAO;
 import com.teamzenith.game.zpuzzle.model.User;
 
 import java.text.ParseException;
@@ -99,6 +100,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         //getting current user
         user = firebaseAuth.getCurrentUser();
+
         progressDialog = new ProgressDialog(this);
 
         // Set up the login form.
@@ -133,6 +135,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onClick(View view) {
                 Intent registerIntent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivity(registerIntent);
+                finish();
             }
         });
 
@@ -149,12 +152,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     //FireBase Login
     private void checkUserLogin() {
         if (firebaseAuth.getCurrentUser() != null) {
-            //starting Main activity
+
             loginStatus = true;
             user = firebaseAuth.getCurrentUser();
-
-            User player = new User(user.getUid(), user.getDisplayName(), user.getEmail(), default_userImage);
-
+            //String userID =user.getUid();
+            User player = new User();
+            player.setUserEmail(user.getEmail());
+            player.setUserID(user.getUid());
+            //player.setUserName(userName);
+            player.setUserImage(default_userImage);
             intent.putExtra("player", player);
             startActivity(intent);
             finish();
@@ -197,17 +203,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return false;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-    }
 
     /**
      * Callback received when a permissions request has been completed.
@@ -277,12 +272,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -393,8 +386,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
@@ -412,7 +403,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }*/
 
-            // TODO: register the new account here.
             return false;
         }
 
@@ -487,6 +477,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             User player = new User(facebook_id, full_name, null, profile_image);
                             intent.putExtra("player", player);
                             startActivity(intent);
+                            finish();
                             try {
                                 profileController.save(player);
                             } catch (ParseException e) {

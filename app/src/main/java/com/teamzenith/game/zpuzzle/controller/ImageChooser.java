@@ -4,9 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,18 +12,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.User;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * Created by memmi on 2017-03-30.
@@ -35,8 +27,9 @@ import java.io.IOException;
 public class ImageChooser extends AppCompatActivity {
 
     enum Method {
-        CAMERA,GALERI,RANDOM;
+        CAMERA, GALERI, RANDOM;
     }
+
     private ImageView takephoto;
     private static final int CAMERA_REQUEST = 1888;
     private static int GALERI_RESULT = 1;
@@ -50,20 +43,18 @@ public class ImageChooser extends AppCompatActivity {
     RandomImageAdapter adapterView;
 
     @Override
-    public void onCreate(Bundle bundle){
+    public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.image_chooser);
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
-        mContext=this;
+        mContext = this;
 
 
+        Intent sendToGameActivity = getIntent();
+        level = (Level) sendToGameActivity.getSerializableExtra("Level");
+        player = (User) sendToGameActivity.getSerializableExtra("player");
 
-
-        Intent it=getIntent();
-        level=(Level)it.getSerializableExtra("Level");
-        player=(User) it.getSerializableExtra("player");
-
-        takephoto=(ImageView)findViewById(R.id.camera);
+        takephoto = (ImageView) findViewById(R.id.camera);
         takephoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,7 +66,7 @@ public class ImageChooser extends AppCompatActivity {
         });
 
 
-        galeri=(ImageView)findViewById(R.id.galeri);
+        galeri = (ImageView) findViewById(R.id.galeri);
         galeri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,14 +87,15 @@ public class ImageChooser extends AppCompatActivity {
             @Override
             public void setOnPrepare(View p) {
 
-                int currentItem =viewPager.getCurrentItem();
-                Intent it=new Intent(ImageChooser.this,Game.class);
-                it.putExtra("method",Method.RANDOM);
-                it.putExtra("idOfDrawable",adapterView.getSliderImagesId()[currentItem]);
-                it.putExtra("current",currentItem);
-                it.putExtra("Level",level);
-                it.putExtra("player",player);
+                int currentItem = viewPager.getCurrentItem();
+                Intent it = new Intent(ImageChooser.this, Game.class);
+                it.putExtra("method", Method.RANDOM);
+                it.putExtra("idOfDrawable", adapterView.getSliderImagesId()[currentItem]);
+                it.putExtra("current", currentItem);
+                it.putExtra("Level", level);
+                it.putExtra("player", player);
                 startActivity(it);
+                finish();
             }
         });
 
@@ -117,28 +109,30 @@ public class ImageChooser extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if(requestCode==CAMERA_REQUEST){
+            if (requestCode == CAMERA_REQUEST) {
                 imgFile1 = new File(Environment.getExternalStorageDirectory() + "/images.jpeg");
-                Intent it=new Intent(this,Game.class);
+                Intent it = new Intent(this, Game.class);
                 it.putExtra("method", Method.CAMERA);
                 it.putExtra("Image", imgFile1);
-                it.putExtra("Level",level);
-                it.putExtra("player",player);
+                it.putExtra("Level", level);
+                it.putExtra("player", player);
                 startActivity(it);
-            }
-           else if(requestCode==GALERI_RESULT){
+                finish();
+            } else if (requestCode == GALERI_RESULT) {
                 Uri selectedImageURI = data.getData();
                 File imageFile = new File(getRealPathFromURI(selectedImageURI));
-                Intent it=new Intent(this,Game.class);
+                Intent it = new Intent(this, Game.class);
                 it.putExtra("method", Method.GALERI);
                 it.putExtra("Image", imageFile);
-                it.putExtra("Level",level);
-                it.putExtra("player",player);
+                it.putExtra("Level", level);
+                it.putExtra("player", player);
                 startActivity(it);
+                finish();
             }
 
 
-        }}
+        }
+    }
 
 
     private String getRealPathFromURI(Uri contentURI) {
@@ -155,9 +149,8 @@ public class ImageChooser extends AppCompatActivity {
         return result;
     }
 
+
     @Override
     public void onBackPressed() {
         finish();
     }}
-
-

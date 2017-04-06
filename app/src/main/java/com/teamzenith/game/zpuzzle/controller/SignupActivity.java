@@ -153,6 +153,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
                            // Toast.makeText(SignupActivity.this, "Wellcome To Our App", Toast.LENGTH_LONG).show();
                             user = firebaseAuth.getCurrentUser();
                             status = true;
+
                             User player = new User(user.getUid(), userName, user.getEmail(), default_userImage);
                             try {
                                 profileController.save(player);
