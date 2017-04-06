@@ -188,10 +188,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             Intent goBackToMain = new Intent(getBaseContext(), MainActivity.class);
             goBackToMain.putExtra("player", player);
             startActivity(goBackToMain);
-            finish();
-
-
-        }
+            }
 
     }
 

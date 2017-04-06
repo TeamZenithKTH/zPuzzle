@@ -37,22 +37,13 @@ public class HistoryActivity extends AppCompatActivity implements GetUserHistory
         }
 
         historyController.setToControllerHistoryActivity(this,userID);
-        Button getImageUri = (Button) findViewById(R.id.get_user_history);
-        getImageUri.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               // historyController.getHistory(userID);
-
-                //System.out.println(uploadToDatabase);
-            }
-        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish(); // close this activity and return to preview activity (if there is any)
+           // close this activity and return to preview activity (if there is any)
         }
 
         return super.onOptionsItemSelected(item);

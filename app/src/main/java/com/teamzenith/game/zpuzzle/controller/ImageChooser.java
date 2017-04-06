@@ -117,7 +117,7 @@ public class ImageChooser extends AppCompatActivity {
                 it.putExtra("Level", level);
                 it.putExtra("player", player);
                 startActivity(it);
-                finish();
+               finish();
             } else if (requestCode == GALERI_RESULT) {
                 Uri selectedImageURI = data.getData();
                 File imageFile = new File(getRealPathFromURI(selectedImageURI));

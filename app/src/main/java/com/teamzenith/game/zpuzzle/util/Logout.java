@@ -20,9 +20,6 @@ public class Logout extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         MainActivity mainActivity = new MainActivity();
         if (AccessToken.getCurrentAccessToken() != null) {
-
-            /*Intent i = new Intent(mainActivity, );
-            startActivity(i);*/
             return logoutStatus = true;
         } else {
             Toast.makeText(this, "No facebook login", Toast.LENGTH_SHORT).show();

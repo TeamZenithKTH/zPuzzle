@@ -37,7 +37,6 @@ public class HistoryDAO {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference usersRef = mDatabase.child("History").child(userID).child(date);
         usersRef.setValue(userHistoryEntry);
-        //getUserHistory(userID);
     }
 
     private String date() throws ParseException {
@@ -57,15 +56,7 @@ public class HistoryDAO {
                 for (DataSnapshot userHistorySnapshot : dataSnapshot.getChildren()) {
                     UserHistoryEntry userHistoryEntry = userHistorySnapshot.getValue(UserHistoryEntry.class);
                     getUserHistory.get(userHistoryEntry);
-                    /*for(int index = 0;index<num;index++){
-                        oneHistoryEntry.put(index,userHistoryEntry);
-                    }
-                   /* String level = userHistoryEntry.getLevel();
-                    String count = userHistoryEntry.getCountMovementString();
-                    String time = userHistoryEntry.getTimerCounterString();
-                    String image = userHistoryEntry.getImageFile();
-                    System.out.println(" Level: " + level + " Count: " + count + " Time: " + time + " User image: " + image);*/
-                }
+                   }
             }
 
             @Override
