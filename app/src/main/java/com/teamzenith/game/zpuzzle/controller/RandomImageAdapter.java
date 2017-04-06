@@ -1,19 +1,13 @@
 package com.teamzenith.game.zpuzzle.controller;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import com.teamzenith.game.zpuzzle.R;
-import com.teamzenith.game.zpuzzle.model.Level;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.teamzenith.game.zpuzzle.R;
 
 
 /**
@@ -21,23 +15,17 @@ import java.util.Map;
  */
 
 
-public class RandomImageAdapter  extends PagerAdapter {
+public class RandomImageAdapter extends PagerAdapter {
 
     Context mContext;
 
 
     private int[] sliderImagesId = new int[]{
-            R.drawable.naruto,
-            R.drawable.son_goku,
-            R.drawable.one_piece,
-            R.drawable.hatake_kakashi,
-            R.drawable.son_goku_ssj2,
-            R.drawable.son_goku_ssj,
-            R.drawable.stockholm,
-            R.drawable.stockholm_1,
-            R.drawable.kth,
-            R.drawable.gamla_stam,
-            R.drawable.zlatan_ibrahimovic
+            R.drawable.image1,
+            R.drawable.image2,
+            R.drawable.image3,
+            R.drawable.image4,
+            R.drawable.image5
     };
     private PrepareForClick prepareForClick;
 
@@ -68,17 +56,15 @@ public class RandomImageAdapter  extends PagerAdapter {
         mImageView.setTag(sliderImagesId[i]);
 
 
-        mImageView.setOnClickListener(new View.OnClickListener()
-        {
+        mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 prepareForClick.setOnPrepare(v);
 
             }
         });
         ((ViewPager) container).addView(mImageView, 0);
-         return mImageView;
+        return mImageView;
 
     }
 
@@ -90,7 +76,7 @@ public class RandomImageAdapter  extends PagerAdapter {
 
     public void setOnPrepareListener(PrepareForClick prepareForClick) {
 
-       this.prepareForClick=prepareForClick;
+        this.prepareForClick = prepareForClick;
 
     }
 }

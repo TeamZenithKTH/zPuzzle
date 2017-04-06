@@ -6,12 +6,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.teamzenith.game.zpuzzle.model.Level;
-import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by alaaalkassar on 4/5/17.
@@ -26,6 +26,9 @@ public class HistoryDAO {
     private String countMovementString;
     private String timerCounterString;
     private UserHistoryEntry userHistoryEntry;
+    private HashMap<Integer,UserHistoryEntry> oneHistoryEntry;
+    private HashMap<Integer,HashMap<Integer,UserHistoryEntry>> AllHistoryEntry;
+    private GetUserHistory getUserHistory;
 
     public void insertOnHistoryEntry(UserHistoryEntry userHistoryEntry) throws ParseException {
         this.userHistoryEntry = userHistoryEntry;
@@ -34,7 +37,7 @@ public class HistoryDAO {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference usersRef = mDatabase.child("History").child(userID).child(date);
         usersRef.setValue(userHistoryEntry);
-        getUserHistory(userID);
+        //getUserHistory(userID);
     }
 
     private String date() throws ParseException {
@@ -42,20 +45,26 @@ public class HistoryDAO {
         return currentDateTimeString;
     }
 
-    public void getUserHistory(String userID) {
-
+    private void getUserHistory(String userID) {
+        oneHistoryEntry = new HashMap<>();
+        AllHistoryEntry= new HashMap<>();
         historyDatabase = FirebaseDatabase.getInstance().getReference().child("History");
         final DatabaseReference historyRef = historyDatabase.child(userID);
         historyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Long num = dataSnapshot.getChildrenCount();
-                 for (DataSnapshot userHistorySnapshot : dataSnapshot.getChildren()) {
+                for (DataSnapshot userHistorySnapshot : dataSnapshot.getChildren()) {
                     UserHistoryEntry userHistoryEntry = userHistorySnapshot.getValue(UserHistoryEntry.class);
-                    String level = userHistoryEntry.getLevel();
+                    getUserHistory.get(userHistoryEntry);
+                    /*for(int index = 0;index<num;index++){
+                        oneHistoryEntry.put(index,userHistoryEntry);
+                    }
+                   /* String level = userHistoryEntry.getLevel();
                     String count = userHistoryEntry.getCountMovementString();
                     String time = userHistoryEntry.getTimerCounterString();
-                    System.out.println(" Level: " + level + " Count: " + count + " Time: " + time);
+                    String image = userHistoryEntry.getImageFile();
+                    System.out.println(" Level: " + level + " Count: " + count + " Time: " + time + " User image: " + image);*/
                 }
             }
 
@@ -66,4 +75,12 @@ public class HistoryDAO {
         });
         //return userHistory;
     }
+    public HashMap<Integer,UserHistoryEntry> getHistoryEntry(String userID){
+        getUserHistory(userID);
+        return oneHistoryEntry;
+    }
+    public void setListener(GetUserHistory getUserHistory) {
+        this.getUserHistory = getUserHistory;
+    }
+
 }
