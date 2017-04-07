@@ -4,14 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:background="@drawable/start">
+    android:background="@drawable/background5"
+    android:weightSum="1">
 
 
     <LinearLayout
         android:layout_marginTop="30dp"
         android:id="@+id/linearLayout3"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/movementCounter"
@@ -43,28 +45,35 @@
 
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="203dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal">
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="84dp"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="50dp"
         android:orientation="horizontal">
 
+
         <ImageView
             android:id="@+id/playAgain"
             android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginTop="10dp"
+            android:layout_height="79dp"
             android:layout_marginRight="48dp"
-            android:src="@drawable/replay"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/refresh1"
             android:text="Play Again" />
-
 
         <ImageView
             android:id="@+id/save_history"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="17dp"
+            android:layout_width="70dp"
+            android:layout_height="79dp"
             android:src="@drawable/save" />
 
 
@@ -72,18 +81,7 @@
             android:id="@+id/backToMain"
             android:layout_width="wrap_content"
             android:layout_height="90dp"
-
             android:src="@drawable/home_button" />
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="203dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:orientation="horizontal">
-
 
     </LinearLayout>
 
