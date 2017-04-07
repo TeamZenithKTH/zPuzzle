@@ -20,10 +20,10 @@
         android:roundIcon="@drawable/zpuzzle"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.MainActivity"/>
+        <activity android:name=".controller.MainActivity" />
         <activity
             android:name=".controller.Game"
-            android:configChanges="orientation|screenSize"/>
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".controller.ProfileActivity" />
         <activity android:name=".controller.SettingsActivity" />
         <activity android:name=".controller.HistoryActivity" />
@@ -43,18 +43,21 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".controller.SignupActivity"/>
-       <activity android:name=".controller.ImageChooser" />
-        <service android:name="com.teamzenith.game.zpuzzle.util.MessingingService">
+        <activity android:name=".controller.SignupActivity" />
+        <activity android:name=".controller.ImageChooser" />
+
+        <service android:name=".util.MessingingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name="com.teamzenith.game.zpuzzle.model.FirebaseIDService">
+        <service android:name=".model.FirebaseIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".controller.SendInvitationActivity" />
     </application>
 
 </manifest>

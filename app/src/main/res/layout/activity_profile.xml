@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
+
     <ScrollView
         android:id="@+id/profile_form"
         android:layout_width="match_parent"
@@ -58,13 +59,35 @@
                     android:id="@+id/user_name_update"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Username"/>
+                    android:hint="Username" />
 
                 <EditText
                     android:id="@+id/user_email_update"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Email"/>
+                    android:hint="Email" />
+                <EditText
+                    android:id="@+id/user_old_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_old_password"
+                    android:imeActionId="@+id/login"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+                <EditText
+                    android:id="@+id/update_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_password"
+                    android:imeActionId="@+id/login"
+                    android:imeActionLabel="@string/action_sign_in_short"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -77,6 +100,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
                         android:text="Update" />
+
                     <Button
                         android:id="@+id/cancel_user_update"
                         android:layout_width="match_parent"

@@ -1,6 +1,11 @@
 package com.teamzenith.game.zpuzzle.controller;
 
+import android.widget.ImageView;
+
+import com.teamzenith.game.zpuzzle.dbhandler.GetImageURL;
 import com.teamzenith.game.zpuzzle.dbhandler.GetUserInformation;
+import com.teamzenith.game.zpuzzle.dbhandler.UpdateUserImage;
+import com.teamzenith.game.zpuzzle.dbhandler.UploadToDatabase;
 import com.teamzenith.game.zpuzzle.dbhandler.UserDAO;
 import com.teamzenith.game.zpuzzle.model.User;
 
@@ -16,14 +21,26 @@ public class ProfileController {
     public void save(User user) throws ParseException {
         this.user = user;
         UserDAO userDAO = new UserDAO();
-         userDAO.insertNewUser(user);
+        userDAO.insertNewUser(user);
     }
 
     public void setToController(GetUserInformation getUserInformation, User user) {
         this.user = user;
-        UserDAO userDAO =new UserDAO();
+        UserDAO userDAO = new UserDAO();
         userDAO.setListener(getUserInformation);
         userDAO.getUserInfo(user.getUserID());
 
+    }
+
+    public void saveUserImage( User user,String ImageURL) {
+
+        UserDAO userDAO = new UserDAO();
+        userDAO.setUserImage(user.getUserID(),ImageURL);
+    }
+
+    public void setToControllerFromProfileActivity(ImageView userImageView, UpdateUserImage updateUserImage, String userID) {
+        UploadToDatabase uploadToDatabase = new UploadToDatabase();
+        uploadToDatabase.setListenerUpdateImage(updateUserImage, userImageView);
+        uploadToDatabase.uploadUserImage(userID);
     }
 }

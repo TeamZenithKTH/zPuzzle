@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.teamzenith.game.zpuzzle.controller.SendInvitationActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/send_toolbar"
+        android:layout_width="368dp"
+        android:layout_height="56dp"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <RelativeLayout
+        android:layout_width="368dp"
+        android:layout_height="551dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="top|center"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <EditText
+                android:id="@+id/invitation_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="66dp"
+                android:layout_weight="0.08"
+                android:ems="10"
+                android:hint="Enter you invitation letter"
+                android:inputType="textMultiLine" />
+
+            <ImageView
+                android:id="@+id/invitation_image"
+                android:layout_width="145dp"
+                android:layout_height="152dp"
+                android:layout_gravity="center"
+                android:src="@drawable/avatar_icon"
+                android:layout_marginTop="40dp"/>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="40dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Level:"/>
+               <Spinner
+                   android:id="@+id/select_level"
+                   android:layout_height="wrap_content"
+                   android:layout_width="wrap_content"
+                   android:drawSelectorOnTop="false"
+                   android:entries="@array/spinnerItems">
+               </Spinner>
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Friend:"/>
+
+               <Spinner
+                   android:id="@+id/select_friend"
+                   android:layout_height="wrap_content"
+                   android:layout_width="wrap_content"
+                   android:drawSelectorOnTop="false"
+                   android:entries="@array/spinner_friends">
+               </Spinner>
+           </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp">
+                <EditText
+                    android:id="@+id/sender_present"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Message for your friend to show after finish"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+                <Button
+                    android:id="@+id/send_invitation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send"/>
+                <Button
+                    android:id="@+id/cancel_send_invitation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
+                    android:text="Cancel"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>
