@@ -313,6 +313,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             next = "<font color='#EE0000'>" + ((String.valueOf(hour).length() > 1) ? hour : "0" + hour) + ":" + ((String.valueOf(minute).length() > 1) ? minute : "0" + minute) + ":" + ((String.valueOf(seconds).length() > 1) ? seconds : "0" + seconds) + ":" +
                                     ((String.valueOf(count).length() > 1) ?
                                             (String.valueOf(count).length() > 2) ?
@@ -377,7 +378,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 im = new ImageButton(this);
                 im.setId(i);
                 imagesIDs.setposition(im.getId(), i);
-                //System.out.println("Image ID2 " + im.getId());
                 im.setImageBitmap(tmpbmp[i]);
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
                 params.setMargins(1, 1, 1, 1);
@@ -487,6 +487,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         it.putExtra("method", method);
         T.cancel();
         startActivity(it);
+        finish();
     }
 
     @Override

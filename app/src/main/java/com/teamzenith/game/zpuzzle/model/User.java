@@ -8,20 +8,23 @@ import java.io.Serializable;
  * Created by alaaalkassar on 3/31/17.
  */
 
-public class User implements Serializable{
+public class User implements Serializable {
     private String userID;
     private String userName;
     private String userEmail;
     private String userImage;
-    public User(String userID,String userName,String userEmail,String userImage){
-        this.userID= userID;
-        this.userEmail= userEmail;
-        this.userName= userName;
-        this.userImage =userImage;
+
+    public User(String userID, String userName, String userEmail, String userImage) {
+        this.userID = userID;
+        this.userEmail = userEmail;
+        this.userName = userName;
+        this.userImage = userImage;
     }
-    public User(){
+
+    public User() {
 
     }
+
     public String getUserImage() {
         return userImage;
     }

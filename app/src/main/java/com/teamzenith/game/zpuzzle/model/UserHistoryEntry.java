@@ -6,18 +6,21 @@ package com.teamzenith.game.zpuzzle.model;
 
 public class UserHistoryEntry {
     private String userID;
-    private Level level;
+    private String level;
     private String countMovementString;
     private String timerCounterString;
     private String imageFile;
 
+    public UserHistoryEntry() {
 
-    public UserHistoryEntry(String userID, Level level, String countMovementString,String timerCounterString,String imageFile){
+    }
+
+    public UserHistoryEntry(String userID, Level level, String countMovementString, String timerCounterString, String imageFile) {
         this.userID = userID;
-        this.level = level;
+        this.level = level.toString();
         this.countMovementString = countMovementString;
         this.timerCounterString = timerCounterString;
-        this.imageFile=imageFile;
+        this.imageFile = imageFile;
     }
 
     public String getUserID() {
@@ -28,11 +31,11 @@ public class UserHistoryEntry {
         this.userID = userID;
     }
 
-    public Level getLevel() {
+    public String getLevel() {
         return level;
     }
 
-    public void setLevel(Level level) {
+    public void setLevel(String level) {
         this.level = level;
     }
 
@@ -47,6 +50,7 @@ public class UserHistoryEntry {
     public String getTimerCounterString() {
         return timerCounterString;
     }
+
     public String getImageFile() {
         return imageFile;
     }

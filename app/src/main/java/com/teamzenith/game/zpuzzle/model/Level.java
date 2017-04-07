@@ -17,10 +17,21 @@ public abstract class Level implements Serializable {
     public Level() {
 
     }
+
     public abstract int getSize();
+
     public abstract int getSizeOfPiece();
+
     public abstract int getSizeOfRow();
+
     public abstract int getSizeOfColumn();
 
+    /**
+     * Get the level name.
+     * @return
+     */
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 
 }
