@@ -489,12 +489,12 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         it.putExtra("method", method);
         T.cancel();
         startActivity(it);
-        finish();
+
     }
 
     @Override
     public void onBackPressed() {
         T.cancel();
-        finish();
+
     }
 }

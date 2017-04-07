@@ -96,6 +96,7 @@ public class ImageChooser extends AppCompatActivity {
                 it.putExtra("player", player);
                 startActivity(it);
                 //   finish();
+
             }
         });
 
@@ -130,6 +131,7 @@ public class ImageChooser extends AppCompatActivity {
                 it.putExtra("player", player);
                 startActivity(it);
                 // finish();
+
             }
 
 

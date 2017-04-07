@@ -20,6 +20,7 @@ import java.util.Map;
 
 public class TopGamesActivity extends AppCompatActivity implements getAllUserGameHistory {
     private HashMap<Integer,UserHistoryEntry> allUsersHistoryHashMap=new HashMap<>();
+    private int i=0;
     public void onCreate(Bundle bundle){
         super.onCreate(bundle);
 
@@ -34,24 +35,35 @@ public class TopGamesActivity extends AppCompatActivity implements getAllUserGam
 
     @Override
     public void getAll(UserHistoryEntry userHistoryEntry) {
-        System.out.println(userHistoryEntry);
+
+
+
         if(allUsersHistoryHashMap.size()<10){
             allUsersHistoryHashMap.put(allUsersHistoryHashMap.size(),userHistoryEntry);
+            i++;
         }
-       else if(allUsersHistoryHashMap.size()==10){
+        else{
+            i=0;
+        }
+
+
+
+      if((allUsersHistoryHashMap.size()==10)&&(i==10)){
             Map<Integer,UserHistoryEntry> h=  sortHashMapByValues(allUsersHistoryHashMap);
 
 
             HashMap<Integer,UserHistoryEntry> allusersss=new HashMap<>();
             for (Map.Entry<Integer, UserHistoryEntry> entry : h.entrySet()){
 
-               // System.out.println(entry.getValue().getTimerCounterString());
                 allusersss.put(allusersss.size(),entry.getValue());
             }
+
+            System.out.println(allusersss.size());
 
             for(int i=0;i<allusersss.size();i++){
                 System.out.println(allusersss.get(i).getTimerCounterString());
             }
+
 
           /*  System.out.println(h.get(0).getTimerCounterString());
             System.out.println(h.get(1).getTimerCounterString());

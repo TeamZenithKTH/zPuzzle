@@ -106,17 +106,18 @@ public class HistoryDAO {
 
                         }
 
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
 
                         }
+
                     });
 
 
                 }
 
             }
-
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

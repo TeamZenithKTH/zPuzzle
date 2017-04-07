@@ -162,7 +162,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             player.setUserImage(default_userImage);
             intent.putExtra("player", player);
             startActivity(intent);
+
             finish();
+
         }
     }
 
@@ -447,7 +449,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             intent.putExtra("player", player);
             startActivity(intent);
-            finish();
+
         }
     }
 
@@ -477,7 +479,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             User player = new User(facebook_id, full_name, null, profile_image);
                             intent.putExtra("player", player);
                             startActivity(intent);
-                            finish();
+
                             try {
                                 profileController.save(player);
                             } catch (ParseException e) {
@@ -545,7 +547,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             User player = new User(user.getUid(), user.getDisplayName(), user.getEmail(), default_userImage);
                             intent.putExtra("player", player);
                             startActivity(intent);
-                            finish();
+
                         } else {
                             Toast.makeText(LoginActivity.this, "Email or Password is wrong", Toast.LENGTH_LONG).show();
 

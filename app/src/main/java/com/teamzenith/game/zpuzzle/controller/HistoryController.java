@@ -26,7 +26,6 @@ public class HistoryController {
     }
 
 
-
     public void setToControllerFromAfterTheGameActivity(ImageView imageView, GetImageURL getImageURL, String userId) {
 
         UploadToDatabase uploadToDatabase = new UploadToDatabase();
@@ -35,6 +34,7 @@ public class HistoryController {
 
 
     }
+
     public void setToControllerHistoryActivity(GetUserHistory getUserHistory, String userId) {
         HistoryDAO historyDAO = new HistoryDAO();
         historyDAO.setListener(getUserHistory);

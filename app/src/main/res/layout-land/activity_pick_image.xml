@@ -5,8 +5,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:weightSum="1"
-    android:background="@drawable/background2">
-
+    android:background="@drawable/background5">
+    <Gallery
+        android:id="@+id/gallery"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/textViewClick"
         android:layout_width="match_parent"
@@ -16,10 +19,9 @@
 
     <ImageButton
         android:id="@+id/imageButtonCamera"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="102dp"
-        app:srcCompat="@drawable/camera_button"
-        android:layout_weight="0.27" />
+        app:srcCompat="@drawable/camera" />
 
     <TextView
         android:id="@+id/textViewGallery"
@@ -30,7 +32,7 @@
 
     <ImageButton
         android:id="@+id/imageButtonGallery"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/gallery" />
 
@@ -44,9 +46,9 @@
     <view
         android:id="@+id/viewPageRandom"
         class="android.support.v4.view.ViewPager"
-        id="@+id/view"
         layout_width="match_parent"
+        android:layout_width="154dp"
+        android:layout_height="151dp"
         android:clickable="true"
-        android:layout_width="wrap_content"
-        android:layout_height="151dp" />
+        android:layout_weight="0.42" />
 </LinearLayout>

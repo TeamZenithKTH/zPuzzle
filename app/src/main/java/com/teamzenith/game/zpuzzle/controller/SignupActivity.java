@@ -108,7 +108,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
             public void onClick(View v) {
                 Intent backToLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(backToLoginActivity);
-               finish();
+
             }
         });
     }
@@ -165,7 +165,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
                             }
                             intent.putExtra("player", player);
                             startActivity(intent);
-                            finish();
+
 
                         } else {
                             //display some message here

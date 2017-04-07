@@ -11,7 +11,6 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.dbhandler.GetImageURL;
@@ -177,7 +176,9 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             }
 
             startActivity(playAgainIntent);
+
             finish();
+
         } else {
             Intent goBackToMain = new Intent(getBaseContext(), MainActivity.class);
             goBackToMain.putExtra("player", player);
