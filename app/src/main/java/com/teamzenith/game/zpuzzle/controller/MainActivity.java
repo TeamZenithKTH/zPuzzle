@@ -23,6 +23,7 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.dbhandler.GetUserInformation;
 import com.teamzenith.game.zpuzzle.model.Level;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView userImageView;
     private View headerView;
     private DrawerLayout drawer;
+    private boolean faceBookLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         profile = Profile.getCurrentProfile();
 
+        if (profile != null) {
+            faceBookLogin = true;
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         user = new User();
@@ -79,8 +84,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
-        //Picasso.with(getBaseContext()).load(userImage).into(userImageView);
+        userImage = player.getUserImage();
+        Picasso.with(getBaseContext()).load(userImage).into(userImageView);
         // getUserImage(userID);
 
     }
@@ -129,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("player", player);
         intent.putExtra("Level", level);
         startActivity(intent);
-        finish();
+
     }
 
     @Override
@@ -181,25 +186,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = item.getItemId();
         if (id == R.id.nav_profile) {
             Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+            i.putExtra("faceBookLogin", faceBookLogin);
             i.putExtra("player", player);
             startActivity(i);
-            finish();
+
         } else if (id == R.id.nav_history) {
             Intent i = new Intent(MainActivity.this, HistoryActivity.class);
             i.putExtra("player", player);
             startActivity(i);
-            finish();
+
+
+        } else if (id == R.id.nav_send_Invitation) {
+            Intent i = new Intent(MainActivity.this, SendInvitationActivity.class);
+            i.putExtra("player", player);
+            startActivity(i);
 
         } else if (id == R.id.nav_settings) {
             Intent i = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(i);
-           finish();
+
         } else if (id == R.id.nav_logout) {
             firebaseAuth.signOut();
             LoginManager.getInstance().logOut();
             Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);
-            finish();
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -211,7 +222,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void get(User user) {
         userNameView.setText(user.getUserName());
         userEmailView.setText(user.getUserEmail());
-        //userImageView.setImageBitmap();
+        userImage = user.getUserImage();
+        Picasso.with(getBaseContext()).load(userImage).into(userImageView);
+
 
     }
 }

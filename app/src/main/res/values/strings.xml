@@ -69,7 +69,8 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
+    <string name="prompt_password">New Password</string>
+    <string name="prompt_old_password">Old assword</string>
     <string name="prompt_username">Username</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_up">Sign up</string>
@@ -87,4 +88,6 @@
 
     <!---Strings Related to Profile-->
     <string name="user_name">Username: </string>
+    <string name="title_activity_send">SendActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

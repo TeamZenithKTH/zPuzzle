@@ -11,26 +11,46 @@
             android:icon="@drawable/ic_history"
             android:title="History" />
         <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_settings"
-            android:title="Settings" />
-        <item
-            android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_logout"
-            android:title="Logout" />
+            android:id="@+id/nav_top_games"
+            android:icon="@drawable/ic_play_games"
+            android:title="Top Games" />
+        <item android:title="Invitation Center">
+            <menu>
+                <item
+                    android:id="@+id/nav_send_Invitation"
+                    android:icon="@drawable/send"
+                    android:title="Send" />
+                <item
+                    android:id="@+id/nav_receive_Invitation"
+                    android:icon="@drawable/ic_receive"
+                    android:title="Receive" />
+            </menu>
+        </item>
+        <item android:title="Control Center">
+            <menu>
+                <item
+                    android:id="@+id/nav_settings"
+                    android:icon="@drawable/ic_settings"
+                    android:title="Settings" />
+                <item
+                    android:id="@+id/nav_logout"
+                    android:icon="@drawable/ic_logout"
+                    android:title="Logout" />
+            </menu>
+        </item>
     </group>
 
-   <!-- <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>-->
+    <!-- <item android:title="Communicate">
+         <menu>
+             <item
+                 android:id="@+id/nav_share"
+                 android:icon="@drawable/ic_menu_share"
+                 android:title="Share" />
+             <item
+                 android:id="@+id/nav_send"
+                 android:icon="@drawable/ic_menu_send"
+                 android:title="Send" />
+         </menu>
+     </item>-->
 
 </menu>

@@ -11,7 +11,6 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.dbhandler.GetImageURL;
@@ -54,7 +53,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     private String fileName, imageFileURL;
     private int current;
     private UploadToDatabase uploadToDatabase;
-    private boolean b=false;
+    private boolean b = false;
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -93,12 +92,11 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onClick(View v) {
 
-                historyController.setToControllerFromAfterTheGameActivity(solvedImage,AfterTheGameActivity.this,userID);
+                historyController.setToControllerFromAfterTheGameActivity(solvedImage, AfterTheGameActivity.this, userID);
 
 
             }
         });
-
 
 
         countMovementString = intentFromGameActivity.getStringExtra("CountMovement");
@@ -146,14 +144,6 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
         }
 
         solvedImage.setImageBitmap(solved);
-       /* //Bitmap bmp =  BitmapFactory.decodeResource(getResources(), R.drawable.chicken);//your image
-        ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
-        solved.compress(Bitmap.CompressFormat.PNG, 50, bYtE);
-        //solved.recycle();
-        byte[] byteArray = bYtE.toByteArray();
-        //String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);*/
-        //historyController.setToController(this,solvedImage, userID);
-
     }
 
 
@@ -183,18 +173,18 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             }
 
             startActivity(playAgainIntent);
-            finish();
-        }  else {
+
+        } else {
             Intent goBackToMain = new Intent(getBaseContext(), MainActivity.class);
             goBackToMain.putExtra("player", player);
             startActivity(goBackToMain);
-            }
+        }
 
     }
 
     @Override
     public void onBackPressed() {
-        //finish();
+        finish();
     }
 
 
