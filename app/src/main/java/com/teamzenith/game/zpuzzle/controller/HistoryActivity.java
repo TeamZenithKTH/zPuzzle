@@ -1,11 +1,15 @@
 package com.teamzenith.game.zpuzzle.controller;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
+import android.graphics.BitmapFactory;
+
+import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
 import android.widget.ListView;
 
 import com.teamzenith.game.zpuzzle.R;
@@ -13,8 +17,16 @@ import com.teamzenith.game.zpuzzle.util.ImageConverter;
 
 import java.util.HashMap;
 
-public class HistoryActivity extends AppCompatActivity {
 
+import com.teamzenith.game.zpuzzle.dbhandler.GetUserHistory;
+import com.teamzenith.game.zpuzzle.model.User;
+import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
+
+public class HistoryActivity extends AppCompatActivity implements GetUserHistory{
+    private HistoryController historyController;
+    private User player;
+    private String userID;
+    private HashMap<Integer,UserHistoryEntry> userHistoryEntry;
     private ListView listHistory;
 
     @Override
@@ -26,29 +38,22 @@ public class HistoryActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.history_toolbar);
         toolbar.setTitle("History");
         setSupportActionBar(toolbar);
+        Intent mIntent= getIntent();
+        player = (User) mIntent.getSerializableExtra("player");
+        userID = player.getUserID();
+        historyController= new HistoryController();
         // add back arrow to toolbar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        HashMap<Integer, String> values = new HashMap<>();
 
 
-        Bitmap hichem =  BitmapFactory.decodeResource(getResources(), R.drawable.son_goku);
-        String hichem_string=new ImageConverter().convertToString(hichem);
-        values.put(0,hichem_string);
 
-        Bitmap ala =  BitmapFactory.decodeResource(getResources(), R.drawable.naruto);
-        String ala_string=new ImageConverter().convertToString(ala);
-        values.put(1,ala_string);
 
-        Bitmap bassam =  BitmapFactory.decodeResource(getResources(), R.drawable.stockholm);
-        String bassam_string=new ImageConverter().convertToString(bassam);
-        values.put(2,bassam_string);
+        historyController.setToControllerHistoryActivity(this,userID);
 
-        HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this, values);
-        listHistory.setAdapter(historyAdapter);
 
 
     }
@@ -57,8 +62,18 @@ public class HistoryActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish(); // close this activity and return to preview activity (if there is any)
+           // close this activity and return to preview activity (if there is any)
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void get(HashMap<Integer, UserHistoryEntry> userHistoryEntry) {
+        this.userHistoryEntry = userHistoryEntry;
+      //  System.out.println(" Level: " + userHistoryEntry.getLevel() + " Count: " + userHistoryEntry.getCountMovementString() + " Time: " + userHistoryEntry.getTimerCounterString() + " User image: " + userHistoryEntry.getImageFile());
+
+
+        HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this, userHistoryEntry);
+        listHistory.setAdapter(historyAdapter);
     }
 }

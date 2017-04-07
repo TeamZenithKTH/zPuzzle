@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,7 +42,8 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
     private static final int REQUEST_READ_CONTACTS = 0;
     private String facebook_id, f_name, m_name, l_name, gender, full_name, email_id;
     private String profile_image;
-    private String default_userImage = "https://firebasestorage.googleapis.com/v0/b/zpuzzle-a8d48.appspot.com/o/zpuzzle.png?alt=media&token=000005df-6b8f-4807-9795-f29e18b2e4ca";
+    private String default_userImage ;
+            //= "https://firebasestorage.googleapis.com/v0/b/zpuzzle-a8d48.appspot.com/o/zpuzzle.png?alt=media&token=000005df-6b8f-4807-9795-f29e18b2e4ca";
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -106,6 +108,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
             public void onClick(View v) {
                 Intent backToLoginActivity = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(backToLoginActivity);
+               finish();
             }
         });
     }

@@ -93,6 +93,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private int hour = 0;
     private int seconds = 0;
     private String next;
+    private String timer;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -313,13 +314,13 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-
-                            next = "<font color='#EE0000'>" + ((String.valueOf(hour).length() > 1) ? hour : "0" + hour) + ":" + ((String.valueOf(minute).length() > 1) ? minute : "0" + minute) + ":" + ((String.valueOf(seconds).length() > 1) ? seconds : "0" + seconds) + ":" +
+                            timer = ((String.valueOf(hour).length() > 1) ? hour : "0" + hour) + ":" + ((String.valueOf(minute).length() > 1) ? minute : "0" + minute) + ":" + ((String.valueOf(seconds).length() > 1) ? seconds : "0" + seconds) + ":" +
                                     ((String.valueOf(count).length() > 1) ?
                                             (String.valueOf(count).length() > 2) ?
                                                     count
                                                     : "0" + count
-                                            : "00" + count) + "</font>";
+                                            : "00" + count);
+                            next = "<font color='#EE0000'>" + timer + "</font>";
                             timerCounter.setText(Html.fromHtml("Timer: " + next));
                             count++;
                             if (count == 999) {
@@ -378,7 +379,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 im = new ImageButton(this);
                 im.setId(i);
                 imagesIDs.setposition(im.getId(), i);
-                //System.out.println("Image ID2 " + im.getId());
                 im.setImageBitmap(tmpbmp[i]);
                 TableRow.LayoutParams params = new TableRow.LayoutParams();
                 params.setMargins(1, 1, 1, 1);
@@ -477,6 +477,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         it.putExtra("Level", level);
         it.putExtra("CountMovement", String.valueOf(countMovement));
         it.putExtra("TimerCounter", String.valueOf(next));
+        it.putExtra("Timer", String.valueOf(timer));
         if (method.equals(ImageChooser.Method.RANDOM)) {
             it.putExtra("Image", idOfDrawable);
             it.putExtra("current", viewPager.getCurrentItem());

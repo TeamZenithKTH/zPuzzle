@@ -8,20 +8,19 @@ import android.media.ExifInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.teamzenith.game.zpuzzle.R;
+import com.teamzenith.game.zpuzzle.dbhandler.GetImageURL;
+import com.teamzenith.game.zpuzzle.dbhandler.UploadToDatabase;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
 import com.teamzenith.game.zpuzzle.util.ImageConverter;
 
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -30,7 +29,7 @@ import java.text.ParseException;
  * Created by Hichem Memmi on 2017-03-27.
  */
 
-public class AfterTheGameActivity extends AppCompatActivity implements View.OnClickListener {
+public class AfterTheGameActivity extends AppCompatActivity implements View.OnClickListener, GetImageURL {
 
     private ImageView playAgainBtn;
     private ImageView goToMainBtn;
@@ -46,6 +45,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     private User user;
     private String userID;
     private String timerCounterString;
+    private String timerCounterStringColored;
     private String countMovementString;
     private UserHistoryEntry userHistoryEntry;
     private User player;
@@ -53,9 +53,10 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     private int idOfDrawable;
     private Bitmap solved;
     private File imageFile;
-    private String fileName;
+    private String fileName, imageFileURL;
     private int current;
-
+    private UploadToDatabase uploadToDatabase;
+    private boolean b = false;
 
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -81,21 +82,34 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
         if (method.equals(ImageChooser.Method.RANDOM)) {
             fileName = intentFromGameActivity.getStringExtra("file");
         }
+        uploadToDatabase = new UploadToDatabase();
+
     }
 
 
     private void actions() {
         playAgainBtn.setOnClickListener(this);
         goToMainBtn.setOnClickListener(this);
-        saveHistory.setOnClickListener(this);
+
+        saveHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                historyController.setToControllerFromAfterTheGameActivity(solvedImage, AfterTheGameActivity.this, userID);
+
+
+            }
+        });
+
 
         countMovementString = intentFromGameActivity.getStringExtra("CountMovement");
         String countMovementStringColored = "<font color='#EE0000'>" + countMovementString + "</font>";
         movementTextView.setText(Html.fromHtml("You solved on " + countMovementStringColored + " steps"));
 
-        timerCounterString = intentFromGameActivity.getStringExtra("TimerCounter");
-        timerTextView.setText(Html.fromHtml("Your time was " + timerCounterString));
-
+        timerCounterStringColored = intentFromGameActivity.getStringExtra("TimerCounter");
+        timerCounterString = intentFromGameActivity.getStringExtra("Timer");
+        timerTextView.setText(Html.fromHtml("Your time was " + timerCounterStringColored));
+        userID = player.getUserID();
 
         solved = null;
 
@@ -117,33 +131,27 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
                 matrix = new Matrix();
                 matrix.postRotate(90);
                 Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
-                solved= Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+                solved = Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
             } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
                 bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
                 matrix = new Matrix();
                 matrix.postRotate(180);
-                solved= Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+                solved = Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
             } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
                 bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
                 matrix = new Matrix();
                 matrix.postRotate(270);
-                solved= Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+                solved = Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
             } else {
-                solved= Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
+                solved = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imageFile.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
             }
         }
 
         solvedImage.setImageBitmap(solved);
-
-        //Bitmap bmp =  BitmapFactory.decodeResource(getResources(), R.drawable.chicken);//your image
-
-        String imageFile = new ImageConverter().convertToString(solved);
-
-        userID = player.getUserID();
-        userHistoryEntry = new UserHistoryEntry(userID, level, countMovementString, timerCounterString,imageFile);
     }
 
-    private int getImageOrientation(File imgFile1){
+
+    private int getImageOrientation(File imgFile1) {
         ExifInterface exif = null;
         try {
             exif = new ExifInterface(imgFile1.getAbsolutePath());
@@ -169,23 +177,15 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             }
 
             startActivity(playAgainIntent);
-        } else if (v.getId() == R.id.save_history) {
-            Toast.makeText(this, "History Saved", Toast.LENGTH_SHORT).show();
-
-            try {
-                historyController.save(userHistoryEntry);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            finish();
         } else {
             Intent goBackToMain = new Intent(getBaseContext(), MainActivity.class);
             goBackToMain.putExtra("player", player);
             startActivity(goBackToMain);
+
             finish();
 
-
-
-    }
+        }
 
     }
 
@@ -193,5 +193,15 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    public void get(String imageURL) {
+
+        userHistoryEntry = new UserHistoryEntry(userID, level, countMovementString, timerCounterString, imageURL);
+        try {
+            historyController.save(userHistoryEntry);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

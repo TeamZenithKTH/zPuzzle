@@ -23,7 +23,6 @@ import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.squareup.picasso.Picasso;
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.dbhandler.GetUserInformation;
 import com.teamzenith.game.zpuzzle.model.Level;
@@ -34,7 +33,7 @@ import com.teamzenith.game.zpuzzle.model.User;
 /**
  *
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener,GetUserInformation {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, GetUserInformation {
     boolean doubleBackToExitPressedOnce = false;
 
     private Button hardBtn;
@@ -52,11 +51,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Profile profile;
     private ProfileController profileController;
     private FirebaseUser firebaseUser;
-    private TextView userNameView,userEmailView;
+    private TextView userNameView, userEmailView;
     private NavigationView navigationView;
     private ImageView userImageView;
     private View headerView;
     private DrawerLayout drawer;
+    private Button b;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FacebookSdk.sdkInitialize(getApplicationContext());
         firebaseAuth = FirebaseAuth.getInstance();
         player = (User) mIntent.getSerializableExtra("player");
-        System.out.println(player.getUserName());
         createComponents();
         Actions();
 
@@ -79,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-
 
 
         //Picasso.with(getBaseContext()).load(userImage).into(userImageView);
@@ -98,9 +96,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         navigationView.setNavigationItemSelectedListener(this);
         headerView = navigationView.getHeaderView(0);
         userNameView = (TextView) headerView.findViewById(R.id.user_name);
-        userEmailView= (TextView) headerView.findViewById(R.id.user_email_header);
+        userEmailView = (TextView) headerView.findViewById(R.id.user_email_header);
         userImageView = (ImageView) headerView.findViewById(R.id.user_image);
-        drawer= (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        b = (Button) findViewById(R.id.b);
 
     }
 
@@ -108,14 +107,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         hardBtn.setOnClickListener(this);
         medelBtn.setOnClickListener(this);
         kidsBtn.setOnClickListener(this);
-        profileController.setToController(this,player);
+        profileController.setToController(this, player);
+        b.setOnClickListener(this);
+
+
     }
 
 
     @Override
     public void onClick(View v) {
         Button btn = (Button) v;
-        Level level;
+        Level level=null;
         LevelFactory levelFactory = LevelFactory.getInstance();
 
 
@@ -124,6 +126,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         } else if (btn.getId() == R.id.medelBtn) {
             level = levelFactory.createLevel(LevelType.MEDIUM);
+        } else if (btn.getId() == R.id.b) {
+            Intent i=new Intent(MainActivity.this,TopGamesActivity.class);
+            startActivity(i);
         } else {
             level = levelFactory.createLevel(LevelType.EASY);
         }
@@ -132,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("player", player);
         intent.putExtra("Level", level);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -188,12 +194,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             finish();
         } else if (id == R.id.nav_history) {
             Intent i = new Intent(MainActivity.this, HistoryActivity.class);
+            i.putExtra("player", player);
             startActivity(i);
             finish();
 
         } else if (id == R.id.nav_settings) {
             Intent i = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(i);
+
             finish();
 
         } else if (id == R.id.nav_logout) {

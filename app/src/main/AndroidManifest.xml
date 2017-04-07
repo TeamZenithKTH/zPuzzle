@@ -45,6 +45,7 @@
 
         <activity android:name=".controller.SignupActivity"/>
        <activity android:name=".controller.ImageChooser" />
+        <activity android:name=".controller.TopGamesActivity"/>
         <service android:name="com.teamzenith.game.zpuzzle.util.MessingingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>

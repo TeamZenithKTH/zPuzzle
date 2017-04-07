@@ -9,7 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.teamzenith.game.zpuzzle.R;
+import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
 import com.teamzenith.game.zpuzzle.util.ImageConverter;
 
 import java.util.HashMap;
@@ -23,8 +25,8 @@ public class HistoryAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater=null;
     Activity historyActivity;
-    HashMap<Integer,String> values;
-    public HistoryAdapter(Activity historyActivity, HashMap<Integer,String> values){
+    HashMap<Integer,UserHistoryEntry> values;
+    public HistoryAdapter(Activity historyActivity, HashMap<Integer, UserHistoryEntry> values){
         this.historyActivity=historyActivity;
         this.values=values;
         inflater=(LayoutInflater) historyActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -50,14 +52,20 @@ public class HistoryAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         View view =convertView;
+        Context context = parent.getContext();
         if(convertView==null)
             view = inflater.inflate(R.layout.history_item, null);
 
-        TextView pos = (TextView)view.findViewById(R.id.pos); // title
-        ImageView val = (ImageView)view.findViewById(R.id.val); // artist name
+        TextView time = (TextView)view.findViewById(R.id.movement);
+        TextView movement = (TextView)view.findViewById(R.id.timercount);
+        TextView level = (TextView)view.findViewById(R.id.level);
+        ImageView image = (ImageView)view.findViewById(R.id.imageHistoryGame);
 
-        pos.setText(String.valueOf(position));
-        val.setImageDrawable(new ImageConverter().convertToBitmap(values.get(position)));
+        time.setText(values.get(position).getTimerCounterString());
+        movement.setText(values.get(position).getCountMovementString());
+        level.setText(values.get(position).getLevel());
+
+        Picasso.with(context).load(values.get(position).getImageFile()).into(image);
 
 
         return view;
