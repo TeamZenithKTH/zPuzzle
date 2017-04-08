@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.teamzenith.game.zpuzzle.model.User;
+import com.teamzenith.game.zpuzzle.model.UsersNameID;
 
 
 /**
@@ -21,14 +22,25 @@ public class UserDAO {
     private String userImage;
     private String imageFile;
     private GetUserInformation getUserInformation;
+    private UsersNameID usersNameID;
 
 
-    public void insertNewUser(User user) {
+    public void insertNewUser(User user, UsersNameID usersNameID) {
         this.user = user;
         this.userID = user.getUserID();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference usersRef = mDatabase.child("Users").child(userID);
+        DatabaseReference allUsersNamesAndIDs = mDatabase.child("UsersNameID").child(userID).child("userName");
+        allUsersNamesAndIDs.setValue(usersNameID.getUserName());
         usersRef.setValue(user);
+    }
+
+    public void insertUserNameID(UsersNameID usersNameID) {
+        this.usersNameID = usersNameID;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference allUsersNamesAndIDs = mDatabase.child("UsersNameID").child(usersNameID.getUserID());
+        allUsersNamesAndIDs.setValue(usersNameID);
+
     }
 
     public void setUserName(String uid, String userName) {

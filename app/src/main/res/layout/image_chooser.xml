@@ -3,8 +3,19 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@drawable/start">
+    android:background="@drawable/background5"
+    android:weightSum="1">
 
+    <TextView
+
+        android:id="@+id/textViewCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="Camera Click"
+        android:textSize="20sp"
+        android:textColor="@color/grey_300"
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/camera"
@@ -14,6 +25,16 @@
         android:src="@drawable/toff"
         android:layout_marginTop="10dp" />
 
+    <TextView
+        android:id="@+id/textViewGallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="Gallery Picture"
+        android:textColor="@color/grey_300"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
     <ImageView
         android:id="@+id/galeri"
         android:layout_width="100dp"
@@ -22,15 +43,26 @@
         android:layout_marginTop="10dp"
         android:src="@drawable/photofromgaleri" />
 
+    <TextView
+        android:id="@+id/RandomImages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:text="Random Pictures"
+        android:textSize="20sp"
+        android:textColor="@color/grey_300"
+        android:textStyle="bold" />
 
     <view
         android:id="@+id/randomImages"
         class="android.support.v4.view.ViewPager"
-        id="@+id/view"
         layout_width="match_parent"
-        android:layout_width="wrap_content"
+        android:layout_width="281dp"
         android:layout_height="151dp"
-        android:clickable="true" />
-
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:clickable="true"
+        android:layout_weight="0.48" />
 
 </LinearLayout>

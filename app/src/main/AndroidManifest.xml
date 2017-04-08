@@ -58,6 +58,8 @@
         </service>
 
         <activity android:name=".controller.SendInvitationActivity" />
+        <activity android:name=".controller.SentInvitationActivity" />
+        <activity android:name=".controller.InboxActivity"></activity>
     </application>
 
 </manifest>

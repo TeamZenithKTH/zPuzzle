@@ -69,7 +69,8 @@
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">New Password</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_new_password">New Password</string>
     <string name="prompt_old_password">Old assword</string>
     <string name="prompt_username">Username</string>
     <string name="action_sign_in">Sign in</string>

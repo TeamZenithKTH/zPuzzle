@@ -52,7 +52,7 @@ public class HistoryActivity extends AppCompatActivity implements GetUserHistory
     @Override
     public void get(UserHistoryEntry userHistoryEntry) {
         this.userHistoryEntry = userHistoryEntry;
-        System.out.println(" Level: " + userHistoryEntry.getLevel() + " Count: " + userHistoryEntry.getCountMovementString() + " Time: " + userHistoryEntry.getTimerCounterString() + " User image: " + userHistoryEntry.getImageFile());
+        //System.out.println(" Level: " + userHistoryEntry.getLevel() + " Count: " + userHistoryEntry.getCountMovementString() + " Time: " + userHistoryEntry.getTimerCounterString() + " User image: " + userHistoryEntry.getImageFile());
 
     }
 }
