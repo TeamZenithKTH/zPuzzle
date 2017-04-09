@@ -11,18 +11,27 @@ public class SendInvitation {
     private String userID;
     private String presentText;
     private boolean status;
-
+    private String friendName;
     public SendInvitation() {
 
     }
 
-    public SendInvitation(String intiationText, String imageURL, String level, String userID, String presentText, boolean status) {
+    public SendInvitation(String intiationText, String imageURL, String level, String userID,String friendName, String presentText, boolean status) {
         this.intiationText = intiationText;
         this.imageURL = imageURL;
         this.level = level;
         this.userID = userID;
         this.presentText = presentText;
         this.status = status;
+        this.friendName = friendName;
+    }
+
+    public String getFriendName() {
+        return friendName;
+    }
+
+    public void setFriendName(String friendName) {
+        this.friendName = friendName;
     }
 
     public boolean isStatus() {

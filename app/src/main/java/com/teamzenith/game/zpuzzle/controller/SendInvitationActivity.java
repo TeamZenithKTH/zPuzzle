@@ -166,9 +166,9 @@ public class SendInvitationActivity extends AppCompatActivity implements SendInv
         this.imageURL = imageURL;
         friendName = String.valueOf(friendSpinner.getSelectedItem());
         String level =String.valueOf(levelSpinner.getSelectedItem());
-        System.out.println(String.valueOf(friendSpinner.getSelectedItem()));
         friendID=allUsersList.get(friendName);
-        sendInvitation = new SendInvitation(invitationText.getText().toString().trim(), imageURL,level ,friendID , senderPresent.getText().toString().trim(), false);
+
+        sendInvitation = new SendInvitation(invitationText.getText().toString().trim(), imageURL,level ,friendID,friendName , senderPresent.getText().toString().trim(), false);
         checkNotEmptyInformation(sendInvitation);
     }
 
