@@ -18,17 +18,4 @@
         tools:layout_editor_absoluteY="0dp" />
 
 
-
-        <Button
-            android:id="@+id/get_user_history"
-            android:layout_width="159dp"
-            android:layout_height="52dp"
-            android:text="History"
-            android:background="@drawable/buttonanmation"
-            android:textColor="#f3f4f9"
-            android:textStyle="bold"
-            android:textSize="18dp"
-
-            />
-
 </android.support.constraint.ConstraintLayout>

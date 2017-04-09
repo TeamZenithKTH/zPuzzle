@@ -19,11 +19,15 @@
                 <item
                     android:id="@+id/nav_send_Invitation"
                     android:icon="@drawable/send"
-                    android:title="Send" />
+                    android:title="Send Invitation" />
+                <item
+                    android:id="@+id/nav_sent_Invitation"
+                    android:icon="@drawable/send"
+                    android:title="Sent" />
                 <item
                     android:id="@+id/nav_receive_Invitation"
                     android:icon="@drawable/ic_receive"
-                    android:title="Receive" />
+                    android:title="Inbox" />
             </menu>
         </item>
         <item android:title="Control Center">

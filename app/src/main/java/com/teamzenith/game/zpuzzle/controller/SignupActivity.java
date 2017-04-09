@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.User;
+import com.teamzenith.game.zpuzzle.model.UsersNameID;
 
 import java.text.ParseException;
 
@@ -158,8 +159,9 @@ public class SignupActivity extends AppCompatActivity implements LoaderManager.L
                             status = true;
 
                             User player = new User(user.getUid(), userName, user.getEmail(), default_userImage);
+                            UsersNameID usersNameID=new UsersNameID(user.getUid(),userName);
                             try {
-                                profileController.save(player);
+                                profileController.save(player,usersNameID);
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }

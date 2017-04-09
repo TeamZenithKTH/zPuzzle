@@ -11,7 +11,12 @@ public class SendInvitation {
     private String userID;
     private String presentText;
     private boolean status;
-    public SendInvitation(String intiationText, String imageURL, String level, String userID, String presentText,boolean status) {
+
+    public SendInvitation() {
+
+    }
+
+    public SendInvitation(String intiationText, String imageURL, String level, String userID, String presentText, boolean status) {
         this.intiationText = intiationText;
         this.imageURL = imageURL;
         this.level = level;

@@ -194,10 +194,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent i = new Intent(MainActivity.this, HistoryActivity.class);
             i.putExtra("player", player);
             startActivity(i);
-
-
         } else if (id == R.id.nav_send_Invitation) {
             Intent i = new Intent(MainActivity.this, SendInvitationActivity.class);
+            i.putExtra("player", player);
+            startActivity(i);
+
+        }else if (id == R.id.nav_sent_Invitation) {
+            Intent i = new Intent(MainActivity.this, SentInvitationActivity.class);
+            i.putExtra("player", player);
+            startActivity(i);
+
+        }else if (id == R.id.nav_receive_Invitation) {
+            Intent i = new Intent(MainActivity.this, InboxActivity.class);
             i.putExtra("player", player);
             startActivity(i);
 
@@ -210,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             LoginManager.getInstance().logOut();
             Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);
-
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

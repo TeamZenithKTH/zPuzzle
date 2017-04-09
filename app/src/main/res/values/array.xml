@@ -5,12 +5,4 @@
         <item>Medium</item>
         <item>Hard</item>
     </string-array>
-    <string-array name="spinner_friends">
-        <item>Alaa</item>
-        <item>Hecham</item>
-        <item>Bssam</item>
-        <item>Shubha</item>
-        <item>Sarita</item>
-        <item>Vimla</item>
-    </string-array>
 </resources>

@@ -46,6 +46,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.User;
+import com.teamzenith.game.zpuzzle.model.UsersNameID;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -133,6 +134,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onClick(View view) {
                 Intent registerIntent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivity(registerIntent);
+                finish();
             }
         });
 
@@ -160,7 +162,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             player.setUserImage(default_userImage);
             intent.putExtra("player", player);
             startActivity(intent);
-
+            finish();
         }
     }
 
@@ -450,7 +452,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             intent.putExtra("player", player);
             startActivity(intent);
-
+            finish();
         }
     }
 
@@ -459,8 +461,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private void faceBookLogin() {
         callbackManager = CallbackManager.Factory.create();
+
+
         /*loginButton.setReadPermissions(Arrays.asList(
         "public_profile", "email", "user_birthday", "user_friends"));*/
+
         loginButton.setReadPermissions("public_profile");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             private ProfileTracker mProfileTracker;
@@ -478,11 +483,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             full_name = newprofile.getName();
                             profile_image = newprofile.getProfilePictureUri(400, 400).toString();
                             User player = new User(facebook_id, full_name, null, profile_image);
+                            UsersNameID usersNameID = new UsersNameID(facebook_id,full_name);
                             intent.putExtra("player", player);
                             startActivity(intent);
-
+                            finish();
                             try {
-                                profileController.save(player);
+                                profileController.save(player,usersNameID);
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
@@ -548,7 +554,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             User player = new User(user.getUid(), user.getDisplayName(), user.getEmail(), default_userImage);
                             intent.putExtra("player", player);
                             startActivity(intent);
-
+                            finish();
                         } else {
                             Toast.makeText(LoginActivity.this, "Email or Password is wrong", Toast.LENGTH_LONG).show();
 

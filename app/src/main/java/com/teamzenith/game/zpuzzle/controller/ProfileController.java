@@ -8,6 +8,7 @@ import com.teamzenith.game.zpuzzle.dbhandler.UpdateUserImage;
 import com.teamzenith.game.zpuzzle.dbhandler.UploadToDatabase;
 import com.teamzenith.game.zpuzzle.dbhandler.UserDAO;
 import com.teamzenith.game.zpuzzle.model.User;
+import com.teamzenith.game.zpuzzle.model.UsersNameID;
 
 import java.text.ParseException;
 
@@ -18,10 +19,11 @@ import java.text.ParseException;
 public class ProfileController {
     private User user;
 
-    public void save(User user) throws ParseException {
+    public void save(User user, UsersNameID usersNameID) throws ParseException {
         this.user = user;
         UserDAO userDAO = new UserDAO();
-        userDAO.insertNewUser(user);
+        userDAO.insertNewUser(user,usersNameID);
+        userDAO.insertUserNameID(usersNameID);
     }
 
     public void setToController(GetUserInformation getUserInformation, User user) {
