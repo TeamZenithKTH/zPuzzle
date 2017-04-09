@@ -6,8 +6,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    tools:context="com.teamzenith.game.zpuzzle.controller.Game"
-    android:background="@drawable/game">
+    tools:context="com.teamzenith.game.zpuzzle.controller.Game">
 
 
     <LinearLayout
@@ -41,7 +40,7 @@
                 android:layout_gravity="center">
 
                 <TextView
-                    android:textColor="#fafafc"
+                    android:textColor="#000000"
                     android:id="@+id/timerCounter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -52,7 +51,7 @@
 
 
                 <TextView
-                    android:textColor="#fafafc"
+                    android:textColor="#000000"
                     android:id="@+id/currentMovement"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -1,3 +1,4 @@
+
 package com.teamzenith.game.zpuzzle.controller;
 
 import android.app.Activity;
@@ -6,16 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-
 import android.widget.TextView;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
-
 import java.util.HashMap;
-
 
 /**
  * Created by Shubha on 4/7/2017.
@@ -69,4 +67,3 @@ import java.util.HashMap;
             return view;
         }
     }
-
