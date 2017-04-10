@@ -118,7 +118,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
         } else if (method.equals(ImageChooser.Method.CAMERA)) {
             photoButton = new ImageView(this);
-            photoButton.setImageResource(R.drawable.cm);
+            photoButton.setImageResource(R.drawable.ic_camera);
             photoButton.setId(R.id.pickphotocamera);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             layoutParams.gravity = Gravity.CENTER;

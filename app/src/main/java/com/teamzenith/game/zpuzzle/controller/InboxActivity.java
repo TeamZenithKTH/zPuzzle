@@ -5,12 +5,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.dbhandler.GetMyFriendsChallengInvitations;
 import com.teamzenith.game.zpuzzle.model.SendInvitation;
 import com.teamzenith.game.zpuzzle.model.User;
+import com.teamzenith.game.zpuzzle.util.InvitationGame;
 
 import java.util.HashMap;
 
@@ -38,7 +42,17 @@ public class InboxActivity extends AppCompatActivity implements GetMyFriendsChal
         player = (User) mIntent.getSerializableExtra("player");
         invitationsController.getUserChallenges(InboxActivity.this, player.getUserID());
         listInvitations = (ListView) findViewById(R.id.inbox_list_view);
-
+        listInvitations.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3)
+            {
+                SendInvitation selectedFromList = (SendInvitation)(listInvitations.getItemAtPosition(position));
+                InvitationGame invitationGame = new InvitationGame(selectedFromList);
+                selectedFromList.getIntiationText();
+                Toast.makeText(InboxActivity.this, "" + selectedFromList.getIntiationText(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
