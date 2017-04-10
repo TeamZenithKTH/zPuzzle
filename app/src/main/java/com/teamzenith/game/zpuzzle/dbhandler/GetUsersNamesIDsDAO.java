@@ -15,13 +15,15 @@ public class GetUsersNamesIDsDAO {
     private DatabaseReference usersNamesIDsDatabase;
     private GetUsersNamesIDs getUsersNamesIDs;
 
+    /**
+     *
+     */
     public void getUserNames() {
         usersNamesIDsDatabase = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference usersNameIDRef = usersNamesIDsDatabase.child("UsersNameID");
         usersNameIDRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Long num = dataSnapshot.getChildrenCount();
                 for (DataSnapshot userNameIDSnapshot : dataSnapshot.getChildren()) {
                     UsersNameID userNameIDEntry = userNameIDSnapshot.getValue(UsersNameID.class);
                     getUsersNamesIDs.get(userNameIDEntry);
@@ -33,8 +35,12 @@ public class GetUsersNamesIDsDAO {
 
             }
         });
-        //return userHistory;
     }
+
+    /**
+     *
+     * @param getUsersNamesIDs
+     */
     public void setListener(GetUsersNamesIDs getUsersNamesIDs) {
         this.getUsersNamesIDs = getUsersNamesIDs;
     }

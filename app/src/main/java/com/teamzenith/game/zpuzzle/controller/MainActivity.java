@@ -36,7 +36,6 @@ import com.teamzenith.game.zpuzzle.model.User;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener, GetUserInformation {
     boolean doubleBackToExitPressedOnce = false;
-
     private Button hardBtn;
     private Button medelBtn;
     private Button kidsBtn;
@@ -64,32 +63,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         profile = Profile.getCurrentProfile();
-
         if (profile != null) {
             faceBookLogin = true;
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         user = new User();
-
         Intent mIntent = getIntent();
         FacebookSdk.sdkInitialize(getApplicationContext());
         firebaseAuth = FirebaseAuth.getInstance();
         player = (User) mIntent.getSerializableExtra("player");
         createComponents();
         Actions();
-
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
         userImage = player.getUserImage();
         Picasso.with(getBaseContext()).load(userImage).into(userImageView);
-        // getUserImage(userID);
-
     }
-
 
     private void createComponents() {
         hardBtn = (Button) findViewById(R.id.hardBtn);
@@ -103,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userEmailView = (TextView) headerView.findViewById(R.id.user_email_header);
         userImageView = (ImageView) headerView.findViewById(R.id.user_image);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
     }
 
     private void Actions() {
@@ -119,22 +110,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btn = (Button) v;
         Level level;
         LevelFactory levelFactory = LevelFactory.getInstance();
-
-
         if (btn.getId() == R.id.hardBtn) {
             level = levelFactory.createLevel(LevelType.HARD);
-
         } else if (btn.getId() == R.id.medelBtn) {
             level = levelFactory.createLevel(LevelType.MEDIUM);
         } else {
             level = levelFactory.createLevel(LevelType.EASY);
         }
-
         Intent intent = new Intent(this, ImageChooser.class);
         intent.putExtra("player", player);
         intent.putExtra("Level", level);
         startActivity(intent);
-
     }
 
     @Override
@@ -142,54 +128,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (doubleBackToExitPressedOnce) {
             this.finishAffinity();
         }
-
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-
         new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
                 doubleBackToExitPressedOnce = false;
-
             }
         }, 2000);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-       /* if (id == R.id.action_settings) {
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_profile) {
             Intent i = new Intent(MainActivity.this, ProfileActivity.class);
             i.putExtra("faceBookLogin", faceBookLogin);
             i.putExtra("player", player);
             startActivity(i);
-
         } else if (id == R.id.nav_history) {
             Intent i = new Intent(MainActivity.this, HistoryActivity.class);
             i.putExtra("player", player);
@@ -198,21 +168,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent i = new Intent(MainActivity.this, SendInvitationActivity.class);
             i.putExtra("player", player);
             startActivity(i);
-
-        }else if (id == R.id.nav_sent_Invitation) {
+        } else if (id == R.id.nav_sent_Invitation) {
             Intent i = new Intent(MainActivity.this, SentInvitationActivity.class);
             i.putExtra("player", player);
             startActivity(i);
-
-        }else if (id == R.id.nav_receive_Invitation) {
+        } else if (id == R.id.nav_receive_Invitation) {
             Intent i = new Intent(MainActivity.this, InboxActivity.class);
             i.putExtra("player", player);
             startActivity(i);
-
         } else if (id == R.id.nav_settings) {
             Intent i = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(i);
-
         } else if (id == R.id.nav_logout) {
             firebaseAuth.signOut();
             LoginManager.getInstance().logOut();
@@ -220,7 +186,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(i);
             finish();
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -232,7 +197,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userEmailView.setText(user.getUserEmail());
         userImage = user.getUserImage();
         Picasso.with(getBaseContext()).load(userImage).into(userImageView);
-
-
     }
 }

@@ -27,7 +27,6 @@ public class SentInvitationActivity extends AppCompatActivity implements GetUser
         Toolbar toolbar = (Toolbar) findViewById(R.id.sent_toolbar);
         toolbar.setTitle("Sent");
         setSupportActionBar(toolbar);
-        // add back arrow to toolbar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -35,18 +34,15 @@ public class SentInvitationActivity extends AppCompatActivity implements GetUser
         invitationsController = new InvitationsController();
         Intent mIntent = getIntent();
         player = (User) mIntent.getSerializableExtra("player");
-
         listInvitations = (ListView) findViewById(R.id.list_view_sent_invitations);
         invitationsController.getUserInvitaionsHistory(SentInvitationActivity.this, player.getUserID());
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish();// close this activity and return to preview activity (if there is any)
+            finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 

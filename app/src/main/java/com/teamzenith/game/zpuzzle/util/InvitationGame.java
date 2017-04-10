@@ -1,13 +1,7 @@
 package com.teamzenith.game.zpuzzle.util;
 
-import android.content.Intent;
-
-import com.teamzenith.game.zpuzzle.controller.ImageChooser;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.SendInvitation;
-import com.teamzenith.game.zpuzzle.model.User;
-
-import java.io.File;
 
 /**
  * Created by alaaalkassar on 4/10/17.
@@ -18,7 +12,14 @@ public class InvitationGame {
     private String invitationLetter, presentLetter, level, senderName, imageURL;
     private boolean status;
     private Level gameLevel;
-    public InvitationGame(SendInvitation sendInvitation) {
+
+    /**
+     * @param sendInvitation
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    public InvitationGame(SendInvitation sendInvitation) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         this.sendInvitation = sendInvitation;
         this.invitationLetter = sendInvitation.getIntiationText();
         this.presentLetter = sendInvitation.getPresentText();
@@ -26,7 +27,10 @@ public class InvitationGame {
         this.imageURL = sendInvitation.getImageURL();
         this.status = sendInvitation.isStatus();
         this.level = sendInvitation.getLevel();
+        Class cls = Class.forName(Level.class.getPackage().getName() + "." + this.level);
+        Level myTestObject = (Level) cls.newInstance();
     }
+
     private void initComponent() {
 
     }

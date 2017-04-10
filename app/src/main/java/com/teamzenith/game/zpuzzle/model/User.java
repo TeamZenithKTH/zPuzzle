@@ -21,6 +21,9 @@ public class User implements Serializable {
         this.userImage = userImage;
     }
 
+    /**
+     *
+     */
     public User() {
 
     }

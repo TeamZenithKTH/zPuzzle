@@ -16,10 +16,7 @@ import com.teamzenith.game.zpuzzle.R;
 
 
 public class RandomImageAdapter extends PagerAdapter {
-
     Context mContext;
-
-
     private int[] sliderImagesId = new int[]{
             R.drawable.image1,
             R.drawable.image2,
@@ -49,13 +46,9 @@ public class RandomImageAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int i) {
-
-
         ImageView mImageView = new ImageView(mContext);
         mImageView.setImageResource(sliderImagesId[i]);
         mImageView.setTag(sliderImagesId[i]);
-
-
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +58,6 @@ public class RandomImageAdapter extends PagerAdapter {
         });
         ((ViewPager) container).addView(mImageView, 0);
         return mImageView;
-
     }
 
     @Override
@@ -73,11 +65,8 @@ public class RandomImageAdapter extends PagerAdapter {
         ((ViewPager) container).removeView((ImageView) obj);
     }
 
-
     public void setOnPrepareListener(PrepareForClick prepareForClick) {
-
         this.prepareForClick = prepareForClick;
-
     }
 }
 

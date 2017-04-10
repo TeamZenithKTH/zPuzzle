@@ -46,17 +46,6 @@
         <activity android:name=".controller.SignupActivity" />
         <activity android:name=".controller.ImageChooser" />
 
-        <service android:name=".util.MessingingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".model.FirebaseIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-
         <activity android:name=".controller.SendInvitationActivity" />
         <activity android:name=".controller.SentInvitationActivity" />
         <activity android:name=".controller.InboxActivity"></activity>

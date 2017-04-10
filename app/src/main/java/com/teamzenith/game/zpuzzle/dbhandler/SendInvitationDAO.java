@@ -27,10 +27,19 @@ public class SendInvitationDAO {
     private HashMap<Integer, SendInvitation> oneInvitationEntry;
     private GetMyFriendsChallengInvitations getMyFriendsChallengInvitations;
 
+    /**
+     *
+     */
     public SendInvitationDAO() {
 
     }
 
+    /**
+     *
+     * @param sendInvitation
+     * @param userID
+     * @throws ParseException
+     */
     public void send(SendInvitation sendInvitation, String userID) throws ParseException {
         this.sendInvitation = sendInvitation;
         this.userID = userID;
@@ -40,6 +49,12 @@ public class SendInvitationDAO {
         usersRef.setValue(sendInvitation);
     }
 
+    /**
+     *
+     * @param sendInvitation
+     * @param friendID
+     * @throws ParseException
+     */
     public void sendToFriend(SendInvitation sendInvitation, String friendID) throws ParseException {
         this.sendInvitation = sendInvitation;
         this.userID = sendInvitation.getUserID();
@@ -56,6 +71,10 @@ public class SendInvitationDAO {
         return currentDateTimeString;
     }
 
+    /**
+     *
+     * @param userID
+     */
     public void getMySentInvitations(String userID) {
         this.userID = userID;
         this.date = date();
@@ -73,7 +92,6 @@ public class SendInvitationDAO {
                     i++;
                 }
                 getUserInvitations.get(oneInvitationEntry);
-
             }
 
             @Override
@@ -83,6 +101,10 @@ public class SendInvitationDAO {
         });
     }
 
+    /**
+     *
+     * @param userID
+     */
     public void getMyChallengesInvitations(String userID) {
         this.userID = userID;
         oneInvitationEntry = new HashMap<>();
@@ -99,7 +121,6 @@ public class SendInvitationDAO {
                     i++;
                 }
                 getMyFriendsChallengInvitations.getMyChallenges(oneInvitationEntry);
-
             }
 
             @Override
@@ -109,11 +130,19 @@ public class SendInvitationDAO {
         });
     }
 
+    /**
+     *
+     * @param getMyFriendsChallengInvitations
+     */
     public void setListenerMyChallenges(GetMyFriendsChallengInvitations getMyFriendsChallengInvitations) {
         this.getMyFriendsChallengInvitations = getMyFriendsChallengInvitations;
 
     }
 
+    /**
+     *
+     * @param getUserInvitations
+     */
     public void setListener(GetUserInvitations getUserInvitations) {
         this.getUserInvitations = getUserInvitations;
     }

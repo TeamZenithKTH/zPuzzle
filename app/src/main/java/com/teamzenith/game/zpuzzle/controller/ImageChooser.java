@@ -21,6 +21,7 @@ import com.teamzenith.game.zpuzzle.model.User;
 import java.io.File;
 
 /**
+ * This class wil select the Image according to what the user select to import the image from.
  * Created by memmi on 2017-03-30.
  */
 
@@ -36,11 +37,11 @@ public class ImageChooser extends AppCompatActivity {
     private File imgFile1;
     private Level level;
     private float scale;
-    ImageView galeri;
-    ViewPager viewPager;
-    Context mContext;
+    private ImageView galeri;
+    private ViewPager viewPager;
+    private Context mContext;
     private User player;
-    RandomImageAdapter adapterView;
+    private RandomImageAdapter adapterView;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -48,12 +49,9 @@ public class ImageChooser extends AppCompatActivity {
         setContentView(R.layout.image_chooser);
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
         mContext = this;
-
-
         Intent sendToGameActivity = getIntent();
         level = (Level) sendToGameActivity.getSerializableExtra("Level");
         player = (User) sendToGameActivity.getSerializableExtra("player");
-
         takephoto = (ImageView) findViewById(R.id.camera);
         takephoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,29 +62,21 @@ public class ImageChooser extends AppCompatActivity {
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         });
-
-
         galeri = (ImageView) findViewById(R.id.galeri);
         galeri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent galeriIntent = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
                 startActivityForResult(galeriIntent, GALERI_RESULT);
             }
         });
-
-
         viewPager = (ViewPager) findViewById(R.id.randomImages);
         adapterView = new RandomImageAdapter(this.getBaseContext());
         viewPager.setAdapter(adapterView);
-
-
         adapterView.setOnPrepareListener(new PrepareForClick() {
             @Override
             public void setOnPrepare(View p) {
-
                 int currentItem = viewPager.getCurrentItem();
                 Intent it = new Intent(ImageChooser.this, Game.class);
                 it.putExtra("method", Method.RANDOM);
@@ -98,12 +88,9 @@ public class ImageChooser extends AppCompatActivity {
                 finish();
             }
         });
-
-
         ActivityCompat.requestPermissions(ImageChooser.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
-
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -129,16 +116,13 @@ public class ImageChooser extends AppCompatActivity {
                 startActivity(it);
                 finish();
             }
-
-
         }
     }
-
 
     private String getRealPathFromURI(Uri contentURI) {
         String result;
         Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) { // Source is Dropbox or other similar local file path
+        if (cursor == null) {
             result = contentURI.getPath();
         } else {
             cursor.moveToFirst();

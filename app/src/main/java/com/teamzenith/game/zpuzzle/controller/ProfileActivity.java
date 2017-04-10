@@ -72,14 +72,11 @@ public class ProfileActivity extends AppCompatActivity implements GetUserInforma
         if (faceBookLogin == true) {
             updateUserProfile.setEnabled(false);
         }
-        // add back arrow to toolbar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
         profileController = new ProfileController();
-
         player = (User) mIntent.getSerializableExtra("player");
         profileController.setToController(this, player);
         userNameUpdate = (EditText) findViewById(R.id.user_name_update);
@@ -90,21 +87,16 @@ public class ProfileActivity extends AppCompatActivity implements GetUserInforma
         userImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, IMG_RESULT);
-
             }
         });
-
         updateUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 profileController.setToControllerFromProfileActivity(userImageView, ProfileActivity.this, player.getUserID());
-
             }
         });
-
         cancleUserUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,11 +110,9 @@ public class ProfileActivity extends AppCompatActivity implements GetUserInforma
         email = userEmailUpdate.getText().toString().trim();
         oldPassword = userOldPassword.getText().toString().trim();
         newPassword = userPasswordUpdate.getText().toString().trim();
-
         final Toast passwordUpdated = Toast.makeText(this, "Password updated", Toast.LENGTH_SHORT);
         final Toast passwordNotUpdated = Toast.makeText(this, "Error password not updated", Toast.LENGTH_SHORT);
         final Toast errorAuth = Toast.makeText(this, "Error auth failed", Toast.LENGTH_SHORT);
-
         AuthCredential credential = EmailAuthProvider.getCredential(email, oldPassword);
         user.reauthenticate(credential)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -146,8 +136,6 @@ public class ProfileActivity extends AppCompatActivity implements GetUserInforma
                         }
                     }
                 });
-
-
     }
 
     private void checkEmailAndUserName() throws ParseException {
@@ -165,11 +153,9 @@ public class ProfileActivity extends AppCompatActivity implements GetUserInforma
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish();// close this activity and return to preview activity (if there is any)
+            finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 

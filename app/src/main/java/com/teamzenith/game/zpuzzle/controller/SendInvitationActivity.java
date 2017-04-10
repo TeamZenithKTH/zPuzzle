@@ -45,7 +45,8 @@ public class SendInvitationActivity extends AppCompatActivity implements SendInv
     private UsersNameID usersNameID;
     private HashMap<String, String> allUsersList = new HashMap<>();
     private List<String> list = new ArrayList<String>();
-    private String friendName,friendID;
+    private String friendName, friendID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,25 +64,20 @@ public class SendInvitationActivity extends AppCompatActivity implements SendInv
         invitationText = (EditText) findViewById(R.id.invitation_text);
         invitationImage = (ImageView) findViewById(R.id.invitation_image);
         senderPresent = (EditText) findViewById(R.id.sender_present);
-        // add back arrow to toolbar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         invitationsController.getUsersNames(SendInvitationActivity.this);
         addListenerOnSpinnerItemSelection();
-
         invitationImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, IMG_RESULT);
                 addItemsOnFreindsSpinner(list);
-
             }
         });
-
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,12 +87,10 @@ public class SendInvitationActivity extends AppCompatActivity implements SendInv
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
             }
         });
     }
 
-    // add items into spinner dynamically
     private void addItemsOnFreindsSpinner(List<String> list) {
         this.list = list;
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
@@ -109,26 +103,20 @@ public class SendInvitationActivity extends AppCompatActivity implements SendInv
         friendSpinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish();// close this activity and return to preview activity (if there is any)
+            finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMG_RESULT && resultCode == RESULT_OK && null != data) {
-
             Uri photoUri = data.getData();
             String[] filePath = {MediaStore.Images.Media.DATA};
-
             if (photoUri != null) {
-
                 try {
                     currentImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
                 } catch (IOException e) {
@@ -165,10 +153,9 @@ public class SendInvitationActivity extends AppCompatActivity implements SendInv
     public void getInitationImage(String imageURL) {
         this.imageURL = imageURL;
         friendName = String.valueOf(friendSpinner.getSelectedItem());
-        String level =String.valueOf(levelSpinner.getSelectedItem());
-        friendID=allUsersList.get(friendName);
-
-        sendInvitation = new SendInvitation(invitationText.getText().toString().trim(), imageURL,level ,friendID,friendName , senderPresent.getText().toString().trim(), false);
+        String level = String.valueOf(levelSpinner.getSelectedItem());
+        friendID = allUsersList.get(friendName);
+        sendInvitation = new SendInvitation(invitationText.getText().toString().trim(), imageURL, level, friendID, friendName, senderPresent.getText().toString().trim(), false);
         checkNotEmptyInformation(sendInvitation);
     }
 

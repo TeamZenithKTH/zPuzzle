@@ -24,7 +24,11 @@ public class UserDAO {
     private GetUserInformation getUserInformation;
     private UsersNameID usersNameID;
 
-
+    /**
+     *
+     * @param user
+     * @param usersNameID
+     */
     public void insertNewUser(User user, UsersNameID usersNameID) {
         this.user = user;
         this.userID = user.getUserID();
@@ -35,6 +39,10 @@ public class UserDAO {
         usersRef.setValue(user);
     }
 
+    /**
+     *
+     * @param usersNameID
+     */
     public void insertUserNameID(UsersNameID usersNameID) {
         this.usersNameID = usersNameID;
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -43,30 +51,9 @@ public class UserDAO {
 
     }
 
-    public void setUserName(String uid, String userName) {
-        this.userID = uid;
-        this.userName = userName;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference insertUserName = ref.child("Users").child(userID).child("userName");
-        insertUserName.setValue(userName);
-    }
-
-    public void setUserImage(String uid, String userImage) {
-        this.userID = uid;
-        this.userImage = userImage;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference insertUserImage = ref.child("Users").child(userID).child("userImage");
-        insertUserImage.setValue(userImage);
-    }
-
-    public void setUserEmail(String uid, String userEmail) {
-        this.userID = uid;
-        this.userEmail = userImage;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference insertUserName = ref.child("Users").child(userID).child("userEmail");
-        insertUserName.setValue(userEmail);
-    }
-
+    /**
+     * @param uid
+     */
     public void getUserInfo(String uid) {
         this.userID = uid;
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
@@ -83,10 +70,11 @@ public class UserDAO {
 
             }
         });
-
-
     }
 
+    /**
+     * @param getUserInformation
+     */
     public void setListener(GetUserInformation getUserInformation) {
         this.getUserInformation = getUserInformation;
     }

@@ -32,7 +32,6 @@ public class InboxActivity extends AppCompatActivity implements GetMyFriendsChal
         Toolbar toolbar = (Toolbar) findViewById(R.id.inbox_toolbar);
         toolbar.setTitle("Inbox");
         setSupportActionBar(toolbar);
-        // add back arrow to toolbar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -42,23 +41,28 @@ public class InboxActivity extends AppCompatActivity implements GetMyFriendsChal
         player = (User) mIntent.getSerializableExtra("player");
         invitationsController.getUserChallenges(InboxActivity.this, player.getUserID());
         listInvitations = (ListView) findViewById(R.id.inbox_list_view);
-        listInvitations.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        listInvitations.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3)
-            {
-                SendInvitation selectedFromList = (SendInvitation)(listInvitations.getItemAtPosition(position));
-                InvitationGame invitationGame = new InvitationGame(selectedFromList);
-                selectedFromList.getIntiationText();
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                SendInvitation selectedFromList = (SendInvitation) (listInvitations.getItemAtPosition(position));
+                try {
+                    InvitationGame invitationGame = new InvitationGame(selectedFromList);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                }
                 Toast.makeText(InboxActivity.this, "" + selectedFromList.getIntiationText(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish();// close this activity and return to preview activity (if there is any)
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -73,6 +77,5 @@ public class InboxActivity extends AppCompatActivity implements GetMyFriendsChal
         this.getInvitation = getInvitation;
         InboxInvitationsAdapter adapter = new InboxInvitationsAdapter(InboxActivity.this, getInvitation);
         listInvitations.setAdapter(adapter);
-
     }
 }
