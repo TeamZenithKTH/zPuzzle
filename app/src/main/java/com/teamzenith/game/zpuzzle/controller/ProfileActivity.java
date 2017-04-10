@@ -154,6 +154,7 @@ public class ProfileActivity extends AppCompatActivity implements GetUserInforma
         player.setUserName(userNameUpdate.getText().toString().trim());
         UsersNameID usersNameID = new UsersNameID();
         usersNameID.setUserName(userNameUpdate.getText().toString().trim());
+        usersNameID.setUserID(player.getUserID());
         updatePassword();
         try {
             profileController.save(player, usersNameID);
