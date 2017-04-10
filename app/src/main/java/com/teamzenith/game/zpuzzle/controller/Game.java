@@ -93,6 +93,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private int hour = 0;
     private int seconds = 0;
     private String next;
+    private String timer;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -117,7 +118,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
         } else if (method.equals(ImageChooser.Method.CAMERA)) {
             photoButton = new ImageView(this);
-            photoButton.setImageResource(R.drawable.cm);
+            photoButton.setImageResource(R.drawable.ic_camera);
             photoButton.setId(R.id.pickphotocamera);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             layoutParams.gravity = Gravity.CENTER;
@@ -314,12 +315,15 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                         @Override
                         public void run() {
 
-                            next = "<font color='#EE0000'>" + ((String.valueOf(hour).length() > 1) ? hour : "0" + hour) + ":" + ((String.valueOf(minute).length() > 1) ? minute : "0" + minute) + ":" + ((String.valueOf(seconds).length() > 1) ? seconds : "0" + seconds) + ":" +
+
+
+                             timer=((String.valueOf(hour).length() > 1) ? hour : "0" + hour) + ":" + ((String.valueOf(minute).length() > 1) ? minute : "0" + minute) + ":" + ((String.valueOf(seconds).length() > 1) ? seconds : "0" + seconds) + ":" +
                                     ((String.valueOf(count).length() > 1) ?
                                             (String.valueOf(count).length() > 2) ?
                                                     count
                                                     : "0" + count
-                                            : "00" + count) + "</font>";
+                                            : "00" + count);
+                            next = "<font color='#EE0000'>" + timer+ "</font>";
                             timerCounter.setText(Html.fromHtml("Timer: " + next));
                             count++;
                             if (count == 999) {
@@ -475,7 +479,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         Intent it = new Intent(getBaseContext(), AfterTheGameActivity.class);
         it.putExtra("Level", level);
         it.putExtra("CountMovement", String.valueOf(countMovement));
-        it.putExtra("TimerCounter", String.valueOf(next));
+        it.putExtra("TimerCounter", String.valueOf(timer));
         if (method.equals(ImageChooser.Method.RANDOM)) {
             it.putExtra("Image", idOfDrawable);
             it.putExtra("current", viewPager.getCurrentItem());

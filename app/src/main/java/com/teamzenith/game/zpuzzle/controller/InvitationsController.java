@@ -2,6 +2,7 @@ package com.teamzenith.game.zpuzzle.controller;
 
 import android.widget.ImageView;
 
+import com.teamzenith.game.zpuzzle.dbhandler.GetMyFriendsChallengInvitations;
 import com.teamzenith.game.zpuzzle.dbhandler.GetUserInvitations;
 import com.teamzenith.game.zpuzzle.dbhandler.GetUsersNamesIDs;
 import com.teamzenith.game.zpuzzle.dbhandler.GetUsersNamesIDsDAO;
@@ -43,5 +44,12 @@ public class InvitationsController {
         SendInvitationDAO sendInvitationDAO = new SendInvitationDAO();
         sendInvitationDAO.setListener(getUserInvitations);
         sendInvitationDAO.getMySentInvitations(userID);
+    }
+    public void getUserChallenges(GetMyFriendsChallengInvitations getMyFriendsChallengInvitations,String userID){
+        this.userID = userID;
+        SendInvitationDAO sendInvitationDAO = new SendInvitationDAO();
+        sendInvitationDAO.setListenerMyChallenges(getMyFriendsChallengInvitations);
+        sendInvitationDAO.getMyChallengesInvitations(userID);
+
     }
 }

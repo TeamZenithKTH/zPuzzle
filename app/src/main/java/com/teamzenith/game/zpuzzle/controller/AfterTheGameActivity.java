@@ -101,10 +101,10 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
 
         countMovementString = intentFromGameActivity.getStringExtra("CountMovement");
         String countMovementStringColored = "<font color='#EE0000'>" + countMovementString + "</font>";
-        movementTextView.setText(Html.fromHtml("You solved on " + countMovementStringColored + " steps"));
+        movementTextView.setText(Html.fromHtml("You solved on " + countMovementStringColored +" steps"));
 
         timerCounterString = intentFromGameActivity.getStringExtra("TimerCounter");
-        timerTextView.setText(Html.fromHtml("Your time was " + timerCounterString));
+        timerTextView.setText(Html.fromHtml("Your time was " + "<font color='#EE0000'>" +timerCounterString+ "</font>"));
         userID = player.getUserID();
 
         solved = null;

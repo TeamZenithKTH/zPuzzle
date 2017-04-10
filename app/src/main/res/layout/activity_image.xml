@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/background5">
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/imageViewPic"
@@ -19,8 +18,7 @@
         android:id="@+id/imageButtonPic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:srcCompat="@drawable/play" />
+        android:layout_weight="1" />
 
 
 </LinearLayout>

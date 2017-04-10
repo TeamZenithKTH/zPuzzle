@@ -4,8 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:weightSum="1"
-    android:background="@drawable/background5">
+    android:weightSum="1">
     <Gallery
         android:id="@+id/gallery"
         android:layout_width="fill_parent"
@@ -20,8 +19,7 @@
     <ImageButton
         android:id="@+id/imageButtonCamera"
         android:layout_width="0dp"
-        android:layout_height="102dp"
-        app:srcCompat="@drawable/camera" />
+        android:layout_height="102dp"/>
 
     <TextView
         android:id="@+id/textViewGallery"

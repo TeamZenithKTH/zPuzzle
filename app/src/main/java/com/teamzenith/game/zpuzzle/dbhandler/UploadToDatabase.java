@@ -32,29 +32,24 @@ public class UploadToDatabase {
         this.userID = userID;
         uploadImageView.setDrawingCacheEnabled(true);
         uploadImageView.buildDrawingCache();
+        Random rand = new Random();
+        int index = rand.nextInt(10000);
         Bitmap bitmap = uploadImageView.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 5, baos);
         byte[] data = baos.toByteArray();
         storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-
-        // Create a reference to "mountains.jpg"
-        StorageReference mountainsRef = storageRef.child(userID).child("user.jpg");
-
+        StorageReference mountainsRef = storageRef.child(userID).child(index + "history.jpg");
         UploadTask uploadTask = mountainsRef.putBytes(data);
-
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //taskSnapshot.getMetadata() ;//contains file metadata such as size, content-type, and download URL.
                 @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                ;
                 getImageURL.get(downloadUrl.toString());
             }
         });
@@ -70,23 +65,17 @@ public class UploadToDatabase {
         byte[] data = baos.toByteArray();
         storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-
-        // Create a reference to "mountains.jpg"
         StorageReference mountainsRef = storageRef.child(userID).child("userImage.jpg");
-
         UploadTask uploadTask = mountainsRef.putBytes(data);
-
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
+
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //taskSnapshot.getMetadata() ;//contains file metadata such as size, content-type, and download URL.
                 @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                ;
                 updateUserImage.getImage(downloadUrl.toString());
             }
         });
@@ -104,22 +93,16 @@ public class UploadToDatabase {
         StorageReference storageRef = storage.getReference();
         Random rand = new Random();
         int index = rand.nextInt(10000);
-        // Create a reference to "mountains.jpg"
         StorageReference mountainsRef = storageRef.child(userID).child(index + "invitationImage.jpg");
-
         UploadTask uploadTask = mountainsRef.putBytes(data);
-
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //taskSnapshot.getMetadata() ;//contains file metadata such as size, content-type, and download URL.
                 @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                ;
                 sendInvitationToUser.getInitationImage(downloadUrl.toString());
             }
         });
