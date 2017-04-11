@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.SendInvitation;
@@ -33,7 +34,7 @@ public class AfterInvitationGameActivity extends AppCompatActivity {
         alertDialog.setTitle("Your Present Text");
 
         // Setting Dialog Message
-        alertDialog.setMessage("Your Present: "+sendInvitation.getPresentText()+". From: "+ sendInvitation.getSenderName());
+        alertDialog.setMessage(Html.fromHtml("<font color='#EE0000'>Your Present:</font> "+sendInvitation.getPresentText()+".<br> <font color='#EE0000'>From:</font> "+ sendInvitation.getSenderName()));
 
         // Setting Icon to Dialog
         alertDialog.setIcon(R.drawable.zpuzzle);

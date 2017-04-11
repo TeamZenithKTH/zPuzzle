@@ -155,7 +155,6 @@ public class ImageChooser extends AppCompatActivity {
         return result;
     }
 
-
     /**
      * this method will be called once the user press on the back button
      */

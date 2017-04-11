@@ -36,7 +36,7 @@ public class ShufflingImage {
            int index = rand.nextInt(list.size());
            tmpBmp[i] = img[list.remove(index)];
 
-       //meMap.put(i, tmpBmp[i]); //********* comment
+      // meMap.put(i, tmpBmp[i]); //********* comment
            i++;
        }
        //Set the right lower corner in the matrix to be empty.
@@ -44,6 +44,7 @@ public class ShufflingImage {
        meMap.put(tmpBmp.length - 1, tmpBmp[tmpBmp.length - 1]);//fixed
        return tmpBmp;
    }
+
 
     /**
      * Get the shuffled image's array.
