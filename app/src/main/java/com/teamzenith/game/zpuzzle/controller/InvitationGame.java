@@ -49,6 +49,9 @@ import static com.teamzenith.game.zpuzzle.R.id.timer;
  * Created by Hichem Memmi on 4/11/17.
  */
 
+/**
+ * this class is the game play for those users will get an invitation from other users
+ */
 public class InvitationGame extends AppCompatActivity {
     private SendInvitation sendInvitation;
     private String invitationLetter, presentLetter, senderName, imageURL;
@@ -95,6 +98,11 @@ public class InvitationGame extends AppCompatActivity {
     private int column;
 
 
+    /**
+     * this method will be called once the user launch this activity, which means when the user
+     * try to solve a puzzle send from other user
+     * @param bundle
+     */
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -116,6 +124,7 @@ public class InvitationGame extends AppCompatActivity {
     }
 
     /**
+     * this method is to fill class fields
      * @param sendInvitation
      * @throws ClassNotFoundException
      * @throws IllegalAccessException
@@ -137,6 +146,9 @@ public class InvitationGame extends AppCompatActivity {
 
     }
 
+    /**
+     * this method is to get an image from an url
+     */
     private void prepareAnImage() {
 
         Picasso.with(this)
@@ -192,10 +204,19 @@ public class InvitationGame extends AppCompatActivity {
     }
 
 
+    /**
+     * this method is to scale a bitmap image
+     * @param imgFile1
+     * @return
+     */
     private Bitmap createBitmap(Bitmap imgFile1) {
         return Bitmap.createScaledBitmap(imgFile1, (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
     }
 
+    /**
+     * this method is to create dynamically tableLayout and imageButtons
+     * @param SHMap
+     */
     private void settingImages(HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
         imageButtons = new ImageButton[row * column];
@@ -237,6 +258,10 @@ public class InvitationGame extends AppCompatActivity {
         imagesIDList = imagesIDs.getposition();
     }
 
+    /**
+     * this method is to allow the user to move pieces
+     * @param SHMap
+     */
     private void createImageViews(final HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
         final GetCurrentStatus getCurrentStatus = new GetCurrentStatus();
@@ -259,6 +284,10 @@ public class InvitationGame extends AppCompatActivity {
 
     }
 
+    /**
+     * this method is to fill imageButtons when the user move a piece
+     * @param SHMap
+     */
     private void setNewImages(HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
 
@@ -269,6 +298,9 @@ public class InvitationGame extends AppCompatActivity {
     }
 
 
+    /**
+     * this method is to check if the puzzle is solved
+     */
     private void SetOriginalImagesToMatrix() {
         Bitmap[] tmpBitMap;
         tmpBitMap = imageSplit.getOriginalDividedImage();

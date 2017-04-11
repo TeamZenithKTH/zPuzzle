@@ -1,29 +1,26 @@
 package com.teamzenith.game.zpuzzle.controller;
 
-import android.graphics.Bitmap;
+
 import android.support.v7.app.AppCompatActivity;
-import android.graphics.BitmapFactory;
-
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-
 import android.widget.ListView;
-
 import com.teamzenith.game.zpuzzle.R;
-import com.teamzenith.game.zpuzzle.util.ImageConverter;
-
 import java.util.HashMap;
-
-
 import com.teamzenith.game.zpuzzle.dbhandler.GetUserHistory;
 import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
 
-import java.util.HashMap;
 
+/**
+ * Created by Hichem Memmi on 2017-04-05.
+ */
+
+/**
+ * this class is the history controller
+ */
 public class HistoryActivity extends AppCompatActivity implements GetUserHistory {
     private HistoryController historyController;
     private User player;
@@ -33,6 +30,10 @@ public class HistoryActivity extends AppCompatActivity implements GetUserHistory
 
     private ListView listHistory;
 
+    /**
+     * this method called once the activity is launched
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +57,11 @@ public class HistoryActivity extends AppCompatActivity implements GetUserHistory
 
     }
 
+    /**
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -64,6 +70,10 @@ public class HistoryActivity extends AppCompatActivity implements GetUserHistory
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * get the user history
+     * @param userHistoryEntry
+     */
     @Override
     public void get(HashMap<Integer, UserHistoryEntry> userHistoryEntry) {
         this.userHistoryEntry = userHistoryEntry;
