@@ -26,6 +26,7 @@ public class UploadToDatabase {
     private GetImageURL getImageURL;
     private UpdateUserImage updateUserImage;
     private ImageView uploadImageView;
+    private Bitmap imageToUser;
     private SendInvitationToUser sendInvitationToUser;
 
     /**
@@ -95,11 +96,9 @@ public class UploadToDatabase {
      */
     public void uploadUserInvitationImage(String userID) {
         this.userID = userID;
-        uploadImageView.setDrawingCacheEnabled(true);
-        uploadImageView.buildDrawingCache();
-        Bitmap bitmap = uploadImageView.getDrawingCache();
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        imageToUser.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
         storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -145,8 +144,8 @@ public class UploadToDatabase {
      * @param sendInvitationToUser
      * @param userImageView
      */
-    public void setListenerUserInvitationImage(SendInvitationToUser sendInvitationToUser, ImageView userImageView) {
+    public void setListenerUserInvitationImage(SendInvitationToUser sendInvitationToUser, Bitmap userImageView) {
         this.sendInvitationToUser = sendInvitationToUser;
-        this.uploadImageView = userImageView;
+        this.imageToUser = userImageView;
     }
 }

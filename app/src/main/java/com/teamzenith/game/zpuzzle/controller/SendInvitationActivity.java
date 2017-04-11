@@ -88,7 +88,7 @@ public class SendInvitationActivity extends AppCompatActivity implements SendInv
             @Override
             public void onClick(View v) {
                 try {
-                    invitationsController.sendInvitationToUser(invitationImage, SendInvitationActivity.this, player.getUserID());
+                    invitationsController.sendInvitationToUser(currentImage, SendInvitationActivity.this, player.getUserID());
                     finish();
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -130,12 +130,12 @@ public class SendInvitationActivity extends AppCompatActivity implements SendInv
                 try {
                     currentImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
                     image = new File(getRealPathFromURI(photoUri));
-                    currentImage=createBitmap(image,currentImage.getHeight(),currentImage.getWidth());
+                    this.currentImage=createBitmap(image,currentImage.getHeight(),currentImage.getWidth());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                invitationImage.setImageBitmap(currentImage);
+                invitationImage.setImageBitmap(this.currentImage);
             }
         }
     }

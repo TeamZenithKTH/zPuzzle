@@ -1,5 +1,6 @@
 package com.teamzenith.game.zpuzzle.controller;
 
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.teamzenith.game.zpuzzle.dbhandler.GetMyFriendsChallengInvitations;
@@ -29,7 +30,7 @@ public class InvitationsController {
      * @param userID
      * @throws ParseException
      */
-    public void sendInvitationToUser(ImageView userImageView, SendInvitationToUser sendInvitationToUser, String userID) throws ParseException {
+    public void sendInvitationToUser(Bitmap userImageView, SendInvitationToUser sendInvitationToUser, String userID) throws ParseException {
         this.userID = userID;
         UploadToDatabase uploadToDatabase = new UploadToDatabase();
         uploadToDatabase.setListenerUserInvitationImage(sendInvitationToUser, userImageView);
