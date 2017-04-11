@@ -24,25 +24,26 @@ public class ShufflingImage {
      */
     public Bitmap[] shuffle(Bitmap[] img) {
 
-        Bitmap[] tmpBmp = new Bitmap[img.length];
-        ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < img.length - 1; i++) {//fixed
-            list.add(i);
-            //meMap.put(i, img[i]); //******** décomment
-        }
-        Random rand = new Random();
-        int i = 0;
-        while (list.size() > 0) {
-            int index = rand.nextInt(list.size());
-            tmpBmp[i] = img[list.remove(index)];
-            meMap.put(i, tmpBmp[i]); //********* comment
-            i++;
-        }
-        //Set the right lower corner in the matrix to be empty.
-        tmpBmp[tmpBmp.length - 1] = img[img.length - 1]; //fixed
-        meMap.put(tmpBmp.length - 1, tmpBmp[tmpBmp.length - 1]);//fixed
-        return tmpBmp;
-    }
+       Bitmap[] tmpBmp = new Bitmap[img.length];
+       ArrayList<Integer> list = new ArrayList<>();
+       for (int i = 0; i < img.length - 1; i++) {//fixed
+           list.add(i);
+      // meMap.put(i, img[i]); //******** décomment
+       }
+       Random rand = new Random();
+       int i = 0;
+       while (list.size() > 0) {
+           int index = rand.nextInt(list.size());
+           tmpBmp[i] = img[list.remove(index)];
+
+       meMap.put(i, tmpBmp[i]); //********* comment
+           i++;
+       }
+       //Set the right lower corner in the matrix to be empty.
+       tmpBmp[tmpBmp.length - 1] = img[img.length - 1]; //fixed
+       meMap.put(tmpBmp.length - 1, tmpBmp[tmpBmp.length - 1]);//fixed
+       return tmpBmp;
+   }
 
     /**
      * Get the shuffled image's array.

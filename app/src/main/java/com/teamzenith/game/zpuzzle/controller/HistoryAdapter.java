@@ -1,4 +1,5 @@
 
+
 package com.teamzenith.game.zpuzzle.controller;
 
 import android.app.Activity;
@@ -67,3 +68,4 @@ public class HistoryAdapter extends BaseAdapter {
         return view;
     }
 }
+

@@ -43,12 +43,18 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".controller.SignupActivity" />
-        <activity android:name=".controller.ImageChooser" />
+        <activity android:name=".controller.SignupActivity"/>
+       <activity android:name=".controller.ImageChooser" />
+        <activity android:name=".controller.TopGamesActivity"/>
+
+
 
         <activity android:name=".controller.SendInvitationActivity" />
         <activity android:name=".controller.SentInvitationActivity" />
         <activity android:name=".controller.InboxActivity"></activity>
+
+        <activity android:name=".controller.InvitationGame" />
+        <activity android:name=".controller.AfterInvitationGameActivity"/>
     </application>
 
 </manifest>

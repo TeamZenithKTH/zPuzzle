@@ -1,10 +1,12 @@
 package com.teamzenith.game.zpuzzle.model;
 
+import java.io.Serializable;
+
 /**
  * Created by alaaalkassar on 4/7/17.
  */
 
-public class SendInvitation {
+public class SendInvitation implements Serializable {
     private String intiationText;
     private String imageURL;
     private String level;

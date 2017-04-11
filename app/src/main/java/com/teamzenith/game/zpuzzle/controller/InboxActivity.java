@@ -14,7 +14,6 @@ import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.dbhandler.GetMyFriendsChallengInvitations;
 import com.teamzenith.game.zpuzzle.model.SendInvitation;
 import com.teamzenith.game.zpuzzle.model.User;
-import com.teamzenith.game.zpuzzle.util.InvitationGame;
 
 import java.util.HashMap;
 
@@ -45,15 +44,11 @@ public class InboxActivity extends AppCompatActivity implements GetMyFriendsChal
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 SendInvitation selectedFromList = (SendInvitation) (listInvitations.getItemAtPosition(position));
-                try {
-                    InvitationGame invitationGame = new InvitationGame(selectedFromList);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                }
+
+                Intent intent=new Intent(InboxActivity.this,InvitationGame.class);
+                intent.putExtra("selectedFromList",selectedFromList);
+                startActivity(intent);
+
                 Toast.makeText(InboxActivity.this, "" + selectedFromList.getIntiationText(), Toast.LENGTH_SHORT).show();
             }
         });

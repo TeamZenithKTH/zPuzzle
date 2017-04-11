@@ -1,13 +1,23 @@
 package com.teamzenith.game.zpuzzle.controller;
 
-import android.content.Intent;
-import android.os.Bundle;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
+import android.graphics.BitmapFactory;
+
+import android.content.Intent;
+
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
 import android.widget.ListView;
 
 import com.teamzenith.game.zpuzzle.R;
+import com.teamzenith.game.zpuzzle.util.ImageConverter;
+
+import java.util.HashMap;
+
+
 import com.teamzenith.game.zpuzzle.dbhandler.GetUserHistory;
 import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
@@ -18,13 +28,17 @@ public class HistoryActivity extends AppCompatActivity implements GetUserHistory
     private HistoryController historyController;
     private User player;
     private String userID;
+
     private HashMap<Integer, UserHistoryEntry> userHistoryEntry;
+
     private ListView listHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        listHistory = (ListView) findViewById(R.id.listViewHistory);
         Toolbar toolbar = (Toolbar) findViewById(R.id.history_toolbar);
         toolbar.setTitle("History");
         setSupportActionBar(toolbar);
@@ -37,7 +51,9 @@ public class HistoryActivity extends AppCompatActivity implements GetUserHistory
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+
         historyController.setToControllerHistoryActivity(this, userID);
+
     }
 
     @Override

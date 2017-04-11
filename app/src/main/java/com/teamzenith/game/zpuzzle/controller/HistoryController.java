@@ -6,6 +6,7 @@ import com.teamzenith.game.zpuzzle.dbhandler.GetImageURL;
 import com.teamzenith.game.zpuzzle.dbhandler.GetUserHistory;
 import com.teamzenith.game.zpuzzle.dbhandler.HistoryDAO;
 import com.teamzenith.game.zpuzzle.dbhandler.UploadToDatabase;
+import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
 
@@ -58,5 +59,13 @@ public class HistoryController {
         HistoryDAO historyDAO = new HistoryDAO();
         historyDAO.setListener(getUserHistory);
         historyDAO.getHistoryEntry(userId);
+    }
+
+    public void setToControllerFromToGamesActivity(TopGamesActivity topGamesActivity, Level s) {
+        HistoryDAO historyDAO=new HistoryDAO();
+        historyDAO.setListener(topGamesActivity);
+        historyDAO.getAllUsersHistory(s);
+
+
     }
 }

@@ -308,7 +308,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                         @Override
                         public void run() {
 
-
                             timer = ((String.valueOf(hour).length() > 1) ? hour : "0" + hour) + ":" + ((String.valueOf(minute).length() > 1) ? minute : "0" + minute) + ":" + ((String.valueOf(seconds).length() > 1) ? seconds : "0" + seconds) + ":" +
                                     ((String.valueOf(count).length() > 1) ?
                                             (String.valueOf(count).length() > 2) ?
@@ -458,7 +457,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         Intent it = new Intent(getBaseContext(), AfterTheGameActivity.class);
         it.putExtra("Level", level);
         it.putExtra("CountMovement", String.valueOf(countMovement));
-        it.putExtra("TimerCounter", String.valueOf(timer));
+        it.putExtra("TimerCounter", String.valueOf(next));
+        it.putExtra("Timer", String.valueOf(timer));
+
         if (method.equals(ImageChooser.Method.RANDOM)) {
             it.putExtra("Image", idOfDrawable);
             it.putExtra("current", viewPager.getCurrentItem());

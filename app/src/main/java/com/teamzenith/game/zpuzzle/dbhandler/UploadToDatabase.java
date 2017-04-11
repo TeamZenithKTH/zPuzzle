@@ -40,7 +40,7 @@ public class UploadToDatabase {
         int index = rand.nextInt(10000);
         Bitmap bitmap = uploadImageView.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 5, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
         storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -69,7 +69,7 @@ public class UploadToDatabase {
         uploadImageView.buildDrawingCache();
         Bitmap bitmap = uploadImageView.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 5, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
         storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -99,7 +99,7 @@ public class UploadToDatabase {
         uploadImageView.buildDrawingCache();
         Bitmap bitmap = uploadImageView.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 5, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
         storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();

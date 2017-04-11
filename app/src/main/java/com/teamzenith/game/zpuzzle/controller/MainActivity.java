@@ -56,7 +56,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView userImageView;
     private View headerView;
     private DrawerLayout drawer;
+
     private boolean faceBookLogin;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,13 +104,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         medelBtn.setOnClickListener(this);
         kidsBtn.setOnClickListener(this);
         profileController.setToController(this, player);
+
+
+
     }
 
 
     @Override
     public void onClick(View v) {
         Button btn = (Button) v;
-        Level level;
+        Level level=null;
         LevelFactory levelFactory = LevelFactory.getInstance();
         if (btn.getId() == R.id.hardBtn) {
             level = levelFactory.createLevel(LevelType.HARD);
@@ -179,6 +184,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.nav_settings) {
             Intent i = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(i);
+
+            finish();
+
         } else if (id == R.id.nav_logout) {
             firebaseAuth.signOut();
             LoginManager.getInstance().logOut();
@@ -186,6 +194,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(i);
             finish();
         }
+/*
+        else if(id==R.id.nav_top_games){
+            Intent i = new Intent(MainActivity.this, TopGamesActivity.class);
+            startActivity(i);
+        }*/
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

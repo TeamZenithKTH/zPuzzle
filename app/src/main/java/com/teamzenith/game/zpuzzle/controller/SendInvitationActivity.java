@@ -1,7 +1,11 @@
 package com.teamzenith.game.zpuzzle.controller;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,6 +28,7 @@ import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.model.UsersNameID;
 import com.teamzenith.game.zpuzzle.util.CustomOnItemSelectedListener;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -41,6 +46,7 @@ public class SendInvitationActivity extends AppCompatActivity implements SendInv
     private static int IMG_RESULT = 1;
     private Intent intent;
     private Bitmap currentImage;
+    private File image;
     private String imageURL;
     private UsersNameID usersNameID;
     private HashMap<String, String> allUsersList = new HashMap<>();
@@ -117,14 +123,71 @@ public class SendInvitationActivity extends AppCompatActivity implements SendInv
             Uri photoUri = data.getData();
             String[] filePath = {MediaStore.Images.Media.DATA};
             if (photoUri != null) {
+
+
+                 //
+                Bitmap currentImage = null;
                 try {
                     currentImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                    image = new File(getRealPathFromURI(photoUri));
+                    currentImage=createBitmap(image,currentImage.getHeight(),currentImage.getWidth());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
                 invitationImage.setImageBitmap(currentImage);
             }
         }
+    }
+
+
+    private Bitmap createBitmap(File imgFile1,int heigh,int width) {
+        Bitmap bitmapNeedsToRotate;
+        Matrix matrix;
+        int exifOrientation = getImageOrientation(imgFile1);
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()),width,heigh, true);
+            matrix = new Matrix();
+            matrix.postRotate(90);
+            Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+            return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), width,heigh, true);
+            matrix = new Matrix();
+            matrix.postRotate(180);
+            return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), width,heigh, true);
+            matrix = new Matrix();
+            matrix.postRotate(270);
+            return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
+        } else {
+            return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), width,heigh, true);
+        }
+    }
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }
+
+
+    private int getImageOrientation(File imgFile1) {
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imgFile1.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
     }
 
     private void checkNotEmptyInformation(SendInvitation sendInvitation) {

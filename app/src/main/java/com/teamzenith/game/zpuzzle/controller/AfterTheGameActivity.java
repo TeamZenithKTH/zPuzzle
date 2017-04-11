@@ -18,6 +18,7 @@ import com.teamzenith.game.zpuzzle.dbhandler.UploadToDatabase;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
+import com.teamzenith.game.zpuzzle.util.ImageConverter;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     private User user;
     private String userID;
     private String timerCounterString;
+    private String timerCounterStringColored;
     private String countMovementString;
     private UserHistoryEntry userHistoryEntry;
     private User player;
@@ -107,8 +109,9 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
         String countMovementStringColored = "<font color='#EE0000'>" + countMovementString + "</font>";
         movementTextView.setText(Html.fromHtml("You solved on " + countMovementStringColored +" steps"));
 
-        timerCounterString = intentFromGameActivity.getStringExtra("TimerCounter");
-        timerTextView.setText(Html.fromHtml("Your time was " + "<font color='#EE0000'>" +timerCounterString+ "</font>"));
+        timerCounterStringColored = intentFromGameActivity.getStringExtra("TimerCounter");
+        timerCounterString = intentFromGameActivity.getStringExtra("Timer");
+        timerTextView.setText(Html.fromHtml("Your time was " + timerCounterStringColored));
         userID = player.getUserID();
 
         solved = null;
@@ -177,23 +180,27 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             }
 
             startActivity(playAgainIntent);
+
             finish();
+
+
         } else {
             Intent goBackToMain = new Intent(getBaseContext(), MainActivity.class);
             goBackToMain.putExtra("player", player);
             startActivity(goBackToMain);
+
             finish();
+
         }
 
     }
+
 
     @Override
     public void onBackPressed() {
         finish();
     }
 
-
-    @Override
     public void get(String imageURL) {
 
         userHistoryEntry = new UserHistoryEntry(userID, level, countMovementString, timerCounterString, imageURL);

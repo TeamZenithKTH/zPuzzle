@@ -1,10 +1,14 @@
 package com.teamzenith.game.zpuzzle.model;
 
+import android.support.annotation.NonNull;
+
+import java.util.Comparator;
+
 /**
  * Created by alaaalkassar on 3/31/17.
  */
 
-public class UserHistoryEntry {
+public class UserHistoryEntry implements Comparable<UserHistoryEntry>{
     private String userID;
     private String level;
     private String countMovementString;
@@ -68,5 +72,29 @@ public class UserHistoryEntry {
 
     public void setTimerCounterString(String timerCounterString) {
         this.timerCounterString = timerCounterString;
+    }
+
+    private static Float convertTimeToSeconds(String s) {
+
+        String[] units = s.split(":"); //will break the string up into an array
+        Float hour = Float.parseFloat(units[0]); //first element
+        Float minutes = Float.parseFloat(units[1]); //second element
+        Float seconds = Float.parseFloat(units[2]);
+        Float millis = Float.parseFloat(units[3]);
+
+        Float duration = (millis / 1000) + (60 * minutes) + seconds + (hour * 3600); //add up our values
+
+
+        return duration;
+    }
+
+
+
+
+    @Override
+    public int compareTo(@NonNull UserHistoryEntry o) {
+
+            return Float.compare(convertTimeToSeconds(this.getTimerCounterString()), convertTimeToSeconds(o.getTimerCounterString()));
+
     }
 }
