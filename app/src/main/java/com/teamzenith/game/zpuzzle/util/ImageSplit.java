@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 /**
- * Created by memmi on 2017-03-13.
+ * Created by Hichem Memmi on 2017-03-13.
  */
 
 public class ImageSplit {

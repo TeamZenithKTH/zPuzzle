@@ -7,7 +7,7 @@ package com.teamzenith.game.zpuzzle.model;
 
 
 /**
- * This Class is a Factory to create instances of Hard, Easy and Medium
+ * This Class is a Factory to create instances of {@link Hard}, {@link Easy} and {@link Medium}
  */
 public class LevelFactory {
     private static LevelFactory levelFactory = null;

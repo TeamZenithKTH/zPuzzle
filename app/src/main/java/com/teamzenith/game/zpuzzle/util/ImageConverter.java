@@ -9,7 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Created by memmi on 2017-04-05.
+ * Created by Hichem Memmi on 2017-04-05.
  */
 
 public class ImageConverter {
