@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Vector;
 
 /**
- * Created by memmi on 2017-04-07.
+ * Created by Hichem Memmi on 2017-04-07.
  */
 
 public class TopGamesActivity extends AppCompatActivity implements getAllUserGameHistory{

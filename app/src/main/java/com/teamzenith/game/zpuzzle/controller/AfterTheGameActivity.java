@@ -73,6 +73,9 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
         actions();
     }
 
+    /**
+     * This method is to set value to the components
+     */
     private void createComponents() {
         playAgainBtn = (ImageView) findViewById(R.id.playAgain);
         goToMainBtn = (ImageView) findViewById(R.id.backToMain);
@@ -89,7 +92,9 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-
+    /**
+     * this method is to handle the action listener
+     */
     private void actions() {
         playAgainBtn.setOnClickListener(this);
         goToMainBtn.setOnClickListener(this);
@@ -105,16 +110,20 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
         });
 
 
+        //set text to movementTextView
         countMovementString = intentFromGameActivity.getStringExtra("CountMovement");
         String countMovementStringColored = "<font color='#EE0000'>" + countMovementString + "</font>";
         movementTextView.setText(Html.fromHtml("You solved on " + countMovementStringColored +" steps"));
 
+
+        //set text to timerTextView
         timerCounterStringColored = intentFromGameActivity.getStringExtra("TimerCounter");
         timerCounterString = intentFromGameActivity.getStringExtra("Timer");
         timerTextView.setText(Html.fromHtml("Your time was " + timerCounterStringColored));
         userID = player.getUserID();
 
         solved = null;
+
 
         if (method.equals(ImageChooser.Method.RANDOM)) {
             idOfDrawable = intentFromGameActivity.getIntExtra("Image", 0);
@@ -154,6 +163,11 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     }
 
 
+    /**
+     * this method i to get image orientation
+     * @param imgFile1
+     * @return
+     */
     private int getImageOrientation(File imgFile1) {
         ExifInterface exif = null;
         try {
@@ -164,6 +178,10 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
         return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
     }
 
+    /**
+     * This method triggered when a button clicked
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.playAgain) {
@@ -196,11 +214,18 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     }
 
 
+    /**
+     * this method called when the user use the back button
+     */
     @Override
     public void onBackPressed() {
         finish();
     }
 
+    /**
+     * this method is to get an image url from a database and to create a user history
+     * @param imageURL
+     */
     public void get(String imageURL) {
 
         userHistoryEntry = new UserHistoryEntry(userID, level, countMovementString, timerCounterString, imageURL);
@@ -210,4 +235,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             e.printStackTrace();
         }
     }
+
+
+
 }

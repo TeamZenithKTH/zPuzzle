@@ -9,11 +9,20 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Created by memmi on 2017-04-05.
+ * Created by Hichem Memmi on 2017-04-05.
  */
 
+
+/**
+ * this class is to convert an {@link Bitmap} to string and a String to {@link Drawable}
+ */
 public class ImageConverter {
 
+    /**
+     * this method is to convert an {@link Bitmap} to {@link String}
+     * @param image
+     * @return
+     */
     public String convertToString(Bitmap image) {
 
 
@@ -26,6 +35,11 @@ public class ImageConverter {
     }
 
 
+    /**
+     * this method is to convert a String to {@link Drawable}
+     * @param imageFile
+     * @return
+     */
     public Drawable convertToBitmap(String imageFile){
         byte[] decodedString = Base64.decode(imageFile, Base64.DEFAULT);
         ByteArrayInputStream is=new ByteArrayInputStream(decodedString);

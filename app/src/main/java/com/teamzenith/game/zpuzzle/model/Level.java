@@ -7,23 +7,41 @@ import java.io.Serializable;
  */
 
 /**
- * This is an abstract method that implements Serializable
+ * This is an abstract class which implements Serializable to be able to send it to an
+ * other activity and inherited by {@link Easy}, {@link Medium} and {@link Hard}
  */
 public abstract class Level implements Serializable {
 
     /**
-     *
+     *Default constructor
      */
     public Level() {
 
     }
 
+    /**
+     * A method which will be implemented by child classes. and it is to get the size of the game space
+     * @return
+     */
     public abstract int getSize();
 
+    /**
+     * A method which will be implemented by child classes, and it is to get the size of each piece of the
+     * puzzle
+     * @return
+     */
     public abstract int getSizeOfPiece();
 
+    /**
+     * A method which will be implemented by child classes, and it is to get the number of row
+     * @return
+     */
     public abstract int getSizeOfRow();
 
+    /**
+     * A method which will be implemented by child classes, and it is to get the number of column
+     * @return
+     */
     public abstract int getSizeOfColumn();
 
     /**

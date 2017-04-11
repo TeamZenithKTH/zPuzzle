@@ -5,7 +5,7 @@ import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
 import java.util.HashMap;
 
 /**
- * Created by memmi on 2017-04-07.
+ * Created by Hichem Memmi on 2017-04-07.
  */
 
 public interface getAllUserGameHistory {

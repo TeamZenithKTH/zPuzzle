@@ -21,8 +21,8 @@ import com.teamzenith.game.zpuzzle.model.User;
 import java.io.File;
 
 /**
- * This class wil select the Image according to what the user select to import the image from.
- * Created by memmi on 2017-03-30.
+ * This class will select the Image according to what the user select to import the image from.
+ * Created by Hichem Memmi on 2017-03-30.
  */
 
 public class ImageChooser extends AppCompatActivity {
@@ -43,6 +43,10 @@ public class ImageChooser extends AppCompatActivity {
     private User player;
     private RandomImageAdapter adapterView;
 
+    /**
+     * this method called once the user launch this activity
+     * @param bundle
+     */
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -95,6 +99,13 @@ public class ImageChooser extends AppCompatActivity {
                 1);
     }
 
+    /**
+     * this method will called once the user try to import the image from the gallery or pick an image with
+     * camera
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
@@ -125,6 +136,11 @@ public class ImageChooser extends AppCompatActivity {
         }
     }
 
+    /**
+     * this method is to get the path of the image if it is imported from gallery
+     * @param contentURI
+     * @return
+     */
     private String getRealPathFromURI(Uri contentURI) {
         String result;
         Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
@@ -140,8 +156,11 @@ public class ImageChooser extends AppCompatActivity {
     }
 
 
-    /*@Override
+    /**
+     * this method will be called once the user press on the back button
+     */
+    @Override
     public void onBackPressed() {
         finish();
-    }}*/
-}
+    }}
+

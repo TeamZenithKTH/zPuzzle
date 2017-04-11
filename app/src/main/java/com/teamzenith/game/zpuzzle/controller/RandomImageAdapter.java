@@ -44,6 +44,12 @@ public class RandomImageAdapter extends PagerAdapter {
         return v == ((ImageView) obj);
     }
 
+    /**
+     *
+     * @param container
+     * @param i
+     * @return
+     */
     @Override
     public Object instantiateItem(ViewGroup container, int i) {
         ImageView mImageView = new ImageView(mContext);
@@ -65,6 +71,10 @@ public class RandomImageAdapter extends PagerAdapter {
         ((ViewPager) container).removeView((ImageView) obj);
     }
 
+    /**
+     * this method is called once the user pick an image
+     * @param prepareForClick
+     */
     public void setOnPrepareListener(PrepareForClick prepareForClick) {
         this.prepareForClick = prepareForClick;
     }
