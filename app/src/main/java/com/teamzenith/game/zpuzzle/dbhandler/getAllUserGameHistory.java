@@ -9,5 +9,5 @@ import java.util.HashMap;
  */
 
 public interface getAllUserGameHistory {
-    public void getAll(UserHistoryEntry userHistoryEntry);
+     void getAll(UserHistoryEntry userHistoryEntry, int i);
 }

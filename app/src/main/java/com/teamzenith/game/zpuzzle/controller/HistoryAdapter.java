@@ -6,69 +6,67 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
+
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
-import com.teamzenith.game.zpuzzle.util.ImageConverter;
 
 import java.util.HashMap;
 
+
 /**
- * Created by memmi on 2017-04-05.
+ * Created by Shubha on 4/7/2017.
  */
 
-public class HistoryAdapter extends BaseAdapter {
+    public class HistoryAdapter extends BaseAdapter{
 
+        private HashMap<Integer, UserHistoryEntry> userHistory = new HashMap<>();
+        private Activity historyActivity;
+        private static LayoutInflater inflater=null;
 
-    private static LayoutInflater inflater=null;
-    Activity historyActivity;
-    HashMap<Integer,UserHistoryEntry> values;
-    public HistoryAdapter(Activity historyActivity, HashMap<Integer, UserHistoryEntry> values){
-        this.historyActivity=historyActivity;
-        this.values=values;
-        inflater=(LayoutInflater) historyActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        public HistoryAdapter(Activity historyActivity, HashMap<Integer, UserHistoryEntry> userHistory) {
+            this.historyActivity=historyActivity;
+            this.userHistory=userHistory;
+            inflater = (LayoutInflater)historyActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        }
 
+        @Override
+        public int getCount() {
+            return userHistory.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return userHistory.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view =convertView;
+            Context context = parent.getContext();
+            if(convertView==null)
+                view = inflater.inflate(R.layout.history_item, null);
+
+            //TextView date = (TextView)view.findViewById(R.id.date);
+            TextView level = (TextView)view.findViewById(R.id.history_level);
+            TextView numOfMoves = (TextView)view.findViewById(R.id.history_numOfMoves);
+            TextView time = (TextView)view.findViewById(R.id.history_timeTaken);
+            ImageView thumb_image=(ImageView) view.findViewById(R.id.history_puzzleImage);
+
+            level.setText(this.userHistory.get(position).getLevel().toString());
+            numOfMoves.setText(this.userHistory.get(position).getCountMovementString());
+            time.setText(this.userHistory.get(position).getTimerCounterString());
+            Picasso.with(context).load(userHistory.get(position).getImageFile()).into(thumb_image);
+            return view;
+        }
     }
-    @Override
-    public int getCount() {
-        return values.size();
-    }
 
-    @Override
-    public Object getItem(int position) {
-        return values.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View view =convertView;
-        Context context = parent.getContext();
-        if(convertView==null)
-            view = inflater.inflate(R.layout.history_item, null);
-
-        TextView time = (TextView)view.findViewById(R.id.movement);
-        TextView movement = (TextView)view.findViewById(R.id.timercount);
-        TextView level = (TextView)view.findViewById(R.id.level);
-        ImageView image = (ImageView)view.findViewById(R.id.imageHistoryGame);
-
-        time.setText(values.get(position).getTimerCounterString());
-        movement.setText(values.get(position).getCountMovementString());
-        level.setText(values.get(position).getLevel());
-
-        Picasso.with(context).load(values.get(position).getImageFile()).into(image);
-
-
-        return view;
-
-    }
-}
