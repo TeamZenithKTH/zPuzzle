@@ -55,18 +55,21 @@ public class InboxInvitationsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
+
         Context context = parent.getContext();
+        boolean status = this.userInvitation.get(position).isStatus();
+
         if (convertView == null)
             view = inflater.inflate(R.layout.inbox_items, null);
-        TextView invitationLetter = (TextView) view.findViewById(R.id.inbox_invitation_letter);
-        TextView level = (TextView) view.findViewById(R.id.inbox_invitation_level);
-        ImageView thumb_image = (ImageView) view.findViewById(R.id.inbox_invitation_image);
-        TextView invitationStatus = (TextView) view.findViewById(R.id.inbox_invitation_status);
-        boolean status = this.userInvitation.get(position).isStatus();
-        invitationLetter.setText(this.userInvitation.get(position).getIntiationText());
-        level.setText(this.userInvitation.get(position).getLevel());
-        Picasso.with(context).load(userInvitation.get(position).getImageURL()).into(thumb_image);
-        invitationStatus.setText(String.valueOf(status));
+            TextView invitationLetter = (TextView) view.findViewById(R.id.inbox_invitation_letter);
+            TextView level = (TextView) view.findViewById(R.id.inbox_invitation_level);
+            ImageView thumb_image = (ImageView) view.findViewById(R.id.inbox_invitation_image);
+
+
+            invitationLetter.setText(this.userInvitation.get(position).getIntiationText());
+            level.setText(this.userInvitation.get(position).getLevel());
+            Picasso.with(context).load(userInvitation.get(position).getImageURL()).into(thumb_image);
+
         return view;
     }
 }

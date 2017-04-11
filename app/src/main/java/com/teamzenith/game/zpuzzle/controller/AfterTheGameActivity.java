@@ -11,6 +11,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.dbhandler.GetImageURL;
@@ -105,7 +106,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
 
                 historyController.setToControllerFromAfterTheGameActivity(solvedImage, AfterTheGameActivity.this, userID);
 
-
+                Toast.makeText(AfterTheGameActivity.this,"History Saved",Toast.LENGTH_SHORT).show();
             }
         });
 

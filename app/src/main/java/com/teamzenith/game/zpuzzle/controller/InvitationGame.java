@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -21,9 +20,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.teamzenith.game.zpuzzle.R;
-import com.teamzenith.game.zpuzzle.controller.AfterTheGameActivity;
-import com.teamzenith.game.zpuzzle.controller.ImageChooser;
-import com.teamzenith.game.zpuzzle.controller.RandomImageAdapter;
 import com.teamzenith.game.zpuzzle.model.Level;
 import com.teamzenith.game.zpuzzle.model.SendInvitation;
 import com.teamzenith.game.zpuzzle.model.User;
@@ -40,10 +36,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
-import java.util.TimerTask;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
-import static com.teamzenith.game.zpuzzle.R.id.timer;
 
 /**
  * Created by Hichem Memmi on 4/11/17.
@@ -111,6 +103,8 @@ public class InvitationGame extends AppCompatActivity {
         Intent intent = getIntent();
 
         SendInvitation selectedFromList = (SendInvitation) intent.getSerializableExtra("selectedFromList");
+        player = (User) intent.getSerializableExtra("player");
+
         try {
             InvitationGame(selectedFromList);
             prepareAnImage();
@@ -142,8 +136,6 @@ public class InvitationGame extends AppCompatActivity {
         this.level = (Level) cls.newInstance();
         row = this.level.getSizeOfRow();
         column = this.level.getSizeOfColumn();
-
-
     }
 
     /**
@@ -201,6 +193,7 @@ public class InvitationGame extends AppCompatActivity {
 
                           }
                       });
+
     }
 
 
@@ -279,7 +272,6 @@ public class InvitationGame extends AppCompatActivity {
                     }
                 }
             });
-
         }
 
     }
@@ -290,7 +282,6 @@ public class InvitationGame extends AppCompatActivity {
      */
     private void setNewImages(HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
-
         for (int i = 0; i < SHMap.size(); i++) {
             ImageButton im = (ImageButton) findViewById(i);
             im.setImageBitmap(SHMap.get(i));
@@ -308,8 +299,10 @@ public class InvitationGame extends AppCompatActivity {
             ImageButton im = (ImageButton) findViewById(i);
             im.setImageBitmap(tmpBitMap[i]);
         }
+        Intent intent = new Intent(this, AfterInvitationGameActivity.class);
+        intent.putExtra("player",player);
+        intent.putExtra("sendInvitation",sendInvitation);
 
-        Intent intent=new Intent(this,AfterInvitationGameActivity.class);
         startActivity(intent);
     }
 
