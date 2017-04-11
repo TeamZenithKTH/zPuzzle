@@ -13,12 +13,12 @@ public class SendInvitation implements Serializable {
     private String userID;
     private String presentText;
     private boolean status;
-    private String friendName;
+    private String friendName,senderName;
     public SendInvitation() {
 
     }
 
-    public SendInvitation(String intiationText, String imageURL, String level, String userID,String friendName, String presentText, boolean status) {
+    public SendInvitation(String intiationText, String imageURL, String level, String userID,String senderName,String friendName, String presentText, boolean status) {
         this.intiationText = intiationText;
         this.imageURL = imageURL;
         this.level = level;
@@ -26,6 +26,15 @@ public class SendInvitation implements Serializable {
         this.presentText = presentText;
         this.status = status;
         this.friendName = friendName;
+        this.senderName =senderName;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 
     public String getFriendName() {

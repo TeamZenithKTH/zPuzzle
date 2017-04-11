@@ -47,16 +47,29 @@ public class InboxActivity extends AppCompatActivity implements GetMyFriendsChal
 
                 Intent intent=new Intent(InboxActivity.this,InvitationGame.class);
                 intent.putExtra("selectedFromList",selectedFromList);
+                intent.putExtra("player",player);
                 startActivity(intent);
 
-                Toast.makeText(InboxActivity.this, "" + selectedFromList.getIntiationText(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(InboxActivity.this, "" + selectedFromList.getIntiationText(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+    @Override
+    public void onBackPressed() {
+        Intent intent=new Intent(InboxActivity.this,MainActivity.class);
+        intent.putExtra("player",player);
+        startActivity(intent);
 
+        finish();
+        finish();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            Intent intent=new Intent(InboxActivity.this,MainActivity.class);
+            intent.putExtra("player",player);
+            startActivity(intent);
+
             finish();
         }
 

@@ -218,7 +218,7 @@ public class SendInvitationActivity extends AppCompatActivity implements SendInv
         friendName = String.valueOf(friendSpinner.getSelectedItem());
         String level = String.valueOf(levelSpinner.getSelectedItem());
         friendID = allUsersList.get(friendName);
-        sendInvitation = new SendInvitation(invitationText.getText().toString().trim(), imageURL, level, friendID, friendName, senderPresent.getText().toString().trim(), false);
+        sendInvitation = new SendInvitation(invitationText.getText().toString().trim(), imageURL, level, friendID, player.getUserName(),friendName, senderPresent.getText().toString().trim(), false);
         checkNotEmptyInformation(sendInvitation);
     }
 
