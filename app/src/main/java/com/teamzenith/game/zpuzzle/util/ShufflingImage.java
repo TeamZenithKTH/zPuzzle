@@ -29,7 +29,7 @@ public class ShufflingImage {
         for (int i = 0; i < img.length - 1; i++) {//fixed
             list.add(i);
 
-        meMap.put(i, img[i]); //******** décomment
+       // meMap.put(i, img[i]); //******** décomment
 
         }
         Random rand = new Random();
@@ -38,7 +38,7 @@ public class ShufflingImage {
             int index = rand.nextInt(list.size());
             tmpBmp[i] = img[list.remove(index)];
 
-      //  meMap.put(i, tmpBmp[i]); //********* comment
+        meMap.put(i, tmpBmp[i]); //********* comment
 
 
             i++;
