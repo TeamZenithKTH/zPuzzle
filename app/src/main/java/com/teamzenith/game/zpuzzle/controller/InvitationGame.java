@@ -102,7 +102,6 @@ public class InvitationGame extends AppCompatActivity {
         scale = getApplicationContext().getResources().getDisplayMetrics().density;
         Intent intent = getIntent();
 
-
         SendInvitation selectedFromList = (SendInvitation) intent.getSerializableExtra("selectedFromList");
         try {
             InvitationGame(selectedFromList);
@@ -114,10 +113,7 @@ public class InvitationGame extends AppCompatActivity {
         } catch (InstantiationException e) {
             e.printStackTrace();
         }
-
-
     }
-
 
     /**
      * @param sendInvitation
@@ -142,7 +138,7 @@ public class InvitationGame extends AppCompatActivity {
     }
 
     private void prepareAnImage() {
-        Bitmap photo;
+
         Picasso.with(this)
                 .load(this.imageURL)
                 .into(new Target(){
@@ -150,9 +146,26 @@ public class InvitationGame extends AppCompatActivity {
                           public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                               FileOutputStream out = null;
                               try {
+
+                                  Bitmap photo;
                                   out = new FileOutputStream(Environment.getExternalStorageDirectory()+"/image.png");
-                                  bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+                                //  bitmap.compress(Bitmap.CompressFormat.PNG, 75, out); // bmp is your Bitmap instance
                                   // PNG is a lossless format, the compression factor (100) is ignored
+
+                                  photo = createBitmap(bitmap);
+                                  try {
+                                      bmp = imageSplit.get(photo, row, column);
+                                  } catch (FileNotFoundException e) {
+                                      e.printStackTrace();
+                                  }
+
+                                  ShufflingImage shufflingImage = new ShufflingImage();
+                                  tmpbmp = shufflingImage.shuffle(bmp);
+                                  SHMap = shufflingImage.getShuffledOrder();
+                                  settingImages(SHMap);
+                                  createImageViews(SHMap);
+
+
                               } catch (Exception e) {
                                   e.printStackTrace();
                               } finally {
@@ -176,60 +189,11 @@ public class InvitationGame extends AppCompatActivity {
 
                           }
                       });
-
-        imageFile = new File(Environment.getExternalStorageDirectory() + "/image.png");
-        photo = createBitmap(imageFile);
-
-
-        try {
-            bmp = imageSplit.get(photo, row, column);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-
-        ShufflingImage shufflingImage = new ShufflingImage();
-        tmpbmp = shufflingImage.shuffle(bmp);
-        SHMap = shufflingImage.getShuffledOrder();
-        settingImages(SHMap);
-        createImageViews(SHMap);
     }
 
 
-    private Bitmap createBitmap(File imgFile1) {
-        Bitmap bitmapNeedsToRotate;
-        Matrix matrix;
-        int exifOrientation = getImageOrientation(imgFile1);
-        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
-            bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
-            matrix = new Matrix();
-            matrix.postRotate(90);
-            Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
-            return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
-        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
-            bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
-            matrix = new Matrix();
-            matrix.postRotate(180);
-            return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
-        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
-            bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
-            matrix = new Matrix();
-            matrix.postRotate(270);
-            return Bitmap.createBitmap(bitmapNeedsToRotate, 0, 0, bitmapNeedsToRotate.getWidth(), bitmapNeedsToRotate.getHeight(), matrix, true);
-        } else {
-            return Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
-        }
-    }
-
-
-    private int getImageOrientation(File imgFile1) {
-        ExifInterface exif = null;
-        try {
-            exif = new ExifInterface(imgFile1.getAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+    private Bitmap createBitmap(Bitmap imgFile1) {
+        return Bitmap.createScaledBitmap(imgFile1, (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
     }
 
     private void settingImages(HashMap<Integer, Bitmap> SHMap) {
@@ -306,13 +270,12 @@ public class InvitationGame extends AppCompatActivity {
 
 
     private void SetOriginalImagesToMatrix() {
-        Bitmap[] tmpbitMap;
-        tmpbitMap = imageSplit.getOriginalDividedImage();
-        for (int i = 0; i < tmpbitMap.length; i++) {
+        Bitmap[] tmpBitMap;
+        tmpBitMap = imageSplit.getOriginalDividedImage();
+        for (int i = 0; i < tmpBitMap.length; i++) {
             ImageButton im = (ImageButton) findViewById(i);
-            im.setImageBitmap(tmpbitMap[i]);
+            im.setImageBitmap(tmpBitMap[i]);
         }
-
 
         Intent intent=new Intent(this,AfterInvitationGameActivity.class);
         startActivity(intent);
