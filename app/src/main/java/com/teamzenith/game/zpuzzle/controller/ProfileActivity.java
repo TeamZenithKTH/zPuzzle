@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +27,7 @@ import com.teamzenith.game.zpuzzle.R;
 import com.teamzenith.game.zpuzzle.dbhandler.GetUserInformation;
 import com.teamzenith.game.zpuzzle.dbhandler.UpdateUserImage;
 import com.teamzenith.game.zpuzzle.model.User;
+import com.teamzenith.game.zpuzzle.model.UsersNameID;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,14 +38,15 @@ import java.text.ParseException;
  */
 
 public class ProfileActivity extends AppCompatActivity implements GetUserInformation, UpdateUserImage {
-    private Button updateUserProfileImage, cancleUserUpdate;
+    private Button updateUserProfile, cancleUserUpdate;
     private User player, user;
     private String userID, userImage;
     private static int IMG_RESULT = 1;
     private Bitmap currentImage;
     private String newImageFile;
     private File imageFile;
-    private EditText userNameUpdate, userEmailUpdate;
+    private EditText userNameUpdate;
+    private TextView userEmailUpdate;
     private boolean faceBookLogin;
     private ImageView userImageView;
     private Intent intent;
@@ -51,6 +54,9 @@ public class ProfileActivity extends AppCompatActivity implements GetUserInforma
     private String imageURL;
     private EditText userPasswordUpdate;
     private EditText userOldPassword;
+    private String newPassword;
+    private String email;
+    private String oldPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,130 +66,111 @@ public class ProfileActivity extends AppCompatActivity implements GetUserInforma
         toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
         Intent mIntent = getIntent();
-        updateUserProfileImage = (Button) findViewById(R.id.update_user_profile);
+        updateUserProfile = (Button) findViewById(R.id.update_user_profile);
         userImageView = (ImageView) findViewById(R.id.user_profile_image);
         faceBookLogin = (boolean) mIntent.getSerializableExtra("faceBookLogin");
         if (faceBookLogin == true) {
-            updateUserProfileImage.setEnabled(false);
+            updateUserProfile.setEnabled(false);
         }
-        // add back arrow to toolbar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
-
         profileController = new ProfileController();
-
         player = (User) mIntent.getSerializableExtra("player");
         profileController.setToController(this, player);
         userNameUpdate = (EditText) findViewById(R.id.user_name_update);
-        userEmailUpdate = (EditText) findViewById(R.id.user_email_update);
+        userEmailUpdate = (TextView) findViewById(R.id.user_email_update);
         userPasswordUpdate = (EditText) findViewById(R.id.update_password);
         userOldPassword = (EditText) findViewById(R.id.user_old_password);
+        cancleUserUpdate = (Button) findViewById(R.id.cancel_user_update);
         userImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, IMG_RESULT);
-
             }
         });
-
-        updateUserProfileImage.setOnClickListener(new View.OnClickListener() {
+        updateUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 profileController.setToControllerFromProfileActivity(userImageView, ProfileActivity.this, player.getUserID());
-
             }
         });
-
+        cancleUserUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void updatePassword() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-// Get auth credentials from the user for re-authentication. The example below shows
-// email and password credentials but there are multiple possible providers,
-// such as GoogleAuthProvider or FacebookAuthProvider.
-        AuthCredential credential = EmailAuthProvider
-                .getCredential(userEmailUpdate.toString().trim(), userOldPassword.toString().trim());
-
-// Prompt the user to re-provide their sign-in credentials
+        email = userEmailUpdate.getText().toString().trim();
+        oldPassword = userOldPassword.getText().toString().trim();
+        newPassword = userPasswordUpdate.getText().toString().trim();
+        final Toast passwordUpdated = Toast.makeText(this, "Password updated", Toast.LENGTH_SHORT);
+        final Toast passwordNotUpdated = Toast.makeText(this, "Error password not updated", Toast.LENGTH_SHORT);
+        final Toast errorAuth = Toast.makeText(this, "Error auth failed", Toast.LENGTH_SHORT);
+        AuthCredential credential = EmailAuthProvider.getCredential(email, oldPassword);
         user.reauthenticate(credential)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            user.updatePassword(userPasswordUpdate.toString().trim()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            user.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        System.out.println("Password Updated");
+                                        passwordUpdated.show();
+                                        userOldPassword.setText("");
+                                        userPasswordUpdate.setText("");
                                     } else {
-                                        System.out.println("Error password not updated");
+                                        passwordNotUpdated.show();
                                     }
                                 }
                             });
                         } else {
-                            System.out.println("Error auth failed");
+                            errorAuth.show();
                         }
                     }
                 });
     }
 
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
     private void checkEmailAndUserName() throws ParseException {
-        if (userNameUpdate == null) {
-            Toast.makeText(this, "Username can not be empty", Toast.LENGTH_SHORT).show();
-        } else if (userEmailUpdate == null) {
-            Toast.makeText(this, "Email can not be empty", Toast.LENGTH_SHORT).show();
-        } else {
-            player.setUserName(userNameUpdate.getText().toString().trim());
-            player.setUserEmail(userEmailUpdate.getText().toString().trim());
-            updatePassword();
-            try {
-                profileController.save(player);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            //profileController.save(player);
+        player.setUserName(userNameUpdate.getText().toString().trim());
+        UsersNameID usersNameID = new UsersNameID();
+        usersNameID.setUserName(userNameUpdate.getText().toString().trim());
+        usersNameID.setUserID(player.getUserID());
+        updatePassword();
+        try {
+            profileController.save(player, usersNameID);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish();// close this activity and return to preview activity (if there is any)
+            finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMG_RESULT && resultCode == RESULT_OK && null != data) {
-
             Uri photoUri = data.getData();
             String[] filePath = {MediaStore.Images.Media.DATA};
-
             if (photoUri != null) {
-
                 try {
                     currentImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
                 userImageView.setImageBitmap(currentImage);
-
-
             }
         }
     }

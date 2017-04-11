@@ -57,6 +57,10 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     private UploadToDatabase uploadToDatabase;
     private boolean b = false;
 
+    /**
+     *
+     * @param bundle
+     */
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.after_the_game);
@@ -103,7 +107,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
 
         countMovementString = intentFromGameActivity.getStringExtra("CountMovement");
         String countMovementStringColored = "<font color='#EE0000'>" + countMovementString + "</font>";
-        movementTextView.setText(Html.fromHtml("You solved on " + countMovementStringColored + " steps"));
+        movementTextView.setText(Html.fromHtml("You solved on " + countMovementStringColored +" steps"));
 
         timerCounterStringColored = intentFromGameActivity.getStringExtra("TimerCounter");
         timerCounterString = intentFromGameActivity.getStringExtra("Timer");
@@ -178,6 +182,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             startActivity(playAgainIntent);
 
             finish();
+
 
         } else {
             Intent goBackToMain = new Intent(getBaseContext(), MainActivity.class);

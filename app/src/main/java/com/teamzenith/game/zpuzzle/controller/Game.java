@@ -118,7 +118,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
         } else if (method.equals(ImageChooser.Method.CAMERA)) {
             photoButton = new ImageView(this);
-            photoButton.setImageResource(R.drawable.cm);
+            photoButton.setImageResource(R.drawable.ic_camera);
             photoButton.setId(R.id.pickphotocamera);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             layoutParams.gravity = Gravity.CENTER;
@@ -141,14 +141,10 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
             idOfDrawable = it.getIntExtra("idOfDrawable", 0);
             prepareAnImage();
         }
-
         actions();
-
         ActivityCompat.requestPermissions(Game.this,
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                 1);
-
-
     }
 
     private void createComponents() {
@@ -256,12 +252,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         return result;
     }
 
-    public Bitmap createBitmap(File imgFile1) {
-
-
+    private Bitmap createBitmap(File imgFile1) {
         Bitmap bitmapNeedsToRotate;
         Matrix matrix;
-
         int exifOrientation = getImageOrientation(imgFile1);
         if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
             bitmapNeedsToRotate = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(imgFile1.getAbsolutePath()), (int) (level.getSize() * scale), (int) (level.getSize() * scale), true);
@@ -294,7 +287,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
     }
 
-    public void prepareAnImage() {
+    private void prepareAnImage() {
         Bitmap photo;
         if (method.equals(ImageChooser.Method.RANDOM)) {
             photo = BitmapFactory.decodeResource(getResources(), idOfDrawable);
@@ -314,6 +307,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             timer = ((String.valueOf(hour).length() > 1) ? hour : "0" + hour) + ":" + ((String.valueOf(minute).length() > 1) ? minute : "0" + minute) + ":" + ((String.valueOf(seconds).length() > 1) ? seconds : "0" + seconds) + ":" +
                                     ((String.valueOf(count).length() > 1) ?
                                             (String.valueOf(count).length() > 2) ?
@@ -396,7 +390,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private void createImageViews(final HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
         final GetCurrentStatus getCurrentStatus = new GetCurrentStatus();
-        //final Toast toast = Toast.makeText(this, moveImage.getMsg(), Toast.LENGTH_LONG);
         for (int i = 0; i < imageButtons.length; i++) {
             imageButtons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -404,12 +397,8 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                     ImageButton b = (ImageButton) v;
                     newMoveedImagesList = moveImage.step(SHMap, b.getId(), row, column);
                     setNewImages(newMoveedImagesList);
-                    //toast.show();
-                    // isFinish = getCurrentStatus.checkCurrentImage(bmp, newMoveedImagesList);
                     isFinish = getCurrentStatus.checkCurrentImage(imageSplit.getOriginalDividedImage(), newMoveedImagesList);
-
                     if (isFinish) {
-                        // toast.show();
                         SetOriginalImagesToMatrix();
                         isFinish = false;
                     }
@@ -443,12 +432,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    /**
-     * Set The new images postion to the imageButtons for each move that the user done.
-     *
-     * @param SHMap
-     */
-    public void setNewImages(HashMap<Integer, Bitmap> SHMap) {
+    private void setNewImages(HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
         countMovement++;
         String next = "<font color='#EE0000'>" + String.valueOf(countMovement) + "</font>";
@@ -463,9 +447,6 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    /**
-     * Set the Original image's pieces after the user solve the puzzle.
-     */
     private void SetOriginalImagesToMatrix() {
         Bitmap[] tmpbitMap;
         tmpbitMap = imageSplit.getOriginalDividedImage();
@@ -478,6 +459,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         it.putExtra("CountMovement", String.valueOf(countMovement));
         it.putExtra("TimerCounter", String.valueOf(next));
         it.putExtra("Timer", String.valueOf(timer));
+
         if (method.equals(ImageChooser.Method.RANDOM)) {
             it.putExtra("Image", idOfDrawable);
             it.putExtra("current", viewPager.getCurrentItem());
@@ -489,7 +471,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         it.putExtra("method", method);
         T.cancel();
         startActivity(it);
-
+        finish();
     }
 
     @Override

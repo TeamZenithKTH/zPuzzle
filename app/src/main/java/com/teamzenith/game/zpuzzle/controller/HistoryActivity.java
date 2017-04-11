@@ -22,11 +22,15 @@ import com.teamzenith.game.zpuzzle.dbhandler.GetUserHistory;
 import com.teamzenith.game.zpuzzle.model.User;
 import com.teamzenith.game.zpuzzle.model.UserHistoryEntry;
 
-public class HistoryActivity extends AppCompatActivity implements GetUserHistory{
+import java.util.HashMap;
+
+public class HistoryActivity extends AppCompatActivity implements GetUserHistory {
     private HistoryController historyController;
     private User player;
     private String userID;
-    private HashMap<Integer,UserHistoryEntry> userHistoryEntry;
+
+    private HashMap<Integer, UserHistoryEntry> userHistoryEntry;
+
     private ListView listHistory;
 
     @Override
@@ -38,31 +42,24 @@ public class HistoryActivity extends AppCompatActivity implements GetUserHistory
         Toolbar toolbar = (Toolbar) findViewById(R.id.history_toolbar);
         toolbar.setTitle("History");
         setSupportActionBar(toolbar);
-        Intent mIntent= getIntent();
+        Intent mIntent = getIntent();
         player = (User) mIntent.getSerializableExtra("player");
         userID = player.getUserID();
-        historyController= new HistoryController();
-        // add back arrow to toolbar
+        listHistory = (ListView) findViewById(R.id.listViewHistory);
+        historyController = new HistoryController();
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-
-
-
-
-        historyController.setToControllerHistoryActivity(this,userID);
-
-
+        historyController.setToControllerHistoryActivity(this, userID);
 
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-           finish();// close this activity and return to preview activity (if there is any)
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -70,9 +67,6 @@ public class HistoryActivity extends AppCompatActivity implements GetUserHistory
     @Override
     public void get(HashMap<Integer, UserHistoryEntry> userHistoryEntry) {
         this.userHistoryEntry = userHistoryEntry;
-      //  System.out.println(" Level: " + userHistoryEntry.getLevel() + " Count: " + userHistoryEntry.getCountMovementString() + " Time: " + userHistoryEntry.getTimerCounterString() + " User image: " + userHistoryEntry.getImageFile());
-
-
         HistoryAdapter historyAdapter = new HistoryAdapter(HistoryActivity.this, userHistoryEntry);
         listHistory.setAdapter(historyAdapter);
     }

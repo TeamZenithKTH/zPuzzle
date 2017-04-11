@@ -2,12 +2,12 @@ package com.teamzenith.game.zpuzzle.controller;
 
 import android.widget.ImageView;
 
-import com.teamzenith.game.zpuzzle.dbhandler.GetImageURL;
 import com.teamzenith.game.zpuzzle.dbhandler.GetUserInformation;
 import com.teamzenith.game.zpuzzle.dbhandler.UpdateUserImage;
 import com.teamzenith.game.zpuzzle.dbhandler.UploadToDatabase;
 import com.teamzenith.game.zpuzzle.dbhandler.UserDAO;
 import com.teamzenith.game.zpuzzle.model.User;
+import com.teamzenith.game.zpuzzle.model.UsersNameID;
 
 import java.text.ParseException;
 
@@ -18,12 +18,22 @@ import java.text.ParseException;
 public class ProfileController {
     private User user;
 
-    public void save(User user) throws ParseException {
+    /**
+     * @param user
+     * @param usersNameID
+     * @throws ParseException
+     */
+    public void save(User user, UsersNameID usersNameID) throws ParseException {
         this.user = user;
         UserDAO userDAO = new UserDAO();
-        userDAO.insertNewUser(user);
+        userDAO.insertNewUser(user, usersNameID);
+        userDAO.insertUserNameID(usersNameID);
     }
 
+    /**
+     * @param getUserInformation
+     * @param user
+     */
     public void setToController(GetUserInformation getUserInformation, User user) {
         this.user = user;
         UserDAO userDAO = new UserDAO();
@@ -32,12 +42,11 @@ public class ProfileController {
 
     }
 
-    public void saveUserImage( User user,String ImageURL) {
-
-        UserDAO userDAO = new UserDAO();
-        userDAO.setUserImage(user.getUserID(),ImageURL);
-    }
-
+    /**
+     * @param userImageView
+     * @param updateUserImage
+     * @param userID
+     */
     public void setToControllerFromProfileActivity(ImageView userImageView, UpdateUserImage updateUserImage, String userID) {
         UploadToDatabase uploadToDatabase = new UploadToDatabase();
         uploadToDatabase.setListenerUpdateImage(updateUserImage, userImageView);

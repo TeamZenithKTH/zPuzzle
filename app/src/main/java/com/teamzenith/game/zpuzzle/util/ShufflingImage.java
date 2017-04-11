@@ -32,14 +32,14 @@ public class ShufflingImage {
         meMap.put(i, img[i]); //******** décomment
 
         }
-
         Random rand = new Random();
         int i = 0;
         while (list.size() > 0) {
             int index = rand.nextInt(list.size());
             tmpBmp[i] = img[list.remove(index)];
 
-        //meMap.put(i, tmpBmp[i]); //********* comment
+      //  meMap.put(i, tmpBmp[i]); //********* comment
+
 
             i++;
         }

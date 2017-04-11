@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.teamzenith.game.zpuzzle.model.User;
+import com.teamzenith.game.zpuzzle.model.UsersNameID;
 
 
 /**
@@ -21,40 +22,38 @@ public class UserDAO {
     private String userImage;
     private String imageFile;
     private GetUserInformation getUserInformation;
+    private UsersNameID usersNameID;
 
-
-    public void insertNewUser(User user) {
+    /**
+     *
+     * @param user
+     * @param usersNameID
+     */
+    public void insertNewUser(User user, UsersNameID usersNameID) {
         this.user = user;
         this.userID = user.getUserID();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference usersRef = mDatabase.child("Users").child(userID);
+        DatabaseReference allUsersNamesAndIDs = mDatabase.child("UsersNameID").child(userID).child("userName");
+        allUsersNamesAndIDs.setValue(usersNameID.getUserName());
         usersRef.setValue(user);
     }
 
-    public void setUserName(String uid, String userName) {
-        this.userID = uid;
-        this.userName = userName;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference insertUserName = ref.child("Users").child(userID).child("userName");
-        insertUserName.setValue(userName);
+    /**
+     *
+     * @param usersNameID
+     */
+    public void insertUserNameID(UsersNameID usersNameID) {
+        this.usersNameID = usersNameID;
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference allUsersNamesAndIDs = mDatabase.child("UsersNameID").child(usersNameID.getUserID());
+        allUsersNamesAndIDs.setValue(usersNameID);
+
     }
 
-    public void setUserImage(String uid, String userImage) {
-        this.userID = uid;
-        this.userImage = userImage;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference insertUserImage = ref.child("Users").child(userID).child("userImage");
-        insertUserImage.setValue(userImage);
-    }
-
-    public void setUserEmail(String uid, String userEmail) {
-        this.userID = uid;
-        this.userEmail = userImage;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference insertUserName = ref.child("Users").child(userID).child("userEmail");
-        insertUserName.setValue(userEmail);
-    }
-
+    /**
+     * @param uid
+     */
     public void getUserInfo(String uid) {
         this.userID = uid;
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
@@ -71,10 +70,11 @@ public class UserDAO {
 
             }
         });
-
-
     }
 
+    /**
+     * @param getUserInformation
+     */
     public void setListener(GetUserInformation getUserInformation) {
         this.getUserInformation = getUserInformation;
     }

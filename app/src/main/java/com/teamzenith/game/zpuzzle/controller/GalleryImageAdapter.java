@@ -20,19 +20,15 @@ import com.teamzenith.game.zpuzzle.model.Level;
 
 public class GalleryImageAdapter extends Activity {
 
-
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private static int IMG_RESULT = 1;
-
-    String ImageDecode;
-    String strSelectedImage;
-
-    Intent intent;
-    Level level;
+    private String ImageDecode;
+    private String strSelectedImage;
+    private Intent intent;
+    private Level level;
     private Bitmap currentImage;
-
-    ImageView imageViewLoad;
-    ImageButton pImageButton;
+    private ImageView imageViewLoad;
+    private ImageButton pImageButton;
 
 
     @Override

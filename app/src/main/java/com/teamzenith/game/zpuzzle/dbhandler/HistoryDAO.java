@@ -40,10 +40,15 @@ public class HistoryDAO{
     private HashMap<Integer, UserHistoryEntry> oneHistoryEntry;
     private HashMap<Integer, UserHistoryEntry> AllHistoryEntry;
     private GetUserHistory getUserHistory;
+
     private TopGamesActivity topGamesActivity;
+
     private DatabaseReference ref;
 
-
+    /**
+     * @param userHistoryEntry
+     * @throws ParseException
+     */
     public void insertOnHistoryEntry(UserHistoryEntry userHistoryEntry) throws ParseException {
         this.userHistoryEntry = userHistoryEntry;
         this.userID = userHistoryEntry.getUserID();
@@ -81,12 +86,8 @@ public class HistoryDAO{
 
             }
         });
-        //return userHistory;
     }
 
-    
-    
-    
     public void getAllUsersHistory(final Level s) {
 
 
@@ -191,15 +192,19 @@ public class HistoryDAO{
         });
     }
 
+
     public void getHistoryEntry(String userID) {
         getUserHistory(userID);
     }
+
 
     public void setListener(GetUserHistory getUserHistory) {
         this.getUserHistory = getUserHistory;
     }
 
+
     public void setListener(TopGamesActivity topGamesActivity) {
         this.topGamesActivity = topGamesActivity;
     }
+
 }

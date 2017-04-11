@@ -7,14 +7,10 @@
     android:orientation="vertical"
     android:weightSum="1"
     tools:context="com.teamzenith.game.zpuzzle.controller.ProfileActivity">
-=======
-    tools:context="com.teamzenith.game.zpuzzle.controller.ProfileActivity"
-    android:background="@drawable/background5">
->>>>>>> Stashed changes
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/profile_toolbar"
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
         android:layout_height="56dp"
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay"
@@ -55,17 +51,23 @@
                     android:layout_gravity="center"
                     android:src="@drawable/avatar_icon" />
 
+                <TextView
+                    android:id="@+id/user_email_update"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:hint="Email"
+                    android:textColor="@color/cast_intro_overlay_background_color"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+
                 <EditText
                     android:id="@+id/user_name_update"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="Username" />
 
-                <EditText
-                    android:id="@+id/user_email_update"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Email" />
+
                 <EditText
                     android:id="@+id/user_old_password"
                     android:layout_width="match_parent"
@@ -77,11 +79,12 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true" />
+
                 <EditText
                     android:id="@+id/update_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_password"
+                    android:hint="@string/prompt_new_password"
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"

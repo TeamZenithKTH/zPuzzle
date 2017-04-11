@@ -12,6 +12,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Random;
 
 /**
  * Created by alaaalkassar on 4/5/17.
@@ -25,79 +26,127 @@ public class UploadToDatabase {
     private GetImageURL getImageURL;
     private UpdateUserImage updateUserImage;
     private ImageView uploadImageView;
+    private SendInvitationToUser sendInvitationToUser;
 
+    /**
+     *
+     * @param userID
+     */
     public void upload(String userID) {
         this.userID = userID;
         uploadImageView.setDrawingCacheEnabled(true);
         uploadImageView.buildDrawingCache();
+        Random rand = new Random();
+        int index = rand.nextInt(10000);
         Bitmap bitmap = uploadImageView.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 5, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
         storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-
-        // Create a reference to "mountains.jpg"
-        StorageReference mountainsRef = storageRef.child(userID).child("user.jpg");
-
+        StorageReference mountainsRef = storageRef.child(userID).child(index + "history.jpg");
         UploadTask uploadTask = mountainsRef.putBytes(data);
-
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //taskSnapshot.getMetadata() ;//contains file metadata such as size, content-type, and download URL.
                 @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                ;
                 getImageURL.get(downloadUrl.toString());
             }
         });
     }
 
+    /**
+     *
+     * @param userID
+     */
     public void uploadUserImage(String userID) {
         this.userID = userID;
         uploadImageView.setDrawingCacheEnabled(true);
         uploadImageView.buildDrawingCache();
         Bitmap bitmap = uploadImageView.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 5, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
         storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
-
-        // Create a reference to "mountains.jpg"
         StorageReference mountainsRef = storageRef.child(userID).child("userImage.jpg");
-
         UploadTask uploadTask = mountainsRef.putBytes(data);
-
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
+
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //taskSnapshot.getMetadata() ;//contains file metadata such as size, content-type, and download URL.
                 @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                ;
                 updateUserImage.getImage(downloadUrl.toString());
             }
         });
     }
 
+    /**
+     *
+     * @param userID
+     */
+    public void uploadUserInvitationImage(String userID) {
+        this.userID = userID;
+        uploadImageView.setDrawingCacheEnabled(true);
+        uploadImageView.buildDrawingCache();
+        Bitmap bitmap = uploadImageView.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+        storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        Random rand = new Random();
+        int index = rand.nextInt(10000);
+        StorageReference mountainsRef = storageRef.child(userID).child(index + "invitationImage.jpg");
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                sendInvitationToUser.getInitationImage(downloadUrl.toString());
+            }
+        });
+    }
+
+    /**
+     *
+     * @param getImageURL
+     * @param imageView
+     */
     public void setListener(GetImageURL getImageURL, ImageView imageView) {
         this.getImageURL = getImageURL;
         this.uploadImageView = imageView;
     }
 
-
+    /**
+     *
+     * @param updateUserImage
+     * @param userImageView
+     */
     public void setListenerUpdateImage(UpdateUserImage updateUserImage, ImageView userImageView) {
         this.updateUserImage = updateUserImage;
+        this.uploadImageView = userImageView;
+    }
+
+    /**
+     *
+     * @param sendInvitationToUser
+     * @param userImageView
+     */
+    public void setListenerUserInvitationImage(SendInvitationToUser sendInvitationToUser, ImageView userImageView) {
+        this.sendInvitationToUser = sendInvitationToUser;
         this.uploadImageView = userImageView;
     }
 }

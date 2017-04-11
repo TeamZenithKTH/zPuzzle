@@ -10,35 +10,39 @@
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_history"
             android:title="History" />
-        <item
+        <!--<item
             android:id="@+id/nav_top_games"
             android:icon="@drawable/ic_play_games"
-            android:title="Top Games" />
+            android:title="Top Games" />-->
         <item android:title="Invitation Center">
-            <menu>
-                <item
-                    android:id="@+id/nav_send_Invitation"
-                    android:icon="@drawable/send"
-                    android:title="Send" />
-                <item
-                    android:id="@+id/nav_receive_Invitation"
-                    android:icon="@drawable/ic_receive"
-                    android:title="Receive" />
-            </menu>
-        </item>
-        <item android:title="Control Center">
-            <menu>
-                <item
-                    android:id="@+id/nav_settings"
-                    android:icon="@drawable/ic_settings"
-                    android:title="Settings" />
-                <item
-                    android:id="@+id/nav_logout"
-                    android:icon="@drawable/ic_logout"
-                    android:title="Logout" />
-            </menu>
-        </item>
-    </group>
+        <menu>
+            <item
+                android:id="@+id/nav_send_Invitation"
+                android:icon="@drawable/send"
+                android:title="Send Invitation" />
+            <item
+                android:id="@+id/nav_sent_Invitation"
+                android:icon="@drawable/send"
+                android:title="Sent" />
+            <item
+                android:id="@+id/nav_receive_Invitation"
+                android:icon="@drawable/ic_receive"
+                android:title="Inbox" />
+        </menu>
+    </item>
+    <item android:title="Control Center">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_settings"
+                android:title="Settings" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_logout"
+                android:title="Logout" />
+        </menu>
+    </item>
+</group>
 
     <!-- <item android:title="Communicate">
          <menu>
@@ -53,4 +57,4 @@
          </menu>
      </item>-->
 
-</menu>
+    </menu>
