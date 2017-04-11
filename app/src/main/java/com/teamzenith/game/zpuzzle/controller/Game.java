@@ -95,6 +95,10 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
     private String next;
     private String timer;
 
+    /**
+     * This method called once the activity called
+     * @param bundle
+     */
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -105,6 +109,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.line1);
         T = new Timer();
+
 
         if (method.equals(ImageChooser.Method.GALERI)) {
             photoButton = new ImageView(this);
@@ -147,11 +152,17 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
                 1);
     }
 
+    /**
+     * this method is to create two textView
+     */
     private void createComponents() {
         currentMovement = (TextView) findViewById(R.id.currentMovement);
         timerCounter = (TextView) findViewById(R.id.timerCounter);
     }
 
+    /**
+     * this method is to fill variables
+     */
     private void initComponent() {
         Intent intent = this.getIntent();
         imageFile = (File) intent.getSerializableExtra("Image");
@@ -163,6 +174,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
     }
 
+    /**
+     * this method handle the action listener
+     */
     private void actions() {
         if (photoButton != null) {
             photoButton.setOnClickListener(this);
@@ -193,6 +207,10 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
     }
 
+    /**
+     * This method called  when the button has been clicked
+     * @param v
+     */
     @Override
     public void onClick(View v) {
 
@@ -223,6 +241,12 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
     }
 
+    /**
+     * this method called when the user pick
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
@@ -252,6 +276,12 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         return result;
     }
 
+    /**
+     * this method is to create an image bitmap with the right orientation, that mean you can pick a photo
+     * and this method will rotate it if it is needed, this method is called by prepareImage method
+     * @param imgFile1
+     * @return
+     */
     private Bitmap createBitmap(File imgFile1) {
         Bitmap bitmapNeedsToRotate;
         Matrix matrix;
@@ -277,6 +307,11 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
+    /**
+     * this method is to get the orientation of an image
+     * @param imgFile1
+     * @return
+     */
     private int getImageOrientation(File imgFile1) {
         ExifInterface exif = null;
         try {
@@ -287,6 +322,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         return exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
     }
 
+    /**
+     * create a bitmap when the user pick a photo
+     */
     private void prepareAnImage() {
         Bitmap photo;
         if (method.equals(ImageChooser.Method.RANDOM)) {
@@ -346,6 +384,10 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         createImageViews(SHMap);
     }
 
+    /**
+     * create dynamically the tablelayout and imageButtons which will hold the pieces of an image
+     * @param SHMap
+     */
     private void settingImages(HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
         imageButtons = new ImageButton[row * column];
@@ -387,6 +429,10 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         imagesIDList = imagesIDs.getposition();
     }
 
+    /**
+     * This method is to allow the user to move pieces and it controls if it is allowed to move a piece
+     * @param SHMap
+     */
     private void createImageViews(final HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
         final GetCurrentStatus getCurrentStatus = new GetCurrentStatus();
@@ -409,6 +455,13 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
 
     }
 
+    /**
+     * this method is a feature available from android lollipop and it is called permission, so the user need to confirm
+     * that he acept that the application will use the gallery and camera
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -432,6 +485,10 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
+    /**
+     * this method is to set pieces of an image after the user has been moved a piece
+     * @param SHMap
+     */
     private void setNewImages(HashMap<Integer, Bitmap> SHMap) {
         this.SHMap = SHMap;
         countMovement++;
@@ -447,6 +504,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
+    /**
+     * check if the puzzle is solved, so this method is called once the user has solved the puzzle
+     */
     private void SetOriginalImagesToMatrix() {
         Bitmap[] tmpbitMap;
         tmpbitMap = imageSplit.getOriginalDividedImage();
@@ -474,6 +534,9 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
         finish();
     }
 
+    /**
+     * this method will be called once the user click on the back button
+     */
     @Override
     public void onBackPressed() {
         T.cancel();
