@@ -210,4 +210,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             e.printStackTrace();
         }
     }
+
+
+
 }

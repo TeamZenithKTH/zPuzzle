@@ -140,8 +140,8 @@ public class ImageChooser extends AppCompatActivity {
     }
 
 
-    /*@Override
+    @Override
     public void onBackPressed() {
         finish();
-    }}*/
-}
+    }}
+
