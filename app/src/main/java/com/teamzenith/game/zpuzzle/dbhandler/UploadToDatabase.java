@@ -28,6 +28,10 @@ public class UploadToDatabase {
     private ImageView uploadImageView;
     private SendInvitationToUser sendInvitationToUser;
 
+    /**
+     *
+     * @param userID
+     */
     public void upload(String userID) {
         this.userID = userID;
         uploadImageView.setDrawingCacheEnabled(true);
@@ -55,6 +59,10 @@ public class UploadToDatabase {
         });
     }
 
+    /**
+     *
+     * @param userID
+     */
     public void uploadUserImage(String userID) {
         this.userID = userID;
         uploadImageView.setDrawingCacheEnabled(true);
@@ -81,6 +89,10 @@ public class UploadToDatabase {
         });
     }
 
+    /**
+     *
+     * @param userID
+     */
     public void uploadUserInvitationImage(String userID) {
         this.userID = userID;
         uploadImageView.setDrawingCacheEnabled(true);
@@ -108,17 +120,31 @@ public class UploadToDatabase {
         });
     }
 
+    /**
+     *
+     * @param getImageURL
+     * @param imageView
+     */
     public void setListener(GetImageURL getImageURL, ImageView imageView) {
         this.getImageURL = getImageURL;
         this.uploadImageView = imageView;
     }
 
-
+    /**
+     *
+     * @param updateUserImage
+     * @param userImageView
+     */
     public void setListenerUpdateImage(UpdateUserImage updateUserImage, ImageView userImageView) {
         this.updateUserImage = updateUserImage;
         this.uploadImageView = userImageView;
     }
 
+    /**
+     *
+     * @param sendInvitationToUser
+     * @param userImageView
+     */
     public void setListenerUserInvitationImage(SendInvitationToUser sendInvitationToUser, ImageView userImageView) {
         this.sendInvitationToUser = sendInvitationToUser;
         this.uploadImageView = userImageView;

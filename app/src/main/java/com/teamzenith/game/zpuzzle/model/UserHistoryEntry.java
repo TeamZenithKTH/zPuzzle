@@ -11,10 +11,21 @@ public class UserHistoryEntry {
     private String timerCounterString;
     private String imageFile;
 
+    /**
+     *
+     */
     public UserHistoryEntry() {
 
     }
 
+    /**
+     *
+     * @param userID
+     * @param level
+     * @param countMovementString
+     * @param timerCounterString
+     * @param imageFile
+     */
     public UserHistoryEntry(String userID, Level level, String countMovementString, String timerCounterString, String imageFile) {
         this.userID = userID;
         this.level = level.toString();

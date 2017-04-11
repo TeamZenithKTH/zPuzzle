@@ -28,7 +28,6 @@ public class SentInvitationsAdapter extends BaseAdapter {
         this.sentInvitationActivity = sentInvitationActivity;
         this.userInvitation = userInvitation;
         inflater = (LayoutInflater) sentInvitationActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
     }
 
     @Override
@@ -52,7 +51,6 @@ public class SentInvitationsAdapter extends BaseAdapter {
         Context context = parent.getContext();
         if (convertView == null)
             view = inflater.inflate(R.layout.sent_items, null);
-
         TextView invitationLetter = (TextView) view.findViewById(R.id.invitation_letter);
         TextView level = (TextView) view.findViewById(R.id.invitation_level);
         ImageView thumb_image = (ImageView) view.findViewById(R.id.sent_invitation_image);
@@ -60,7 +58,7 @@ public class SentInvitationsAdapter extends BaseAdapter {
         TextView invitationPresent = (TextView) view.findViewById(R.id.invitation_present);
         TextView invitationStatus = (TextView) view.findViewById(R.id.invitation_status);
 
-        boolean status =this.userInvitation.get(position).isStatus();
+        boolean status = this.userInvitation.get(position).isStatus();
 
         invitationLetter.setText(this.userInvitation.get(position).getIntiationText());
 

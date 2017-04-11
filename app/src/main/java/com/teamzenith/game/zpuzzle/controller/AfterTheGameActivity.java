@@ -55,6 +55,10 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
     private UploadToDatabase uploadToDatabase;
     private boolean b = false;
 
+    /**
+     *
+     * @param bundle
+     */
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.after_the_game);
