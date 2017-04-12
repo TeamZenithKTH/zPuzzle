@@ -539,6 +539,7 @@ public class Game extends AppCompatActivity implements View.OnClickListener {
      */
     @Override
     public void onBackPressed() {
+        finish();
         T.cancel();
 
     }

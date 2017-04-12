@@ -19,13 +19,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Invitation Letter: "
+                android:textColor="#FFFFB700"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/inbox_invitation_letter"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
@@ -37,13 +37,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Level: "
+                android:textColor="#FFFFB700"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/inbox_invitation_level"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
 

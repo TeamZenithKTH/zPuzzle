@@ -223,6 +223,7 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
         finish();
     }
 
+
     /**
      * this method is to get an image url from a database and to create a user history
      * @param imageURL
@@ -236,7 +237,4 @@ public class AfterTheGameActivity extends AppCompatActivity implements View.OnCl
             e.printStackTrace();
         }
     }
-
-
-
 }

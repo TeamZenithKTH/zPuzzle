@@ -2,36 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     android:weightSum="1">
 
 
     <LinearLayout
-        android:layout_marginTop="30dp"
         android:id="@+id/linearLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/movementCounter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="90dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="90dp"
             android:gravity="center"
-            android:typeface="serif"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:typeface="serif" />
 
 
         <TextView
             android:id="@+id/timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:typeface="serif"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:typeface="serif" />
 
     </LinearLayout>
 
@@ -41,7 +41,7 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_gravity="center"
-        android:background="@drawable/style_for_image"/>
+        android:background="@drawable/style_for_image" />
 
 
     <LinearLayout
@@ -53,61 +53,39 @@
 
     </LinearLayout>
 
+
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="84dp"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:layout_marginLeft="40dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/playAgain"
-                    android:layout_width="70dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_replay"
-                    android:text="Play Again" />
+        <ImageView
+            android:id="@+id/playAgain"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="27dp"
+            android:src="@drawable/ic_replay"
+            android:text="Play Again" />
 
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp">
-
-                <ImageView
-                    android:id="@+id/save_history"
-                    android:layout_width="70dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_save" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/save_history"
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="27dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/ic_save" />
 
 
-                <ImageView
-                    android:id="@+id/backToMain"
-                    android:layout_width="70dp"
-                    android:layout_height="90dp"
-                    android:src="@drawable/ic_home" />
-            </LinearLayout>
-        </LinearLayout>
-
+        <ImageView
+            android:id="@+id/backToMain"
+            android:layout_width="70dp"
+            android:layout_height="90dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/ic_home" />
     </LinearLayout>
-
-
 </LinearLayout>
+
