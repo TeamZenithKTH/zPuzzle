@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Invitation Letter: "
-                android:textColor="#ff0004"
+                android:textColor="#FFFFB700"
                 android:textStyle="bold" />
 
             <TextView
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Level: "
-                android:textColor="#ff0004"
+                android:textColor="#FFFFB700"
                 android:textStyle="bold" />
 
 
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Friend Name: "
-                android:textColor="#ff0004"
+                android:textColor="#FFFFB700"
                 android:textStyle="bold" />
 
 
@@ -78,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Present: "
-                android:textColor="#ff0004"
+                android:textColor="#FFFFB700"
                 android:textStyle="bold" />
 
 
@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Status: "
-                android:textColor="#ff0004"
+                android:textColor="#FFFFB700"
                 android:textStyle="bold" />
 
 

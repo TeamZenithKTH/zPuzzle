@@ -18,7 +18,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#ff0004"
+                android:textColor="#FFFFB700"
                 android:text="Level: "
                 android:textStyle="bold"/>
 
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Movements: "
-                android:textColor="#ff0004"
+                android:textColor="#FFFFB700"
                 android:textStyle="bold"/>
 
             <TextView
@@ -55,7 +55,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#ff0004"
+                android:textColor="#FFFFB700"
                 android:text="Time: "
                 android:textStyle="bold"/>
 
